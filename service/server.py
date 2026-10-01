@@ -19,7 +19,7 @@ from typing import List, Optional
 
 from fastapi import APIRouter, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, HTMLResponse
+from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 
 from rusetect_engine import Engine
@@ -47,31 +47,12 @@ def need_engine() -> Engine:
 
 
 # ---------------------------------------------------------------- pages
-LANDING = """<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>RuseTect</title><style>
-:root{--bg:#f5f7f9;--ink:#15202b;--ink2:#4a5866;--acc:#0b6e7a;--rule:#d9e0e6;--panel:#fff}
-@media (prefers-color-scheme:dark){:root{--bg:#0d1419;--ink:#e6edf2;--ink2:#a9b6c1;--acc:#4fc3cf;--rule:#24313b;--panel:#152029;color-scheme:dark}}
-body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 system-ui,sans-serif;padding:48px 16px}
-main{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
-h1{font-size:40px;line-height:1.1;margin:0}p{color:var(--ink2);margin:0}
-.k{font:600 12px ui-monospace,monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--acc)}
-.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
-a.c{display:block;background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:14px 16px;color:var(--ink);text-decoration:none}
-a.c b{display:block;color:var(--acc)}a.c span{font-size:13px;color:var(--ink2)}a.c:hover{border-color:var(--acc)}
-</style></head><body><main>
-<span class="k">RuseTect</span>
-<h1>Layered AI filtration for mule accounts and scam money flows</h1>
-<p>L0 stops mule accounts at opening; L1 clears ~80% of payments in 0.3 ms; L2 boosted graph models block laundering with ~0.92 precision; L4 links blocks into ring cases.</p>
-<div class="links">
-<a class="c" href="/console"><b>Live Console →</b><span>Replay real test-period payments through the cascade</span></a>
-<a class="c" href="/report"><b>Benchmark report →</b><span>21 AML models + 8 onboarding models compared</span></a>
-<a class="c" href="/docs"><b>API docs →</b><span>Score payments and applications yourself</span></a>
-</div></main></body></html>"""
 
 
-@app.get("/", response_class=HTMLResponse)
+
+@app.get("/")
 async def landing():
-    return LANDING
+    return FileResponse(ROOT / "static" / "index.html")
 
 
 @app.get("/console")

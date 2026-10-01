@@ -41,7 +41,7 @@ uvicorn index:app --port 8001          # open http://localhost:8001
 On Windows: `.\run_local.ps1`.
 
 Pages:
-- `/` is the landing page.
+- `/` is the landing page (layout based on the Figma Community "Modern Product Launch" template).
 - `/console` is the Live Console: load account history, then stream real test-period payments.
 - `/report` is the benchmark report.
 - `/docs` is the interactive API.

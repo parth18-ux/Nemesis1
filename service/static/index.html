@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>RuseTect</title>
+<meta name="description" content="Layered AI filtration for mule accounts and scam money flows. RuseTect.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Layout follows the "Modern Product Launch" (Area) template: centred nav, giant serif hero, device on a sage slab,
+   then feature columns, a numbered "big picture" split, a spec sheet, steps and a closing CTA. Light theme on purpose. */
+:root{
+  --paper:#ffffff; --ink:#111111; --ink-2:#5f5f5c; --ink-3:#8d8d88; --rule:#e7e6e1; --wash:#f5f4ef;
+  --olive:#3c4a14; --olive-ink:#f3f5ea; --sage:#8e9b74; --sage-deep:#6f7c57; --alert:#b3261e;
+  --serif:"Instrument Serif","Iowan Old Style","Palatino Linotype",Georgia,serif;
+  --sans:"Geist",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 var(--sans);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{max-width:1240px;margin:0 auto;padding-inline:clamp(16px,4vw,40px)}
+h1,h2,h3{font-weight:400;margin:0;text-wrap:balance}
+p{margin:0}
+.serif{font-family:var(--serif)}
+.eyebrow{font:500 12px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+.num{font-variant-numeric:tabular-nums}
+:focus-visible{outline:2px solid var(--olive);outline-offset:3px;border-radius:4px}
+
+/* nav */
+header.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:color-mix(in srgb,var(--paper) 92%,transparent);backdrop-filter:saturate(1.2) blur(10px)}
+.nav .wrap{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;padding-block:18px}
+.brand{font:600 19px/1 var(--sans);letter-spacing:-.03em;text-decoration:none}
+.links{display:flex;gap:28px;font:500 13.5px var(--sans)}
+.links a{text-decoration:none;color:var(--ink)}
+.links a:hover{color:var(--olive)}
+.pill{justify-self:end;display:inline-flex;align-items:center;gap:6px;background:var(--olive);color:var(--olive-ink);text-decoration:none;font:500 13.5px var(--sans);padding:10px 18px;border-radius:999px;transition:background .2s}
+.pill:hover{background:#2d380d}
+.pill.ghost{background:transparent;color:var(--ink);border:1px solid var(--ink)}
+.pill.ghost:hover{background:var(--wash)}
+@media (max-width:780px){.nav .wrap{grid-template-columns:1fr auto}.links{display:none}}
+
+/* hero */
+.hero{padding-block:clamp(40px,7vw,84px) 0;text-align:center}
+.hero h1{font-family:var(--serif);font-size:clamp(56px,11.5vw,156px);line-height:.92;letter-spacing:-.025em}
+.hero .sub{margin:22px auto 0;max-width:56ch;color:var(--ink-2);font-size:17px}
+.hero .ctas{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:28px}
+.stage{position:relative;margin-top:clamp(40px,6vw,64px);padding-top:clamp(8px,2vw,16px)}
+.slab{position:absolute;inset:clamp(70px,13vw,170px) 0 0 0;background:var(--sage);border-radius:20px}
+.device{position:relative;width:min(1000px,92%);margin:0 auto;background:#141414;border-radius:22px 22px 0 0;padding:clamp(8px,1.2vw,14px) clamp(8px,1.2vw,14px) 0}
+.screen{position:relative;aspect-ratio:16/9.4;border-radius:12px 12px 0 0;overflow:hidden;
+  background:radial-gradient(120% 80% at 30% 15%,#e9f0f6 0%,#c9d8e6 35%,#a9bccd 60%,#8ea2b4 100%);color:#fff;text-align:left}
+.screen::after{content:"";position:absolute;inset:auto -10% -38% -10%;height:62%;background:radial-gradient(60% 70% at 50% 100%,#566a3c 0%,#71834d 40%,transparent 72%);opacity:.9}
+.scr-in{position:absolute;inset:0;padding:clamp(14px,3vw,34px);display:flex;flex-direction:column;z-index:1}
+.crumb{font:500 clamp(8px,.9vw,11px) var(--mono);opacity:.8}
+.big{display:flex;align-items:baseline;gap:clamp(8px,1.4vw,16px);margin-top:clamp(10px,2.4vw,26px);flex-wrap:wrap}
+.big b{font:400 clamp(32px,5.6vw,68px)/1 var(--serif)}
+.big span{font:400 clamp(14px,2vw,24px) var(--serif)}
+.chip{margin-left:auto;font:500 clamp(8px,.9vw,11px) var(--mono);background:rgba(255,255,255,.28);border:1px solid rgba(255,255,255,.5);padding:5px 12px;border-radius:999px;align-self:center}
+.axis{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid rgba(255,255,255,.55);margin-top:clamp(10px,2vw,22px);padding-top:6px;font:500 clamp(8px,.85vw,11px) var(--mono)}
+.sticks{position:relative;flex:1;display:grid;grid-template-columns:repeat(5,1fr);align-items:end;padding-bottom:4px}
+.col{position:relative;height:100%;display:flex;justify-content:center;align-items:flex-end;gap:clamp(18px,4vw,52px)}
+.lolly{width:2px;background:rgba(255,255,255,.95);position:relative;border-radius:2px;transform-origin:bottom;animation:rise 1.2s cubic-bezier(.2,.8,.2,1) both}
+.lolly::before{content:"";position:absolute;top:-4px;left:50%;width:8px;height:8px;margin-left:-4px;background:#fff;border-radius:2px}
+.lolly.red::before{background:#ff6b5f}
+.lolly.red em{color:#ffe1dd}
+.lolly em{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);font:500 clamp(7px,.8vw,10.5px) var(--mono);font-style:normal;white-space:nowrap;text-shadow:0 1px 6px rgba(40,60,80,.35)}
+@media (max-width:640px){.screen{aspect-ratio:4/3.6}.chip{display:none}.lolly em{display:none}.col{gap:10px}.axis{font-size:8px}}
+@keyframes rise{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@media (prefers-reduced-motion:reduce){.lolly{animation:none}}
+
+/* sections */
+section{padding-block:clamp(72px,10vw,128px)}
+.head{display:flex;flex-direction:column;gap:14px;max-width:760px}
+.head h2{font-family:var(--serif);font-size:clamp(40px,6.4vw,78px);line-height:1;letter-spacing:-.02em}
+.head p{color:var(--ink-2);font-size:17px;max-width:60ch}
+.feat{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(20px,3vw,40px);margin-top:clamp(40px,6vw,72px);border-top:1px solid var(--rule);padding-top:28px}
+.feat article{display:flex;flex-direction:column;gap:10px;min-width:0}
+.feat svg{width:26px;height:26px;stroke:var(--ink);fill:none;stroke-width:1.5}
+.feat .tag{font:500 11.5px var(--mono);color:var(--olive)}
+.feat h3{font:600 17px/1.3 var(--sans);letter-spacing:-.01em}
+.feat p{color:var(--ink-2);font-size:14.5px}
+.feat .stat{margin-top:auto;padding-top:10px;font:400 30px/1 var(--serif)}
+.feat .stat small{display:block;font:500 11.5px/1.4 var(--sans);color:var(--ink-3);margin-top:4px;min-height:2.8em}
+@media (max-width:900px){.feat{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.feat{grid-template-columns:1fr}}
+
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(32px,6vw,80px);align-items:center}
+@media (max-width:900px){.split{grid-template-columns:1fr}}
+.steps{list-style:none;margin:36px 0 0;padding:0;display:flex;flex-direction:column}
+.steps li{display:grid;grid-template-columns:48px minmax(0,1fr);gap:8px 14px;padding:20px 0;border-top:1px solid var(--rule)}
+.steps li:last-child{border-bottom:1px solid var(--rule)}
+.steps .n{font:500 13px var(--mono);color:var(--ink-3);padding-top:3px}
+.steps h3{font:600 17px var(--sans)}
+.steps p{grid-column:2;color:var(--ink-2);font-size:14.5px}
+.card{background:var(--sage);border-radius:20px;padding:clamp(18px,3vw,32px);color:var(--olive-ink);min-width:0}
+.card svg{display:block;width:100%;height:auto}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font:500 12px var(--mono);margin-top:14px;opacity:.9}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+
+.specs{margin-top:48px;border-top:1px solid var(--ink)}
+.spec{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:16px;padding:18px 0;border-bottom:1px solid var(--rule)}
+.spec dt{font:500 14px var(--sans)}
+.spec dd{margin:0;color:var(--ink-2);font-size:14.5px}
+.spec dd b{color:var(--ink);font:400 22px/1.2 var(--serif);margin-right:8px}
+@media (max-width:640px){.spec{grid-template-columns:1fr;gap:4px}}
+
+.bars{display:flex;flex-direction:column;gap:10px;margin-top:40px}
+.bar{display:grid;grid-template-columns:minmax(150px,240px) minmax(0,1fr) 52px;gap:14px;align-items:center;font-size:14px}
+.bar .t{height:10px;background:var(--wash);border-radius:6px;overflow:hidden}
+.bar .t div{height:100%;background:var(--sage-deep);border-radius:6px}
+.bar.win .t div{background:var(--olive)}
+.bar.win{font-weight:600}
+.bar .v{font:500 13px var(--mono);text-align:right}
+@media (max-width:560px){.bar{grid-template-columns:minmax(0,1fr) 52px}.bar .t{grid-column:1/-1;order:3}}
+.note{margin-top:18px;color:var(--ink-3);font-size:13px;max-width:80ch}
+
+.how{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:48px}
+.how article{background:var(--wash);border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.how .n{font:500 12px var(--mono);color:var(--olive)}
+.how h3{font:600 18px var(--sans)}
+.how p{color:var(--ink-2);font-size:14.5px}
+pre{margin:6px 0 0;background:#141414;color:#e9ecdf;border-radius:10px;padding:14px;font:12.5px/1.6 var(--mono);overflow-x:auto;white-space:pre}
+@media (max-width:900px){.how{grid-template-columns:1fr}}
+
+.cta{text-align:center;background:var(--olive);color:var(--olive-ink);border-radius:24px;padding:clamp(48px,8vw,96px) 24px;display:flex;flex-direction:column;align-items:center;gap:18px}
+.cta h2{font-family:var(--serif);font-size:clamp(42px,7vw,92px);line-height:.98;letter-spacing:-.02em}
+.cta p{max-width:52ch;opacity:.85}
+.cta .pill{background:var(--olive-ink);color:var(--olive)}
+.cta .pill.ghost{background:transparent;color:var(--olive-ink);border-color:var(--olive-ink)}
+.cta .pill.ghost:hover{background:rgba(255,255,255,.08)}
+footer{padding-block:40px 56px;color:var(--ink-3);font-size:13px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-between}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top">RuseTect</a>
+    <nav class="links" aria-label="Sections">
+      <a href="#layers">How it works</a><a href="#specs">Specifications</a><a href="#bench">Benchmarks</a><a href="#howto">How-to</a>
+    </nav>
+    <a class="pill" href="/console">Open live console ↗</a>
+  </div>
+</header>
+
+<main id="top">
+  <div class="hero wrap">
+    <h1>Catch the ring.<br>Clear the rest.</h1>
+    <p class="sub">A five-layer AI filter for mule accounts and scam money flows. Most payments clear in a third of a millisecond; the few that reach an analyst arrive as linked ring cases, with reasons.</p>
+    <div class="ctas"><a class="pill" href="/console">Watch it on real payments ↗</a><a class="pill ghost" href="/report">Read the benchmark</a></div>
+    <div class="stage">
+      <div class="slab" aria-hidden="true"></div>
+      <div class="device">
+        <div class="screen" role="img" aria-label="Payments remaining after each layer on the 10-day test period">
+          <div class="scr-in">
+            <div class="crumb">Test period › Cascade funnel</div>
+            <div class="big"><b>79.5%</b><span>cleared at the first gate</span><span class="chip">All 1,015,669 payments ▾</span></div>
+            <div class="sticks">
+              <div class="col"><div class="lolly" style="height:92%"><em>1,015,669</em></div><div class="lolly red" style="height:46%;animation-delay:.1s"><em>1,797</em></div></div>
+              <div class="col"><div class="lolly" style="height:79%;animation-delay:.15s"><em>208,050</em></div><div class="lolly red" style="height:45%;animation-delay:.2s"><em>1,783</em></div></div>
+              <div class="col"><div class="lolly" style="height:47%;animation-delay:.25s"><em>1,105</em></div><div class="lolly red" style="height:41%;animation-delay:.3s"><em>1,018</em></div></div>
+              <div class="col"><div class="lolly" style="height:37%;animation-delay:.35s"><em>318 cases</em></div></div>
+              <div class="col"><div class="lolly red" style="height:31%;animation-delay:.4s"><em>158 rings</em></div></div>
+            </div>
+            <div class="axis"><span>All payments</span><span>After L1</span><span>Blocked (L2–L3)</span><span>L4 cases</span><span>Rings caught</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section id="layers">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">How it works</span>
+        <h2>We've cracked the cascade.</h2>
+        <p>Each layer approves what it is confident is clean and passes the rest to a heavier model. Heavy models only see one payment in five, so the system stays fast and the alerts stay few.</p>
+      </div>
+      <div class="feat">
+        <article>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M7.5 18c1-2.3 2.6-3.4 4.5-3.4s3.5 1.1 4.5 3.4"/></svg>
+          <span class="tag">L0 · Onboarding gate</span>
+          <h3>Stop mule accounts at opening</h3>
+          <p>LightGBM scores each new application. Separate thresholds per age group keep false alarms even across customers.</p>
+          <div class="stat num">0.88<small>false-alarm parity, 50+ vs under 50 (was 0.31)</small></div>
+        </article>
+        <article>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4-2v-4z"/></svg>
+          <span class="tag">L1 · Gatekeeper</span>
+          <h3>Clear clean traffic instantly</h3>
+          <p>A 30-tree XGBoost reads each account's history (fan-out, pass-through, first-time payees) and approves the obvious.</p>
+          <div class="stat num">0.3 ms<small>keeps 99.2% of laundering for the next layer</small></div>
+        </article>
+        <article>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M8 7.5l3 8.5M16 7.5l-3 8.5M8.5 6h7"/></svg>
+          <span class="tag">L2 + L3 · Graph-boost &amp; behaviour</span>
+          <h3>Score what's left, with reasons</h3>
+          <p>XGBoost, LightGBM and Random Forest, blended with LSTM and Transformer models over each account's recent activity.</p>
+          <div class="stat num">0.92<small>precision of auto-blocks on the test period</small></div>
+        </article>
+        <article>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="4" r="1.6"/><circle cx="19" cy="15" r="1.6"/><circle cx="5" cy="15" r="1.6"/></svg>
+          <span class="tag">L4 · Ring linker</span>
+          <h3>Turn alerts into ring cases</h3>
+          <p>Blocked payments that share accounts are merged into one case per mule cluster, so analysts review rings, not rows.</p>
+          <div class="stat num">3.5×<small>fewer items to review (1,105 alerts → 318 cases)</small></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="wrap split">
+      <div>
+        <div class="head">
+          <span class="eyebrow">What the model sees</span>
+          <h2>See the whole ring.</h2>
+          <p>A single transfer looks normal. The pattern around it does not.</p>
+        </div>
+        <ol class="steps">
+          <li><span class="n">01</span><h3>History, not just the payment</h3><p>22 features per payment, each computed only from earlier activity: money in then straight out, sudden fan-out, money flowing back.</p></li>
+          <li><span class="n">02</span><h3>Reasons an analyst can use</h3><p>Every block lists its top drivers in plain words, such as "minutes since money came in: 0" or "new counterparty", ready for the STR draft.</p></li>
+          <li><span class="n">03</span><h3>Rings by typology</h3><p>Measured against IBM's labelled rings: fan-in 90%, cycles 88%, gather-scatter 87%, fan-out 86% caught. Bipartite rings are the hardest at 52%.</p></li>
+        </ol>
+      </div>
+      <div class="card" aria-label="A fan-out ring: one source splits money across mule accounts that converge on a cash-out account">
+        <svg viewBox="40 50 470 280" role="img">
+          <g stroke="#f3f5ea" stroke-width="1.4" fill="none" opacity=".85">
+            <path d="M80 190 C 170 110, 200 80, 250 80"/><path d="M80 190 C 170 160, 200 150, 250 150"/><path d="M80 190 C 170 220, 200 230, 250 230"/><path d="M80 190 C 170 270, 200 300, 250 300"/>
+            <path d="M250 80 C 330 90, 360 160, 430 190"/><path d="M250 150 C 330 160, 360 180, 430 190"/><path d="M250 230 C 330 220, 360 200, 430 190"/><path d="M250 300 C 330 290, 360 220, 430 190"/>
+          </g>
+          <g fill="#f3f5ea"><circle cx="80" cy="190" r="13"/><circle cx="250" cy="80" r="9"/><circle cx="250" cy="150" r="9"/><circle cx="250" cy="230" r="9"/><circle cx="250" cy="300" r="9"/></g>
+          <circle cx="430" cy="190" r="14" fill="#ff6b5f"/>
+          <g font-family="Geist Mono, monospace" font-size="12" fill="#f3f5ea">
+            <text x="80" y="226" text-anchor="middle">Victim payment</text>
+            <text x="268" y="84">mule 1 · 0 min</text><text x="268" y="154">mule 2 · 2 min</text><text x="268" y="234">mule 3 · 4 min</text><text x="268" y="304">mule 4 · 7 min</text>
+            <text x="430" y="228" text-anchor="middle">Cash-out</text>
+          </g>
+        </svg>
+        <div class="legend"><span><i style="background:#f3f5ea"></i>accounts in one L4 case</span><span><i style="background:#ff6b5f"></i>blocked + STR drafted</span><span>illustration</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="specs" style="background:var(--wash)">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">Specifications</span>
+        <h2>Measured, not promised.</h2>
+        <p>Every number comes from data later in time than anything the models were trained on.</p>
+      </div>
+      <dl class="specs">
+        <div class="spec"><dt>Payment data</dt><dd><b class="num">5,078,345</b>IBM AMLworld HI-Small payments, 515,088 accounts, 5,177 laundering, 370 labelled rings</dd></div>
+        <div class="spec"><dt>Onboarding data</dt><dd><b class="num">1,000,000</b>Feedzai BAF account applications, 1.1% fraud</dd></div>
+        <div class="spec"><dt>Test protocol</dt><dd>Time-ordered 60/20/20 split; thresholds set on validation; BAF trained on months 0–4, tested on 6–7</dd></div>
+        <div class="spec"><dt>Block precision / F1</dt><dd><b class="num">0.921</b>precision, F1 0.702, PR-AUC 0.725 (full cascade)</dd></div>
+        <div class="spec"><dt>Rings caught</dt><dd><b class="num">82–89%</b>of the 192 test-period rings get at least one block (range across two retrains)</dd></div>
+        <div class="spec"><dt>Onboarding recall</dt><dd><b class="num">0.534</b>at a 5% false-positive rate, with age-fair thresholds</dd></div>
+        <div class="spec"><dt>Latency</dt><dd><b class="num">0.33 ms</b>median per payment including feature computation, one CPU core</dd></div>
+        <div class="spec"><dt>Live vs offline</dt><dd><b class="num">100%</b>same block decisions on 60,000 payments replayed through the API</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section id="bench">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">Benchmarks</span>
+        <h2>21 models, one scoreboard.</h2>
+        <p>Same training rows, same thresholds procedure, same held-out test period. PR-AUC on laundering payments (0.18% of test traffic).</p>
+      </div>
+      <div class="bars" id="bars"></div>
+      <p class="note">Account history features matter most: XGBoost goes from 0.172 on raw payment fields to 0.715 with them. The GNN is tested with strictly past-only graph data; published GNN results on this dataset let the test graph include future edges. <a href="/report">Full report →</a></p>
+    </div>
+  </section>
+
+  <section id="howto" style="padding-top:0">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">How-to</span>
+        <h2>Try it in three steps.</h2>
+      </div>
+      <div class="how">
+        <article><span class="n">01</span><h3>Load account history</h3><p>Open the live console and load earlier payments, so every account has context, as it would in a bank.</p><a class="pill ghost" href="/console" style="align-self:flex-start;margin-top:auto">Open console</a></article>
+        <article><span class="n">02</span><h3>Stream real payments</h3><p>60,000 test-period payments flow through the layers. Watch clears, blocks, reasons and ring cases, checked against ground truth.</p></article>
+        <article><span class="n">03</span><h3>Call the API</h3><p>Score your own payment or account application.</p>
+<pre>POST /api/v2/payment
+{ "timestamp": "2022-09-09 10:00",
+  "from_bank": "070", "from_account": "A1",
+  "to_bank": "011",   "to_account": "B2",
+  "amount_paid": 9300, "payment_format": "ACH" }</pre>
+          <a class="pill ghost" href="/docs" style="align-self:flex-start">API docs</a></article>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="cta">
+        <span class="eyebrow" style="color:var(--olive-ink);opacity:.7">RuseTect</span>
+        <h2>Stop the money,<br>not the customer.</h2>
+        <p>Built and benchmarked on 6 million synthetic records. The pipeline retrains on a bank's own UPI and IMPS data.</p>
+        <div class="ctas" style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center"><a class="pill" href="/console">Open live console ↗</a><a class="pill ghost" href="/report">Benchmark report</a></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>RuseTect · Parth Sharma, Thapar Institute of Engineering &amp; Technology</span>
+    <span>Data: IBM AMLworld (synthetic), Feedzai BAF (synthetic). Covers account opening and money movement; scam calls and chats are out of scope.</span>
+  </div>
+</footer>
+
+<script>
+const BARS = [
+  ["XGBoost + graph features", .715, 1], ["Random Forest + graph", .706], ["CatBoost + graph", .700], ["LightGBM + graph", .699],
+  ["LSTM (sequence)", .662], ["Transformer (sequence)", .655], ["1D-CNN (sequence)", .644], ["MLP", .574],
+  ["GNN (strictly causal)", .516], ["AdaBoost + graph", .501], ["XGBoost, raw fields only", .172], ["Isolation Forest", .004]];
+document.getElementById("bars").innerHTML = BARS.map(([n, v, w]) =>
+  `<div class="bar${w ? " win" : ""}"><span>${n}</span><div class="t"><div style="width:${(v / .75 * 100).toFixed(1)}%"></div></div><span class="v">${v.toFixed(3)}</span></div>`).join("");
+</script>
+</body>
+</html>
