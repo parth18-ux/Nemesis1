@@ -5,7 +5,9 @@ RuseTect API — layered filtration cascade for mule accounts and scam money flo
   /console             Live Console: replays recorded IBM AMLworld (synthetic) test-period payments through the live path
   /report              benchmark report (21 AML models, 8 onboarding models)
   /api/health          engine status
-  /api/v2/payment      score one payment (L1 -> L2 -> decision band -> L4 case)
+  /api/v2/message      L-1 lure detector: score an SMS / WhatsApp / e-mail / call transcript, decide whether to warn
+  /api/v2/payment      score one payment (L1 -> L2 -> decision band -> L4 case), escalated by recent lures
+  /api/v2/alerts/summary  alert-fatigue counters (pushed vs suppressed, and why)
   /api/v2/payments/batch
   /api/v2/cases        current ring cases
   /api/v2/onboard      L0 onboarding gate for a new account application (Feedzai BAF schema)
@@ -23,7 +25,9 @@ from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 
 from branding import NAME, SLUG, TAGLINE, VERSION
+from lure_fusion import LureMemory
 from rusetect_engine import Engine
+from scam_text import MessageModel
 
 ROOT = Path(__file__).parent
 MODELS = ROOT / "models"
@@ -40,6 +44,14 @@ try:
 except Exception as e:  # pragma: no cover
     log.warning("%s engine unavailable: %s", NAME, e)
     ENGINE = None
+
+
+try:
+    MESSAGES = MessageModel(MODELS / "message_model.json")
+except Exception as e:  # pragma: no cover
+    log.warning("%s message model unavailable: %s", NAME, e)
+    MESSAGES = None
+LURES = LureMemory()
 
 
 def need_engine() -> Engine:
@@ -99,10 +111,50 @@ def to_payload(p: PaymentIn) -> dict:
     return d
 
 
+def score_with_context(eng: Engine, p: PaymentIn) -> dict:
+    d = to_payload(p)
+    return LURES.apply_to_payment(d, eng.score_payment(d))
+
+
 @api.post("/v2/payment")
 async def v2_payment(p: PaymentIn):
-    """Score one payment and update account state. Send payments in time order."""
-    return need_engine().score_payment(to_payload(p))
+    """Score one payment and update account state. Send payments in time order.
+    A recent risky message to the payer, or a payee named in one, can raise the decision (never lower it)."""
+    return score_with_context(need_engine(), p)
+
+
+class MessageIn(BaseModel):
+    text: str = Field(min_length=1, max_length=5000, examples=["Your SBI account will be blocked today. Update PAN at http://sbi-kyc-update.in"])
+    channel: str = Field("sms", description="sms, whatsapp, email, call_transcript")
+    timestamp: Optional[str] = Field(None, description="YYYY-MM-DD HH:MM (UTC); defaults to now")
+    bank: Optional[str] = Field(None, description="Recipient's bank code, to link the message to their later payments")
+    account: Optional[str] = Field(None, description="Recipient's account id (same id as from_account in /v2/payment)")
+
+
+@api.post("/v2/message")
+async def v2_message(m: MessageIn):
+    """L-1 lure detector. Scores the text, explains which scam workflow and tactics it matches, and applies the
+    alert-fatigue policy (push only high-risk, deduplicated, capped). Entities in risky messages join a payee watchlist."""
+    if MESSAGES is None:
+        raise HTTPException(503, "Message model not loaded")
+    ts = datetime.strptime(m.timestamp.replace("/", "-"), "%Y-%m-%d %H:%M").replace(tzinfo=timezone.utc) if m.timestamp else datetime.now(timezone.utc)
+    res = MESSAGES.score(m.text)
+    acct = f"{m.bank}:{m.account}" if m.account else None
+    res["alert"] = LURES.record_message(acct, int(ts.timestamp()) // 60, res)
+    res["channel"] = m.channel
+    return res
+
+
+@api.get("/v2/alerts/summary")
+async def v2_alert_summary():
+    """How many messages were scored, pushed, or suppressed (and why); how many payments a lure escalated."""
+    return LURES.summary()
+
+
+@api.get("/v2/message-model")
+async def v2_message_model():
+    import json
+    return json.loads((ROOT.parent / "results" / "message_model_eval.json").read_text()) if (ROOT.parent / "results" / "message_model_eval.json").exists() else {}
 
 
 @api.post("/v2/payments/batch")
@@ -110,7 +162,7 @@ async def v2_batch(items: List[PaymentIn]):
     if len(items) > 20000:
         raise HTTPException(413, "Batch too large (max 20000)")
     eng = need_engine()
-    out = [eng.score_payment(to_payload(p)) for p in sorted(items, key=lambda x: x.timestamp)]
+    out = [score_with_context(eng, p) for p in sorted(items, key=lambda x: x.timestamp)]
     flagged = [dict(i=i, **{k: r[k] for k in ("risk", "decision", "case_id", "reasons")}) for i, r in enumerate(out) if r["band"] != "safe"]
     flagged.sort(key=lambda f: -f["risk"])
     exits = {"L1": sum(r["layer_exit"] == "L1" for r in out), "L2": sum(r["layer_exit"] == "L2" for r in out)}
@@ -184,7 +236,7 @@ def full_history_rows():
 @api.post("/v2/demo/reset")
 async def demo_reset(warm: bool = True):
     """Clear state, then ingest earlier payments as account history (features only, no scoring)."""
-    eng = need_engine(); eng.reset(); rows = demo_rows(); t = time.perf_counter(); source = "bundled sample"
+    eng = need_engine(); eng.reset(); LURES.reset(); rows = demo_rows(); t = time.perf_counter(); source = "bundled sample"
     hist = full_history_rows() if warm else None
     if hist is not None:
         for fb, fa, tb, ta, ap, cp, cr, fm, tm in hist.select("fb", "fa", "tb", "ta", "amt_paid", "cur_paid", "cur_recv", "fmt", "tmin").iter_rows():

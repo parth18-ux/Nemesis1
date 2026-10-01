@@ -85,7 +85,7 @@ section{padding-block:clamp(72px,10vw,128px)}
 .head{display:flex;flex-direction:column;gap:14px;max-width:760px}
 .head h2{font-family:var(--serif);font-size:clamp(40px,6.4vw,78px);line-height:1;letter-spacing:-.02em}
 .head p{color:var(--ink-2);font-size:17px;max-width:60ch}
-.feat{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(20px,3vw,40px);margin-top:clamp(40px,6vw,72px);border-top:1px solid var(--rule);padding-top:28px}
+.feat{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(20px,3vw,40px);margin-top:clamp(40px,6vw,72px);border-top:1px solid var(--rule);padding-top:28px}
 .feat article{display:flex;flex-direction:column;gap:10px;min-width:0}
 .feat svg{width:26px;height:26px;stroke:var(--ink);fill:none;stroke-width:1.5}
 .feat .tag{font:500 11.5px var(--mono);color:var(--olive)}
@@ -93,6 +93,7 @@ section{padding-block:clamp(72px,10vw,128px)}
 .feat p{color:var(--ink-2);font-size:14.5px}
 .feat .stat{margin-top:auto;padding-top:10px;font:400 30px/1 var(--serif)}
 .feat .stat small{display:block;font:500 11.5px/1.4 var(--sans);color:var(--ink-3);margin-top:4px;min-height:2.8em}
+@media (max-width:1100px){.feat{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media (max-width:900px){.feat{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:520px){.feat{grid-template-columns:1fr}}
 
@@ -201,6 +202,13 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-bet
         <p>Each layer approves what it is confident is clean and passes the rest to a heavier model, so heavier models only see about one payment in five. Figures below are committed benchmark results on synthetic data.</p>
       </div>
       <div class="feat">
+        <article>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/><path d="M12 8v3M12 13.5v.5"/></svg>
+          <span class="tag">L-1 · Lure detector (new)</span>
+          <h3>Catch the scam before the payment</h3>
+          <p>Scores the SMS, WhatsApp message or call transcript that starts the scam, names the workflow (digital arrest, KYC block, task job…) and warns once. A payment to a new payee within 72 h gets a cool-off.</p>
+          <div class="stat num">0.95<small>precision of push warnings on unseen Indian scam templates (synthetic) · offline CV</small></div>
+        </article>
         <article>
           <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M7.5 18c1-2.3 2.6-3.4 4.5-3.4s3.5 1.1 4.5 3.4"/></svg>
           <span class="tag">L0 · Onboarding gate</span>

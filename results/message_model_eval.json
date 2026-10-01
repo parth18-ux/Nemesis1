@@ -1,0 +1,718 @@
+{
+ "task": "Is this message / call transcript part of a scam workflow? (binary)",
+ "data": {
+  "total": 7365,
+  "scam": 1772,
+  "india": 1791,
+  "india_scam": 1025,
+  "uci": 5574,
+  "uci_spam": 747,
+  "note": "Indian rows are synthetic, template-based (ml/scam_corpus.py). UCI rows are real but UK-centric and older."
+ },
+ "protocol": "5-fold grouped CV; a group is one template (Indian) or one distinct text (UCI). Thresholds picked on out-of-fold Indian scores.",
+ "served_decision": {
+  "india": {
+   "caution_or_high": {
+    "threshold": 0.5,
+    "precision": 0.9171,
+    "recall": 0.8205,
+    "f1": 0.8661,
+    "tp": 841,
+    "fp": 76,
+    "fn": 184,
+    "flagged_legit_per_1000": 99.22
+   },
+   "high": {
+    "threshold": 0.5,
+    "precision": 0.9507,
+    "recall": 0.6771,
+    "f1": 0.7909,
+    "tp": 694,
+    "fp": 36,
+    "fn": 331,
+    "flagged_legit_per_1000": 47.0
+   }
+  },
+  "uci": {
+   "caution_or_high": {
+    "threshold": 0.5,
+    "precision": 0.9909,
+    "recall": 0.8728,
+    "f1": 0.9281,
+    "tp": 652,
+    "fp": 6,
+    "fn": 95,
+    "flagged_legit_per_1000": 1.24
+   },
+   "high": {
+    "threshold": 0.5,
+    "precision": 0.9949,
+    "recall": 0.7845,
+    "f1": 0.8772,
+    "tp": 586,
+    "fp": 3,
+    "fn": 161,
+    "flagged_legit_per_1000": 0.62
+   }
+  },
+  "hard_signal_hits": {
+   "india_scam": 166,
+   "india_legit": 0,
+   "uci_spam": 0,
+   "uci_ham": 0
+  },
+  "legit_examples_with_hard_signal": [],
+  "note": "optimistic on the Indian corpus (same authors as the hard-signal list); see legit hits for false alarms"
+ },
+ "lr_C_grid_ap_india": {
+  "1.0": 0.9440380797947969,
+  "4.0": 0.9443943656141205,
+  "16.0": 0.9419002158020947
+ },
+ "domain_weight_india": 4.0,
+ "chosen_C": 4.0,
+ "thresholds": {
+  "caution": 0.6155,
+  "high": 0.7546
+ },
+ "models": {
+  "Rules only": {
+   "all": {
+    "average_precision": 0.7814,
+    "at_high": {
+     "threshold": 0.7546,
+     "precision": 1.0,
+     "recall": 0.0999,
+     "f1": 0.1816,
+     "tp": 177,
+     "fp": 0,
+     "fn": 1595,
+     "flagged_legit_per_1000": 0.0
+    },
+    "at_caution": {
+     "threshold": 0.6155,
+     "precision": 1.0,
+     "recall": 0.2128,
+     "f1": 0.3509,
+     "tp": 377,
+     "fp": 0,
+     "fn": 1395,
+     "flagged_legit_per_1000": 0.0
+    }
+   },
+   "india": {
+    "average_precision": 0.9829,
+    "at_high": {
+     "threshold": 0.7546,
+     "precision": 1.0,
+     "recall": 0.1727,
+     "f1": 0.2945,
+     "tp": 177,
+     "fp": 0,
+     "fn": 848,
+     "flagged_legit_per_1000": 0.0
+    },
+    "at_caution": {
+     "threshold": 0.6155,
+     "precision": 1.0,
+     "recall": 0.361,
+     "f1": 0.5305,
+     "tp": 370,
+     "fp": 0,
+     "fn": 655,
+     "flagged_legit_per_1000": 0.0
+    },
+    "at_best_f1": {
+     "threshold": 0.12,
+     "precision": 0.8701,
+     "recall": 0.961,
+     "f1": 0.9133,
+     "tp": 985,
+     "fp": 147,
+     "fn": 40,
+     "flagged_legit_per_1000": 191.91
+    }
+   },
+   "uci": {
+    "average_precision": 0.3629,
+    "at_high": {
+     "threshold": 0.7546,
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "tp": 0,
+     "fp": 0,
+     "fn": 747,
+     "flagged_legit_per_1000": 0.0
+    },
+    "at_caution": {
+     "threshold": 0.6155,
+     "precision": 1.0,
+     "recall": 0.0094,
+     "f1": 0.0186,
+     "tp": 7,
+     "fp": 0,
+     "fn": 740,
+     "flagged_legit_per_1000": 0.0
+    }
+   }
+  },
+  "Naive Bayes": {
+   "all": {
+    "average_precision": 0.9497,
+    "at_high": {
+     "threshold": 0.7546,
+     "precision": 0.8864,
+     "recall": 0.8809,
+     "f1": 0.8837,
+     "tp": 1561,
+     "fp": 200,
+     "fn": 211,
+     "flagged_legit_per_1000": 35.76
+    },
+    "at_caution": {
+     "threshold": 0.6155,
+     "precision": 0.8844,
+     "recall": 0.8809,
+     "f1": 0.8827,
+     "tp": 1561,
+     "fp": 204,
+     "fn": 211,
+     "flagged_legit_per_1000": 36.47
+    }
+   },
+   "india": {
+    "average_precision": 0.9549,
+    "at_high": {
+     "threshold": 0.7546,
+     "precision": 0.828,
+     "recall": 0.878,
+     "f1": 0.8523,
+     "tp": 900,
+     "fp": 187,
+     "fn": 125,
+     "flagged_legit_per_1000": 244.13
+    },
+    "at_caution": {
+     "threshold": 0.6155,
+     "precision": 0.8272,
+     "recall": 0.878,
+     "f1": 0.8519,
+     "tp": 900,
+     "fp": 188,
+     "fn": 125,
+     "flagged_legit_per_1000": 245.43
+    }
+   },
+   "uci": {
+    "average_precision": 0.9491,
+    "at_high": {
+     "threshold": 0.7546,
+     "precision": 0.9807,
+     "recall": 0.8849,
+     "f1": 0.9303,
+     "tp": 661,
+     "fp": 13,
+     "fn": 86,
+     "flagged_legit_per_1000": 2.69
+    },
+    "at_caution": {
+     "threshold": 0.6155,
+     "precision": 0.9764,
+     "recall": 0.8849,
+     "f1": 0.9284,
+     "tp": 661,
+     "fp": 16,
+     "fn": 86,
+     "flagged_legit_per_1000": 3.31
+    }
+   }
+  },
+  "Logistic regression": {
+   "all": {
+    "average_precision": 0.9622,
+    "at_high": {
+     "threshold": 0.7546,
+     "precision": 0.9684,
+     "recall": 0.6919,
+     "f1": 0.8071,
+     "tp": 1226,
+     "fp": 40,
+     "fn": 546,
+     "flagged_legit_per_1000": 7.15
+    },
+    "at_caution": {
+     "threshold": 0.6155,
+     "precision": 0.9258,
+     "recall": 0.803,
+     "f1": 0.8601,
+     "tp": 1423,
+     "fp": 114,
+     "fn": 349,
+     "flagged_legit_per_1000": 20.38
+    }
+   },
+   "india": {
+    "average_precision": 0.931,
+    "at_high": {
+     "threshold": 0.7546,
+     "precision": 0.9422,
+     "recall": 0.5883,
+     "f1": 0.7243,
+     "tp": 603,
+     "fp": 37,
+     "fn": 422,
+     "flagged_legit_per_1000": 48.3
+    },
+    "at_caution": {
+     "threshold": 0.6155,
+     "precision": 0.8751,
+     "recall": 0.7385,
+     "f1": 0.8011,
+     "tp": 757,
+     "fp": 108,
+     "fn": 268,
+     "flagged_legit_per_1000": 140.99
+    }
+   },
+   "uci": {
+    "average_precision": 0.9839,
+    "at_high": {
+     "threshold": 0.7546,
+     "precision": 0.9952,
+     "recall": 0.834,
+     "f1": 0.9075,
+     "tp": 623,
+     "fp": 3,
+     "fn": 124,
+     "flagged_legit_per_1000": 0.62
+    },
+    "at_caution": {
+     "threshold": 0.6155,
+     "precision": 0.9911,
+     "recall": 0.8916,
+     "f1": 0.9387,
+     "tp": 666,
+     "fp": 6,
+     "fn": 81,
+     "flagged_legit_per_1000": 1.24
+    }
+   }
+  },
+  "Logistic regression, India-weighted": {
+   "all": {
+    "average_precision": 0.9654,
+    "at_high": {
+     "threshold": 0.7546,
+     "precision": 0.9702,
+     "recall": 0.7173,
+     "f1": 0.8248,
+     "tp": 1271,
+     "fp": 39,
+     "fn": 501,
+     "flagged_legit_per_1000": 6.97
+    },
+    "at_caution": {
+     "threshold": 0.6155,
+     "precision": 0.9463,
+     "recall": 0.8149,
+     "f1": 0.8757,
+     "tp": 1444,
+     "fp": 82,
+     "fn": 328,
+     "flagged_legit_per_1000": 14.66
+    }
+   },
+   "india": {
+    "average_precision": 0.9444,
+    "at_high": {
+     "threshold": 0.7546,
+     "precision": 0.9501,
+     "recall": 0.6683,
+     "f1": 0.7847,
+     "tp": 685,
+     "fp": 36,
+     "fn": 340,
+     "flagged_legit_per_1000": 47.0
+    },
+    "at_caution": {
+     "threshold": 0.6155,
+     "precision": 0.9124,
+     "recall": 0.7727,
+     "f1": 0.8368,
+     "tp": 792,
+     "fp": 76,
+     "fn": 233,
+     "flagged_legit_per_1000": 99.22
+    }
+   },
+   "uci": {
+    "average_precision": 0.9824,
+    "at_high": {
+     "threshold": 0.7546,
+     "precision": 0.9949,
+     "recall": 0.7845,
+     "f1": 0.8772,
+     "tp": 586,
+     "fp": 3,
+     "fn": 161,
+     "flagged_legit_per_1000": 0.62
+    },
+    "at_caution": {
+     "threshold": 0.6155,
+     "precision": 0.9909,
+     "recall": 0.8728,
+     "f1": 0.9281,
+     "tp": 652,
+     "fp": 6,
+     "fn": 95,
+     "flagged_legit_per_1000": 1.24
+    }
+   }
+  },
+  "Blend: LR India-weighted + NB": {
+   "all": {
+    "average_precision": 0.9638,
+    "at_high": {
+     "threshold": 0.7546,
+     "precision": 0.9122,
+     "recall": 0.8267,
+     "f1": 0.8674,
+     "tp": 1465,
+     "fp": 141,
+     "fn": 307,
+     "flagged_legit_per_1000": 25.21
+    },
+    "at_caution": {
+     "threshold": 0.6155,
+     "precision": 0.9042,
+     "recall": 0.8792,
+     "f1": 0.8916,
+     "tp": 1558,
+     "fp": 165,
+     "fn": 214,
+     "flagged_legit_per_1000": 29.5
+    }
+   },
+   "india": {
+    "average_precision": 0.9405,
+    "at_high": {
+     "threshold": 0.7546,
+     "precision": 0.8559,
+     "recall": 0.8,
+     "f1": 0.827,
+     "tp": 820,
+     "fp": 138,
+     "fn": 205,
+     "flagged_legit_per_1000": 180.16
+    },
+    "at_caution": {
+     "threshold": 0.6155,
+     "precision": 0.8515,
+     "recall": 0.878,
+     "f1": 0.8646,
+     "tp": 900,
+     "fp": 157,
+     "fn": 125,
+     "flagged_legit_per_1000": 204.96
+    }
+   },
+   "uci": {
+    "average_precision": 0.9838,
+    "at_high": {
+     "threshold": 0.7546,
+     "precision": 0.9954,
+     "recall": 0.8635,
+     "f1": 0.9247,
+     "tp": 645,
+     "fp": 3,
+     "fn": 102,
+     "flagged_legit_per_1000": 0.62
+    },
+    "at_caution": {
+     "threshold": 0.6155,
+     "precision": 0.988,
+     "recall": 0.8809,
+     "f1": 0.9314,
+     "tp": 658,
+     "fp": 8,
+     "fn": 89,
+     "flagged_legit_per_1000": 1.66
+    }
+   }
+  }
+ },
+ "india_by_workflow": {
+  "bank_debit": {
+   "n": 84,
+   "scam": false,
+   "flagged_high": 0.0,
+   "flagged_caution": 0.048,
+   "served_high": 0.0,
+   "served_any": 0.048
+  },
+  "bank_notice": {
+   "n": 139,
+   "scam": false,
+   "flagged_high": 0.0,
+   "flagged_caution": 0.0,
+   "served_high": 0.0,
+   "served_any": 0.0
+  },
+  "delivery": {
+   "n": 57,
+   "scam": false,
+   "flagged_high": 0.0,
+   "flagged_caution": 0.0,
+   "served_high": 0.0,
+   "served_any": 0.0
+  },
+  "digital_arrest": {
+   "n": 77,
+   "scam": true,
+   "flagged_high": 0.506,
+   "flagged_caution": 0.584,
+   "served_high": 0.571,
+   "served_any": 0.818
+  },
+  "fake_loan": {
+   "n": 69,
+   "scam": true,
+   "flagged_high": 1.0,
+   "flagged_caution": 1.0,
+   "served_high": 1.0,
+   "served_any": 1.0
+  },
+  "fake_support": {
+   "n": 51,
+   "scam": true,
+   "flagged_high": 0.451,
+   "flagged_caution": 0.725,
+   "served_high": 0.451,
+   "served_any": 0.725
+  },
+  "family_emergency": {
+   "n": 84,
+   "scam": true,
+   "flagged_high": 0.333,
+   "flagged_caution": 0.5,
+   "served_high": 0.333,
+   "served_any": 0.5
+  },
+  "govt_scheme": {
+   "n": 69,
+   "scam": true,
+   "flagged_high": 0.812,
+   "flagged_caution": 1.0,
+   "served_high": 0.812,
+   "served_any": 1.0
+  },
+  "investment": {
+   "n": 84,
+   "scam": true,
+   "flagged_high": 0.5,
+   "flagged_caution": 0.667,
+   "served_high": 0.5,
+   "served_any": 0.667
+  },
+  "kyc_block": {
+   "n": 98,
+   "scam": true,
+   "flagged_high": 0.673,
+   "flagged_caution": 0.857,
+   "served_high": 0.673,
+   "served_any": 0.857
+  },
+  "lottery_prize": {
+   "n": 70,
+   "scam": true,
+   "flagged_high": 1.0,
+   "flagged_caution": 1.0,
+   "served_high": 1.0,
+   "served_any": 1.0
+  },
+  "marketing": {
+   "n": 16,
+   "scam": false,
+   "flagged_high": 0.0,
+   "flagged_caution": 0.75,
+   "served_high": 0.0,
+   "served_any": 0.75
+  },
+  "otp": {
+   "n": 112,
+   "scam": false,
+   "flagged_high": 0.0,
+   "flagged_caution": 0.0,
+   "served_high": 0.0,
+   "served_any": 0.0
+  },
+  "parcel_customs": {
+   "n": 67,
+   "scam": true,
+   "flagged_high": 0.418,
+   "flagged_caution": 0.582,
+   "served_high": 0.418,
+   "served_any": 0.582
+  },
+  "personal": {
+   "n": 130,
+   "scam": false,
+   "flagged_high": 0.0,
+   "flagged_caution": 0.123,
+   "served_high": 0.0,
+   "served_any": 0.123
+  },
+  "remote_access": {
+   "n": 43,
+   "scam": true,
+   "flagged_high": 0.326,
+   "flagged_caution": 0.419,
+   "served_high": 0.419,
+   "served_any": 0.953
+  },
+  "reward_points": {
+   "n": 42,
+   "scam": true,
+   "flagged_high": 1.0,
+   "flagged_caution": 1.0,
+   "served_high": 1.0,
+   "served_any": 1.0
+  },
+  "services": {
+   "n": 130,
+   "scam": false,
+   "flagged_high": 0.277,
+   "flagged_caution": 0.338,
+   "served_high": 0.277,
+   "served_any": 0.338
+  },
+  "sextortion": {
+   "n": 40,
+   "scam": true,
+   "flagged_high": 1.0,
+   "flagged_caution": 1.0,
+   "served_high": 1.0,
+   "served_any": 1.0
+  },
+  "task_job": {
+   "n": 83,
+   "scam": true,
+   "flagged_high": 0.675,
+   "flagged_caution": 0.831,
+   "served_high": 0.675,
+   "served_any": 0.831
+  },
+  "upi_collect_refund": {
+   "n": 78,
+   "scam": true,
+   "flagged_high": 0.897,
+   "flagged_caution": 0.897,
+   "served_high": 0.897,
+   "served_any": 1.0
+  },
+  "utility_bill": {
+   "n": 98,
+   "scam": false,
+   "flagged_high": 0.0,
+   "flagged_caution": 0.0,
+   "served_high": 0.0,
+   "served_any": 0.0
+  },
+  "utility_disconnect": {
+   "n": 70,
+   "scam": true,
+   "flagged_high": 0.6,
+   "flagged_caution": 0.6,
+   "served_high": 0.6,
+   "served_any": 0.6
+  }
+ },
+ "examples": {
+  "missed_scams": [
+   {
+    "score": 0.092,
+    "workflow": "remote_access",
+    "text": "Bhai, galti se tumhare number par OTP chala gaya, please forward kar do."
+   },
+   {
+    "score": 0.092,
+    "workflow": "remote_access",
+    "text": "bhai, galti se tumhare number par otp chala gaya, please forward kar do."
+   },
+   {
+    "score": 0.161,
+    "workflow": "remote_access",
+    "text": "Install QuickSupport app so that our technician can fix your BHIM issue. Share screen please."
+   },
+   {
+    "score": 0.161,
+    "workflow": "remote_access",
+    "text": "install quicksupport app so that our technician can fix your bhim issue. share screen please."
+   },
+   {
+    "score": 0.17,
+    "workflow": "remote_access",
+    "text": "Install QuickSupport app so that our technician can fix your CRED issue. Share screen please."
+   },
+   {
+    "score": 0.17,
+    "workflow": "remote_access",
+    "text": "install quicksupport app so that our technician can fix your cred issue. share screen please."
+   },
+   {
+    "score": 0.175,
+    "workflow": "family_emergency",
+    "text": "Hi mom this is my new number, my phone fell in water. Can you send Rs 1,290 for urgent fees? I will return tomorrow."
+   },
+   {
+    "score": 0.175,
+    "workflow": "family_emergency",
+    "text": "Hi mom this is my new number, my phone fell in water. Can you send Rs 11,830 for urgent fees? I will return tomorrow."
+   }
+  ],
+  "false_alarms": [
+   {
+    "score": 0.909,
+    "workflow": "services",
+    "text": "your income tax return for ay 2026-27 has been processed. refund of rs 8,280 will be credited to your pre-validated bank account."
+   },
+   {
+    "score": 0.909,
+    "workflow": "services",
+    "text": "Your income tax return for AY 2026-27 has been processed. Refund of Rs 5,250 will be credited to your pre-validated bank account."
+   },
+   {
+    "score": 0.909,
+    "workflow": "services",
+    "text": "Your income tax return for AY 2026-27 has been processed. Refund of Rs 4,980 will be credited to your pre-validated bank account."
+   },
+   {
+    "score": 0.909,
+    "workflow": "services",
+    "text": "Your income tax return for AY 2026-27 has been processed. Refund of Rs 4,120 will be credited to your pre-validated bank account."
+   },
+   {
+    "score": 0.909,
+    "workflow": "services",
+    "text": "Your income tax return for AY 2026-27 has been processed. Refund of Rs 23,980 will be credited to your pre-validated bank account."
+   },
+   {
+    "score": 0.909,
+    "workflow": "services",
+    "text": "Your income tax return for AY 2026-27 has been processed. Refund of Rs 23,490 will be credited to your pre-validated bank account."
+   },
+   {
+    "score": 0.909,
+    "workflow": "services",
+    "text": "Your income tax return for AY 2026-27 has been processed. Refund of Rs 22,440 will be credited to your pre-validated bank account."
+   },
+   {
+    "score": 0.909,
+    "workflow": "services",
+    "text": "Your income tax return for AY 2026-27 has been processed. Refund of Rs 21,350 will be credited to your pre-validated bank account."
+   }
+  ]
+ },
+ "runtime_seconds": 123.4
+}

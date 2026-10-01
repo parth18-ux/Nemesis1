@@ -72,6 +72,21 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .obres{font-size:13px;border-radius:8px;padding:10px 12px;background:var(--bg);min-height:62px}
 .obres b{font-family:var(--mono)}
 .num{font-variant-numeric:tabular-nums}
+.lure{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+@media (max-width:1000px){.lure{grid-template-columns:1fr}}
+.lure textarea{width:100%;min-height:96px;font:13px/1.45 var(--body);color:var(--ink);background:var(--bg);border:1px solid var(--rule);border-radius:8px;padding:10px 12px;resize:vertical}
+.lure textarea:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.lure .row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.lure .row button.s{padding:4px 10px;font-size:12px}
+.lres{display:flex;flex-direction:column;gap:8px;font-size:13px;background:var(--bg);border-radius:8px;padding:12px 14px;min-height:150px}
+.lres .head{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.lres .wf{font-weight:600}
+.lres .desc{color:var(--ink-2)}
+.pill.safe{background:var(--ok-soft);color:var(--ok)}
+.chip.hard{border-color:var(--bad);color:var(--bad)}
+.note{font-size:12.5px;border-left:3px solid var(--accent);padding:4px 10px;color:var(--ink-2)}
+.note.warn{border-color:var(--warn)} .note.bad{border-color:var(--bad)}
+.fatigue{font:12px var(--mono);color:var(--ink-3)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -107,6 +122,17 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
     <div class="t"><b id="tTP">0 / 0</b><span>caught / laundering seen</span></div>
     <div class="t"><b id="tFP">0</b><span>false blocks</span></div>
     <div class="t"><b id="tLat">—</b><span>median latency per payment</span></div>
+  </div>
+
+  <div class="panel lure">
+    <div style="display:flex;flex-direction:column;gap:8px;min-width:0">
+      <span class="label">L-1 lure detector · scam message or call transcript</span>
+      <textarea id="msgText" aria-label="Message text">Sir, this is Inspector Sharma from CBI. Your Aadhaar is linked to a money laundering case. You are under digital arrest, stay on the video call and transfer Rs 2,50,000 to the RBI verification account rbi.verify@paytm. Do not tell anyone.</textarea>
+      <div class="row" id="msgSamples"></div>
+      <div class="row"><button class="primary" id="msgCheck">Check message</button><button id="msgPay" disabled>Then pay a new payee</button><button id="msgPayScam" disabled>Pay the UPI ID in the message</button></div>
+      <span class="fatigue" id="fatigue">Alert budget: nothing scored yet</span>
+    </div>
+    <div class="lres" id="msgRes"><span class="empty" style="padding:0">Paste an SMS, WhatsApp message or call transcript. The model scores it, names the scam workflow and tactics, and decides whether the user should be interrupted. A payment that follows a risky message is escalated.</span></div>
   </div>
 
   <div class="cols">
@@ -208,6 +234,59 @@ async function onboard(kind) {
   const s = SAMPLES[kind];
   $("obres").innerHTML = `<b>${r.decision}</b><br>Risk ${r.risk.toFixed(4)} vs. threshold ${r.threshold.toFixed(4)} for age ${s.customer_age >= 50 ? "50+" : "under 50"} · device ${s.device_os} · housing ${s.housing_status} · name–email similarity ${s.name_email_similarity.toFixed(2)}<br><span style="color:var(--ink-3)">Dataset label: ${kind === "mule" ? "fraud" : "genuine"}</span>`;
 }
+// ---- L-1 lure detector
+const MSG_SAMPLES = {
+  "KYC block": "Dear SBI customer your account will be blocked today. Please update your PAN card immediately click http://sbi-kyc-update.in/verify",
+  "Task job": "Hi, I am Neha from a recruitment team. Part time job: like YouTube videos and earn Rs 3,000 to Rs 8,000 daily from home. Join our Telegram task group.",
+  "Voice clone": "Papa main police station mein hoon, mujhe pakad liya hai. Jaldi Rs 50,000 bhejo is number par 9876501234, mummy ko mat batana.",
+  "Screen share": "Sir I am from your bank, to cancel the fraud transaction install AnyDesk and read out the OTP you just received.",
+  "Genuine OTP": "482913 is your OTP for transaction of Rs 2,300 at MYNTRA on HDFC Bank card XX1234. Valid for 5 mins. Do not share this OTP with anyone.",
+  "Genuine family": "Papa please send Rs 4,500 for the hostel fee, the last date is Friday. I will send the receipt.",
+};
+let lastMsg = null, payClock = 0;
+$("msgSamples").innerHTML = Object.keys(MSG_SAMPLES).map(k => `<button class="s" data-k="${k}">${k}</button>`).join("");
+$("msgSamples").onclick = e => { const k = e.target.dataset && e.target.dataset.k; if (k) { $("msgText").value = MSG_SAMPLES[k]; $("msgCheck").click(); } };
+const esc = t => String(t).replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+
+async function refreshFatigue() {
+  const s = await api("/api/v2/alerts/summary");
+  const sup = (s.suppressed_caution || 0) + (s.suppressed_duplicate || 0) + (s.suppressed_daily_cap || 0) + (s.suppressed_no_account || 0);
+  $("fatigue").textContent = `Alert budget: ${s.messages || 0} messages scored · ${s.notified || 0} pushed · ${sup} held back (caution ${s.suppressed_caution || 0}, duplicate ${s.suppressed_duplicate || 0}, daily cap ${s.suppressed_daily_cap || 0}) · ${s.payments_escalated || 0} payments escalated`;
+}
+
+$("msgCheck").onclick = async () => {
+  const text = $("msgText").value.trim(); if (!text) return;
+  $("msgCheck").disabled = true;
+  try {
+    const r = await api("/api/v2/message", {method: "POST", body: {text, channel: "sms", timestamp: "2022-09-09 09:00", bank: "070", account: "DEMO-USER"}});
+    lastMsg = r;
+    const cls = r.band === "high" ? "block" : r.band === "caution" ? "hold" : "safe";
+    const wf = r.workflow ? `<div><span class="wf">${esc(r.workflow.label)}</span><div class="desc">${esc(r.workflow.description)}</div></div>` : `<div class="desc">No scam workflow matched.</div>`;
+    const chips = [...r.hard_signals.map(h => `<span class="chip hard">${esc(h.label)}</span>`), ...r.tactics.map(t => `<span class="chip">${esc(t.label)}</span>`)].join("");
+    const ents = [...r.entities.upi_ids, ...r.entities.phones, ...r.entities.links].map(x => `<span class="chip">${esc(x)}</span>`).join("");
+    const al = r.alert.notify ? `<div class="note bad"><b>Push warning sent:</b> ${esc(r.alert.message)}</div>` : `<div class="note">No push: ${esc(r.alert.reason)}</div>`;
+    $("msgRes").innerHTML = `<div class="head"><span class="pill ${cls}">${r.band === "high" ? "High risk" : r.band === "caution" ? "Caution" : "Looks safe"}</span><span class="num">risk ${r.risk.toFixed(3)}</span><span class="status">model ${r.model_risk.toFixed(3)}</span></div>
+      ${wf}${chips ? `<div class="reasons">${chips}</div>` : ""}${r.key_phrases.length ? `<div class="desc">Key phrases: ${r.key_phrases.map(esc).join(" · ")}</div>` : ""}
+      ${ents ? `<div class="reasons"><span class="status">entities →</span>${ents}</div>` : ""}${al}`;
+    $("msgPay").disabled = false; $("msgPayScam").disabled = !r.entities.upi_ids.length;
+    refreshFatigue();
+  } catch (e) { $("msgRes").textContent = "Message check failed: " + e.message; }
+  $("msgCheck").disabled = false;
+};
+
+async function payAfter(toBank, toAcct) {
+  payClock += 1;
+  const t = `2022-09-09 ${String(10 + Math.floor(payClock / 60) % 12).padStart(2, "0")}:${String(payClock % 60).padStart(2, "0")}`;
+  const r = await api("/api/v2/payment", {method: "POST", body: {timestamp: t, from_bank: "070", from_account: "DEMO-USER", to_bank: toBank, to_account: toAcct, amount_paid: 2500, payment_format: "ACH"}});
+  const cls = r.band === "high" ? "bad" : r.band === "med" ? "warn" : "";
+  const was = r.decision_before_lure ? ` (payment model alone: ${esc(r.decision_before_lure)})` : "";
+  const lure = r.reasons.filter(x => /message/.test(x.feature)).map(x => `${esc(x.feature)}: ${esc(x.display)}`).join(" · ");
+  $("msgRes").insertAdjacentHTML("beforeend", `<div class="note ${cls}"><b>Payment to ${esc(toAcct)} → ${esc(r.decision)}</b>${was}${lure ? "<br>" + lure : ""}${r.payer_prompt ? "<br><i>" + esc(r.payer_prompt) + "</i>" : ""}</div>`);
+  refreshFatigue();
+}
+$("msgPay").onclick = () => payAfter("011", "NEW-PAYEE-" + Math.floor(Math.random() * 1e6));
+$("msgPayScam").onclick = () => lastMsg && payAfter("upi", lastMsg.entities.upi_ids[0]);
+
 $("obMule").onclick = () => onboard("mule"); $("obGen").onclick = () => onboard("genuine");
 boot();
 </script>

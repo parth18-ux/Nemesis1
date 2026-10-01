@@ -2,7 +2,9 @@
 
 **Layered AI filtration for mule accounts and scam money flows.**
 
-RuseTect scores bank payments and new account applications for money-mule activity. A small model clears
+RuseTect follows a scam from the first message to the mule ring. It scores the lure (SMS, WhatsApp, call
+transcript) and warns the user once. It escalates a payment to a new payee that follows a risky message. It also
+scores bank payments and new account applications for money-mule activity. A small model clears
 most payments quickly; the rest are scored by gradient-boosted trees, explained per feature, and linked into ring
 cases for an analyst. It is a research prototype trained and evaluated on **synthetic** datasets
 (IBM AMLworld, Feedzai BAF); nothing here shows performance on real banking traffic.
@@ -11,6 +13,8 @@ cases for an analyst. It is a research prototype trained and evaluated on **synt
 
 | Layer | Model (file) | What it does |
 |---|---|---|
+| **L-1 lure detector** | Logistic regression on hashed TF-IDF + 6 "never legitimate" rules (`message_model.json`, `service/scam_text.py`) | Scores a message; names the scam workflow (digital arrest, KYC block, task job, voice-clone emergency…) and tactics; extracts UPI IDs, phones, links |
+| **Lure → payment fusion** | Rules (`service/lure_fusion.py`) | Step-up + cool-off prompt for a payment to a new payee within 72 h of a risky message; hold for payments to a UPI ID/account named in one; push budget against alert fatigue |
 | **L0 onboarding** | LightGBM (`service/models/l0_onboarding_lgbm.json`) | Scores an account application; separate thresholds for applicants 50+ and under 50 |
 | **L1 gatekeeper** | XGBoost, 30 trees, depth 3 (`l1_gatekeeper.json`) | Approves most payments; passes the rest on |
 | **L2 graph-boost** | XGBoost (`l2_xgb.json`) + LightGBM (`l2_lgbm.json`), averaged | Risk score → Approve / Step-up / Hold / Block + STR draft, with XGBoost TreeSHAP reasons |
@@ -36,7 +40,13 @@ See `ml/aml_features.py` (offline) and `Engine.features` (live; parity checked b
 - **Live path audit** (`results/live_path_audit.json`): what the served configuration actually does on the test period.
   See `docs/project-audit.md`.
 
-Why gradient-boosted trees, and what the alternatives showed: `docs/model-selection.md`.
+- **Message layer** (`results/message_model_eval.json`, `python ml/train_message_model.py`): on synthetic Indian
+  messages from templates held out of training, push warnings are 0.95 precise and catch 68% of scams; with the
+  caution band, 82% at 0.92 precision. Genuine OTP, bank, bill and delivery SMS: 0 false alarms. Real UCI SMS: 0.98
+  average precision.
+
+Why gradient-boosted trees and logistic regression, and what the alternatives showed: `docs/model-selection.md`.
+Data to collect next: `docs/datasets.md`. Project status and open findings: `docs/project-audit.md`.
 
 ## Run it
 
@@ -62,6 +72,15 @@ curl -X POST localhost:8001/api/v2/payment -H 'Content-Type: application/json' -
   "timestamp": "2022-09-09 10:00", "from_bank": "070", "from_account": "A1",
   "to_bank": "011", "to_account": "B2", "amount_paid": 9300, "payment_format": "ACH"}'
 ```
+Score a message (link it to a payer by passing their `bank`/`account`):
+```bash
+curl -X POST localhost:8001/api/v2/message -H 'Content-Type: application/json' -d '{
+  "text": "Your SBI account will be blocked today. Update PAN at http://sbi-kyc-update.in/verify",
+  "timestamp": "2022-09-09 09:00", "bank": "070", "account": "A1"}'
+```
+A later `/api/v2/payment` from `070`/`A1` to a new payee is then escalated. `GET /api/v2/alerts/summary` shows pushed vs
+suppressed warnings.
+
 Other routes: `POST /api/v2/payments/batch`, `POST /api/v2/onboard`, `GET /api/v2/cases`,
 `GET /api/v2/model-card`, `GET /api/health`.
 
@@ -88,6 +107,7 @@ python ml/export_sequence_results.py   # sequence models -> results/model_compar
 python ml/audit_live_path.py           # live path audit -> results/live_path_audit.json
 python ml/parity_check.py              # streaming features == offline features
 python ml/build_report.py              # regenerate service/static/report.html from report/report_template.html
+python ml/train_message_model.py      # L-1 lure detector (needs data/sms.tsv, see the script header) -> service/models/message_model.json
 pytest tests/
 ```
 The report has one source: edit `report/report_template.html` and run `python ml/build_report.py`.
@@ -112,5 +132,8 @@ settings (see `docs/project-audit.md`).
 ## Limits
 
 - Both datasets are synthetic, so thresholds and models must be re-validated on a bank's own data.
-- Scam calls and chats (lure and pressure stages) are not modelled. RuseTect covers account opening and money movement.
+- The Indian message corpus is synthetic (templates written from public advisories). Real reported scam messages
+  are needed before the L-1 thresholds can be trusted; see `docs/datasets.md`. Call audio and deepfake voice are not
+  modelled: L-1 needs a transcript.
+- Lure events, the payee watchlist and alert budgets are in memory too, and are not shared across serverless instances.
 - The engine keeps account state in memory; production needs a persistent feature store and a history replay at start-up.
