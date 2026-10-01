@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RuseTect Live Console</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: control bar, then funnel strip, then two columns (alert feed | cases + onboarding). */
+:root{
+  --bg:#eef2f5; --panel:#ffffff; --ink:#15202b; --ink-2:#4a5866; --ink-3:#7d8a97; --rule:#d9e0e6;
+  --accent:#0b6e7a; --accent-soft:#d9eef0; --bad:#b4232c; --bad-soft:#f8e1e2; --warn:#9a6100; --warn-soft:#f6ead5; --ok:#2c7a3f; --ok-soft:#ddf0e1;
+  --display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif; --body:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0d1419;--panel:#152029;--ink:#e6edf2;--ink-2:#a9b6c1;--ink-3:#77858f;--rule:#24313b;--accent:#4fc3cf;--accent-soft:#143338;--bad:#f07b82;--bad-soft:#3a1c1f;--warn:#e3a54a;--warn-soft:#3a2c14;--ok:#6fcf8a;--ok-soft:#173222;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0d1419;--panel:#152029;--ink:#e6edf2;--ink-2:#a9b6c1;--ink-3:#77858f;--rule:#24313b;--accent:#4fc3cf;--accent-soft:#143338;--bad:#f07b82;--bad-soft:#3a1c1f;--warn:#e3a54a;--warn-soft:#3a2c14;--ok:#6fcf8a;--ok-soft:#173222;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:14px/1.5 var(--body);padding-inline:16px;padding-block:20px 40px}
+.wrap{max-width:1360px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+h1{font:700 24px/1.1 var(--display);margin:0;letter-spacing:-.01em}
+h1 small{display:block;font:500 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button{font:500 13px var(--body);border:1px solid var(--rule);background:var(--panel);color:var(--ink);border-radius:6px;padding:8px 14px;cursor:pointer}
+button.primary{background:var(--accent);border-color:var(--accent);color:var(--panel)}
+button:disabled{opacity:.45;cursor:default}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.status{font:12px var(--mono);color:var(--ink-3)}
+.panel{background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:14px 16px;min-width:0}
+.label{font:500 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.funnel{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0;padding:0;overflow:hidden}
+.fstep{padding:14px 16px;border-left:1px solid var(--rule);display:flex;flex-direction:column;gap:4px}
+.fstep:first-child{border-left:0}
+.fstep .v{font:500 24px var(--mono);font-variant-numeric:tabular-nums}
+.fstep .s{font-size:12px;color:var(--ink-2)}
+.fstep.l1 .v{color:var(--ok)} .fstep.hold .v{color:var(--warn)} .fstep.block .v{color:var(--bad)}
+.meter{height:4px;background:var(--rule);border-radius:2px;overflow:hidden;margin-top:4px}
+.meter div{height:100%;background:currentColor;transition:width .3s}
+@media (max-width:900px){.funnel{grid-template-columns:repeat(3,minmax(0,1fr))}.fstep:nth-child(4){border-left:0}.fstep:nth-child(n+4){border-top:1px solid var(--rule)}}
+.truth{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.truth .t{display:flex;flex-direction:column;gap:2px;border-left:2px solid var(--accent);padding-left:12px}
+.truth .t b{font:500 20px var(--mono);font-variant-numeric:tabular-nums}
+.truth .t span{font-size:12px;color:var(--ink-2)}
+@media (max-width:900px){.truth{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.progress{height:6px;background:var(--rule);border-radius:3px;overflow:hidden}
+.progress div{height:100%;background:var(--accent);width:0;transition:width .3s}
+.cols{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:1000px){.cols{grid-template-columns:1fr}}
+.side{display:flex;flex-direction:column;gap:16px;min-width:0}
+.feed{display:flex;flex-direction:column;gap:0;max-height:640px;overflow-y:auto}
+.alert{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;padding:10px 0;border-top:1px solid var(--rule)}
+.alert:first-child{border-top:0}
+.alert .route{font:12.5px var(--mono);color:var(--ink);overflow-wrap:anywhere}
+.alert .meta{font-size:12px;color:var(--ink-3)}
+.pill{font:500 11.5px var(--mono);padding:2px 8px;border-radius:999px;white-space:nowrap;justify-self:end}
+.pill.block{background:var(--bad-soft);color:var(--bad)} .pill.hold{background:var(--warn-soft);color:var(--warn)} .pill.verify{background:var(--accent-soft);color:var(--accent)}
+.reasons{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:11.5px;background:var(--bg);border:1px solid var(--rule);border-radius:4px;padding:1px 7px;color:var(--ink-2)}
+.verdict{font:500 11.5px var(--mono);justify-self:end}
+.verdict.y{color:var(--ok)} .verdict.n{color:var(--ink-3)}
+.empty{color:var(--ink-3);font-size:13px;padding:18px 0}
+.case{display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--rule)}
+.case:first-of-type{border-top:0}
+.case svg{width:120px;height:84px;background:var(--bg);border-radius:6px}
+.case b{font:500 13px var(--mono)}
+.case span{display:block;font-size:12px;color:var(--ink-2)}
+.ob{display:flex;flex-direction:column;gap:10px}
+.ob .row{display:flex;gap:8px;flex-wrap:wrap}
+.obres{font-size:13px;border-radius:8px;padding:10px 12px;background:var(--bg);min-height:62px}
+.obres b{font-family:var(--mono)}
+.num{font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1><small>RuseTect · layered filtration cascade</small>Live Console</h1>
+    <div class="controls">
+      <button id="btnReset">1 · Load account history</button>
+      <button id="btnRun" class="primary" disabled>2 · Stream payments</button>
+      <button id="btnPause" disabled>Pause</button>
+      <span class="status" id="status">Engine: checking…</span>
+    </div>
+  </header>
+
+  <div class="panel" style="display:flex;flex-direction:column;gap:8px">
+    <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap"><span class="label">Replay of IBM AMLworld test-period payments</span><span class="status" id="simtime">sim time —</span></div>
+    <div class="progress"><div id="prog"></div></div>
+  </div>
+
+  <div class="panel funnel">
+    <div class="fstep"><span class="label">Scored</span><span class="v" id="fScored">0</span><span class="s">payments through the cascade</span></div>
+    <div class="fstep l1"><span class="label">L1 cleared</span><span class="v" id="fL1">0</span><span class="s" id="fL1p">approved by gatekeeper</span><div class="meter"><div id="mL1" style="width:0"></div></div></div>
+    <div class="fstep"><span class="label">L2 escalated</span><span class="v" id="fL2">0</span><span class="s">sent to XGBoost + LightGBM</span></div>
+    <div class="fstep hold"><span class="label">Step-up / hold</span><span class="v" id="fMed">0</span><span class="s">OTP re-check or analyst hold</span></div>
+    <div class="fstep block"><span class="label">Block + STR</span><span class="v" id="fBlock">0</span><span class="s">auto-blocked, STR drafted</span></div>
+    <div class="fstep"><span class="label">L4 cases</span><span class="v" id="fCases">0</span><span class="s">mule clusters to review</span></div>
+  </div>
+
+  <div class="panel truth">
+    <div class="t"><b id="tPrec">—</b><span>precision of blocks vs. ground truth</span></div>
+    <div class="t"><b id="tRec">—</b><span>laundering payments blocked</span></div>
+    <div class="t"><b id="tTP">0 / 0</b><span>caught / laundering seen</span></div>
+    <div class="t"><b id="tFP">0</b><span>false blocks</span></div>
+    <div class="t"><b id="tLat">—</b><span>median latency per payment</span></div>
+  </div>
+
+  <div class="cols">
+    <div class="panel">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:6px"><span class="label">Alert feed · newest first</span><span class="status">ground-truth label shown for the demo only</span></div>
+      <div class="feed" id="feed"><div class="empty">Load account history, then stream payments. Blocks and holds appear here with the reasons the model gave.</div></div>
+    </div>
+    <div class="side">
+      <div class="panel">
+        <span class="label">L4 ring linker · largest cases</span>
+        <div id="cases"><div class="empty">Cases form when blocked payments share accounts.</div></div>
+      </div>
+      <div class="panel ob">
+        <span class="label">L0 onboarding gate · new account applications (Feedzai BAF, test months)</span>
+        <div class="row"><button id="obMule">Score application A</button><button id="obGen">Score application B</button></div>
+        <div class="obres" id="obres">Two real held-out applications. One was labelled fraud in the dataset, one genuine. The model sees neither label.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const SAMPLES = {"mule": {"income": 0.9, "name_email_similarity": 0.0452381698427012, "prev_address_months_count": -1, "current_address_months_count": 84, "customer_age": 40, "days_since_request": 0.0076979065840055, "intended_balcon_amount": -0.5697656791958139, "payment_type": "AC", "zip_count_4w": 2539, "velocity_6h": 3655.14740343208, "velocity_24h": 3798.573074800848, "velocity_4w": 3107.0505436563453, "bank_branch_count_8w": 0, "date_of_birth_distinct_emails_4w": 1, "employment_status": "CA", "credit_risk_score": 249, "email_is_free": 1, "housing_status": "BA", "phone_home_valid": 0, "phone_mobile_valid": 1, "bank_months_count": -1, "has_other_cards": 0, "proposed_credit_limit": 2000.0, "foreign_request": 0, "source": "INTERNET", "session_length_in_minutes": 3.102063265364043, "device_os": "windows", "keep_alive_session": 0, "device_distinct_emails_8w": 1, "device_fraud_count": 0}, "genuine": {"income": 0.4, "name_email_similarity": 0.8707952377237682, "prev_address_months_count": 46, "current_address_months_count": 11, "customer_age": 40, "days_since_request": 0.007769235283125, "intended_balcon_amount": -1.1096952670520477, "payment_type": "AB", "zip_count_4w": 717, "velocity_6h": 2969.442803950711, "velocity_24h": 3663.957943681082, "velocity_4w": 3039.0498465342584, "bank_branch_count_8w": 1, "date_of_birth_distinct_emails_4w": 9, "employment_status": "CD", "credit_risk_score": 77, "email_is_free": 0, "housing_status": "BC", "phone_home_valid": 1, "phone_mobile_valid": 0, "bank_months_count": 2, "has_other_cards": 1, "proposed_credit_limit": 200.0, "foreign_request": 0, "source": "INTERNET", "session_length_in_minutes": 4.513869524714286, "device_os": "linux", "keep_alive_session": 1, "device_distinct_emails_8w": 1, "device_fraud_count": 0}};
+const $ = id => document.getElementById(id);
+const nf = n => Number(n).toLocaleString("en-US");
+const pct = (a, b) => b ? (100 * a / b).toFixed(1) + "%" : "—";
+let running = false, totals = {scored: 0, L1: 0, L2: 0, med: 0, high: 0};
+
+async function api(path, opts = {}) {
+  const r = await fetch(path, {method: opts.method || "GET", headers: {"Content-Type": "application/json"}, body: opts.body ? JSON.stringify(opts.body) : undefined});
+  if (!r.ok) throw new Error(`${path} returned ${r.status}`);
+  return r.json();
+}
+
+async function boot() {
+  try { const h = await api("/api/"); $("status").textContent = h.engine_loaded ? "Engine: models loaded" : "Engine: models missing"; }
+  catch (e) { $("status").textContent = "Engine: API not reachable"; }
+}
+
+$("btnReset").onclick = async () => {
+  $("btnReset").disabled = true; $("status").textContent = "Ingesting earlier payments as account history (up to ~2 min for the full history)…";
+  const r = await api("/api/v2/demo/reset", {method: "POST"});
+  totals = {scored: 0, L1: 0, L2: 0, med: 0, high: 0}; render({truth: {tp: 0, fp: 0, pos: 0}, feed: [], cases: [], position: 0, total: r.remaining});
+  $("status").textContent = `History loaded: ${nf(r.history_ingested)} payments (${r.source}) in ${r.seconds}s`;
+  $("btnRun").disabled = false; $("btnReset").disabled = false;
+};
+$("btnRun").onclick = () => { running = true; $("btnRun").disabled = true; $("btnPause").disabled = false; $("btnReset").disabled = true; loop(); };
+$("btnPause").onclick = () => { running = false; $("btnPause").disabled = true; $("btnRun").disabled = false; $("btnReset").disabled = false; };
+
+async function loop() {
+  while (running) {
+    const r = await api("/api/v2/demo/next?n=1500", {method: "POST"});
+    totals.scored += r.scored; totals.L1 += r.exits.L1; totals.L2 += r.exits.L2; totals.med += r.bands.med; totals.high += r.bands.high;
+    render(r);
+    if (r.done) { running = false; $("btnPause").disabled = true; $("btnReset").disabled = false; $("status").textContent = "Replay finished"; }
+  }
+}
+
+function render(r) {
+  $("fScored").textContent = nf(totals.scored); $("fL1").textContent = nf(totals.L1); $("fL2").textContent = nf(totals.L2);
+  $("fMed").textContent = nf(totals.med); $("fBlock").textContent = nf(totals.high);
+  $("fL1p").textContent = totals.scored ? `${pct(totals.L1, totals.scored)} approved by gatekeeper` : "approved by gatekeeper";
+  $("mL1").style.width = totals.scored ? (100 * totals.L1 / totals.scored) + "%" : 0;
+  $("fCases").textContent = nf(r.open_cases || 0);
+  const T = r.truth; $("tPrec").textContent = pct(T.tp, T.tp + T.fp); $("tRec").textContent = pct(T.tp, T.pos);
+  $("tTP").textContent = `${nf(T.tp)} / ${nf(T.pos)}`; $("tFP").textContent = nf(T.fp);
+  $("tLat").textContent = r.latency_p50_ms != null ? r.latency_p50_ms.toFixed(2) + " ms" : "—";
+  $("prog").style.width = r.total ? (100 * r.position / r.total) + "%" : 0;
+  if (r.sim_time) $("simtime").textContent = `sim time ${r.sim_time} UTC · ${nf(r.position)} of ${nf(r.total)}`;
+  renderFeed(r.feed || []); renderCases(r.cases || []);
+}
+
+function renderFeed(feed) {
+  if (!feed.length) return;
+  $("feed").innerHTML = feed.map(a => {
+    const cls = a.decision.startsWith("Block") ? "block" : a.decision.startsWith("Hold") ? "hold" : "verify";
+    return `<div class="alert"><div><div class="route">${a.from} → ${a.to}</div><div class="meta">${a.ts} · ${nf(a.amount)} ${a.currency} · ${a.format} · risk ${a.risk.toFixed(3)}${a.case_id ? " · " + a.case_id : ""}</div></div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><span class="pill ${cls}">${a.decision}</span><span class="verdict ${a.truth ? "y" : "n"}">${a.truth ? "laundering ✓" : "not laundering"}</span></div>
+      <div class="reasons">${a.reasons.map(x => `<span class="chip">${x.feature}: ${x.display}</span>`).join("")}</div></div>`;
+  }).join("");
+}
+
+function renderCases(cases) {
+  if (!cases.length) return;
+  $("cases").innerHTML = cases.slice(0, 5).map(c => `<div class="case">${miniGraph(c.edges)}<div><b>${c.case_id}</b><span>${c.alerts} blocked payments · ${c.accounts} accounts</span><span>${nf(c.total_amount)} moved · ${c.formats.join(", ")}</span></div></div>`).join("");
+}
+
+function miniGraph(edges) {
+  const ids = [...new Set(edges.flatMap(e => [e.from, e.to]))].slice(0, 14), W = 120, H = 84, R = 30;
+  const pos = Object.fromEntries(ids.map((id, i) => { const a = 2 * Math.PI * i / ids.length - Math.PI / 2; return [id, [W / 2 + R * 1.45 * Math.cos(a), H / 2 + R * Math.sin(a)]]; }));
+  const ink = getComputedStyle(document.documentElement).getPropertyValue("--ink-3").trim(), bad = getComputedStyle(document.documentElement).getPropertyValue("--bad").trim();
+  const ls = edges.filter(e => pos[e.from] && pos[e.to]).map(e => `<line x1="${pos[e.from][0]}" y1="${pos[e.from][1]}" x2="${pos[e.to][0]}" y2="${pos[e.to][1]}" stroke="${ink}" stroke-width="1"/>`).join("");
+  const ns = ids.map(id => `<circle cx="${pos[id][0]}" cy="${pos[id][1]}" r="3.6" fill="${bad}"/>`).join("");
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="accounts in case">${ls}${ns}</svg>`;
+}
+
+async function onboard(kind) {
+  const r = await api("/api/v2/onboard", {method: "POST", body: SAMPLES[kind]});
+  const s = SAMPLES[kind];
+  $("obres").innerHTML = `<b>${r.decision}</b><br>Risk ${r.risk.toFixed(4)} vs. threshold ${r.threshold.toFixed(4)} for age ${s.customer_age >= 50 ? "50+" : "under 50"} · device ${s.device_os} · housing ${s.housing_status} · name–email similarity ${s.name_email_similarity.toFixed(2)}<br><span style="color:var(--ink-3)">Dataset label: ${kind === "mule" ? "fraud" : "genuine"}</span>`;
+}
+$("obMule").onclick = () => onboard("mule"); $("obGen").onclick = () => onboard("genuine");
+boot();
+</script>
+</body>
+</html>

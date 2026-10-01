@@ -1,0 +1,8 @@
+ml/
+report/
+tests/
+data/
+work/
+*.md
+run_local.ps1
+__pycache__/

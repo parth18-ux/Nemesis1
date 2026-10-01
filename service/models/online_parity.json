@@ -1,0 +1,12 @@
+{
+ "test_payments_scored": 60000,
+ "laundering_in_slice": 97,
+ "max_abs_risk_diff": 0.03219700013075777,
+ "mean_abs_risk_diff": 9.313195174206251e-06,
+ "same_decision_rate": 1.0,
+ "pr_auc_live": 0.7060328405352353,
+ "pr_auc_offline": 0.7058979196642119,
+ "latency_ms_p50": 0.33,
+ "latency_ms_p99": 11.74,
+ "l1_exit_rate": 0.8614
+}

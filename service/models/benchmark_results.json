@@ -1,0 +1,573 @@
+{
+ "dataset": {
+  "aml": "IBM AMLworld HI-Small: 5,078,345 payments, 5,177 laundering (0.10%), 515,088 accounts, 370 labelled rings",
+  "onboarding": "Feedzai BAF Base: 1,000,000 applications, 1.1% fraud"
+ },
+ "protocol": {
+  "aml": "time-ordered split 60/20/20; causal features (past only); threshold on validation; metrics on test",
+  "gnn": "embeddings from past graph only (0-40% -> train 40-60%, 0-60% -> val, 0-80% -> test)",
+  "baf": "train months 0-4, threshold month 5, test months 6-7; recall at 5% FPR"
+ },
+ "aml_models": {
+  "XGBoost": {
+   "pr_auc": 0.17204600869785294,
+   "roc_auc": 0.9433401803438132,
+   "precision": 0.31314878892733566,
+   "recall": 0.20144685587089595,
+   "f1": 0.24517439891635626,
+   "alerts": 1156,
+   "alerts_per_tp": 3.1933701657458564,
+   "recall_at_budget": 0.29938786867000555,
+   "precision_at_budget": 0.26489414081733137,
+   "pr_auc_core": 0.07198654185754162,
+   "family": "boosting",
+   "features": "raw",
+   "train_secs": 3.4,
+   "note": ""
+  },
+  "XGBoost+graph": {
+   "pr_auc": 0.7150991088560061,
+   "roc_auc": 0.9885448825731412,
+   "precision": 0.8609492089925063,
+   "recall": 0.575403450194769,
+   "f1": 0.6897931954636425,
+   "alerts": 1201,
+   "alerts_per_tp": 1.1615087040618957,
+   "recall_at_budget": 0.6722314969393434,
+   "precision_at_budget": 0.5947808961102905,
+   "pr_auc_core": 0.585114458517612,
+   "family": "boosting",
+   "features": "all",
+   "train_secs": 6.4,
+   "note": ""
+  },
+  "LightGBM+graph": {
+   "pr_auc": 0.6985202257679424,
+   "roc_auc": 0.9819718417585926,
+   "precision": 0.8508557457212714,
+   "recall": 0.5809682804674458,
+   "f1": 0.6904761904761905,
+   "alerts": 1227,
+   "alerts_per_tp": 1.1752873563218391,
+   "recall_at_budget": 0.6655537006121314,
+   "precision_at_budget": 0.5888724766125062,
+   "pr_auc_core": 0.5640297202806377,
+   "family": "boosting",
+   "features": "all",
+   "train_secs": 10.5,
+   "note": ""
+  },
+  "CatBoost+graph": {
+   "pr_auc": 0.7001287167761713,
+   "roc_auc": 0.9878581529049065,
+   "precision": 0.8315617334423548,
+   "recall": 0.5659432387312187,
+   "f1": 0.6735099337748344,
+   "alerts": 1223,
+   "alerts_per_tp": 1.2025565388397246,
+   "recall_at_budget": 0.6549805230940456,
+   "precision_at_budget": 0.5795174790743476,
+   "pr_auc_core": 0.5628794287764958,
+   "family": "boosting",
+   "features": "all",
+   "train_secs": 18.7,
+   "note": ""
+  },
+  "AdaBoost+graph": {
+   "pr_auc": 0.5007119519094987,
+   "roc_auc": 0.9855268653692296,
+   "precision": 0.6426256077795786,
+   "recall": 0.44129104062326097,
+   "f1": 0.5232596502804355,
+   "alerts": 1234,
+   "alerts_per_tp": 1.5561160151324085,
+   "recall_at_budget": 0.5097384529771842,
+   "precision_at_budget": 0.45100935499753814,
+   "pr_auc_core": 0.370546735558711,
+   "family": "boosting",
+   "features": "all",
+   "train_secs": 132.8,
+   "note": ""
+  },
+  "LogisticRegression": {
+   "pr_auc": 0.00994100965343846,
+   "roc_auc": 0.8912306500364946,
+   "precision": 0.014094882624496612,
+   "recall": 0.6388425153032833,
+   "f1": 0.02758123611027689,
+   "alerts": 81448,
+   "alerts_per_tp": 70.94773519163763,
+   "recall_at_budget": 0.0,
+   "precision_at_budget": 0.0,
+   "pr_auc_core": 0.005768469391509696,
+   "family": "classical",
+   "features": "raw",
+   "train_secs": 0.5,
+   "note": ""
+  },
+  "LogisticRegression+graph": {
+   "pr_auc": 0.13229451086393632,
+   "roc_auc": 0.9757917561026934,
+   "precision": 0.2566171723692705,
+   "recall": 0.44240400667779634,
+   "f1": 0.32482124616956076,
+   "alerts": 3098,
+   "alerts_per_tp": 3.8968553459119497,
+   "recall_at_budget": 0.21702838063439064,
+   "precision_at_budget": 0.19202363367799113,
+   "pr_auc_core": 0.0608199640206461,
+   "family": "classical",
+   "features": "all",
+   "train_secs": 2.7,
+   "note": ""
+  },
+  "DecisionTree+graph": {
+   "pr_auc": 0.533474403747151,
+   "roc_auc": 0.9230567279655988,
+   "precision": 0.73224043715847,
+   "recall": 0.5219810795770728,
+   "f1": 0.6094866796621182,
+   "alerts": 1281,
+   "alerts_per_tp": 1.3656716417910448,
+   "recall_at_budget": 0.552031163049527,
+   "precision_at_budget": 0.48842934515017233,
+   "pr_auc_core": 0.4267926629708874,
+   "family": "classical",
+   "features": "all",
+   "train_secs": 3.9,
+   "note": ""
+  },
+  "RandomForest+graph": {
+   "pr_auc": 0.7058398835353147,
+   "roc_auc": 0.9850766862143986,
+   "precision": 0.8898999090081893,
+   "recall": 0.5442404006677797,
+   "f1": 0.675414364640884,
+   "alerts": 1099,
+   "alerts_per_tp": 1.1237218813905931,
+   "recall_at_budget": 0.657762938230384,
+   "precision_at_budget": 0.5819793205317577,
+   "pr_auc_core": 0.5675087256258732,
+   "family": "classical",
+   "features": "all",
+   "train_secs": 66.7,
+   "note": ""
+  },
+  "LinearSVM+graph": {
+   "pr_auc": 0.12531676311925502,
+   "roc_auc": 0.975394677290384,
+   "precision": 0.2447405329593268,
+   "recall": 0.3884251530328325,
+   "f1": 0.300279630027963,
+   "alerts": 2852,
+   "alerts_per_tp": 4.08595988538682,
+   "recall_at_budget": 0.2337228714524207,
+   "precision_at_budget": 0.206794682422452,
+   "pr_auc_core": 0.05583879283540746,
+   "family": "classical",
+   "features": "all",
+   "train_secs": 3.3,
+   "note": ""
+  },
+  "KNN+graph (k=50)": {
+   "pr_auc": 0.4494166756043086,
+   "roc_auc": 0.9777737620604552,
+   "family": "classical",
+   "features": "all",
+   "train_secs": 0.0,
+   "note": "40K-row train subsample; test estimated on positives + 10% negatives (re-weighted)"
+  },
+  "RBF-SVM+graph": {
+   "pr_auc": 0.12119420660503818,
+   "roc_auc": 0.9763157130796191,
+   "family": "classical",
+   "features": "all",
+   "train_secs": 10.1,
+   "note": "40K-row train subsample; test estimated on positives + 10% negatives (re-weighted)"
+  },
+  "IsolationForest+graph": {
+   "pr_auc": 0.004423338107540572,
+   "roc_auc": 0.7901924541711195,
+   "precision": 0.00518229643782553,
+   "recall": 0.7712854757929883,
+   "f1": 0.010295417573520127,
+   "alerts": 267449,
+   "alerts_per_tp": 192.96464646464648,
+   "recall_at_budget": 0.0,
+   "precision_at_budget": 0.0,
+   "pr_auc_core": 0.0026855956089841173,
+   "family": "unsupervised",
+   "features": "all",
+   "train_secs": 1.8,
+   "note": "trained on negatives only"
+  },
+  "XGBoost+graph \u2212format": {
+   "pr_auc": 0.6899318664810743,
+   "roc_auc": 0.9848016317092806,
+   "precision": 0.8966507177033493,
+   "recall": 0.5214245965498052,
+   "f1": 0.6593947923997184,
+   "alerts": 1045,
+   "alerts_per_tp": 1.1152614727854855,
+   "recall_at_budget": 0.6533110740122426,
+   "precision_at_budget": 0.5780403741999015,
+   "pr_auc_core": 0.5532237213649787,
+   "family": "boosting",
+   "features": "all\u2212fmt",
+   "train_secs": 6.6,
+   "note": "payment format removed"
+  },
+  "MLP": {
+   "pr_auc": 0.5737225924023895,
+   "roc_auc": 0.9886763394705068,
+   "precision": 0.7943661971830986,
+   "recall": 0.4707846410684474,
+   "f1": 0.5911949685534591,
+   "alerts": 1065,
+   "alerts_per_tp": 1.2588652482269505,
+   "recall_at_budget": 0.562047857540345,
+   "precision_at_budget": 0.49729197439684886,
+   "pr_auc_core": 0.46508535932452894,
+   "family": "deep",
+   "features": "all",
+   "train_secs": 4.6
+  },
+  "1D-CNN (sequence)": {
+   "pr_auc": 0.6435934674499789,
+   "roc_auc": 0.9905932643054458,
+   "precision": 0.7725190839694657,
+   "recall": 0.5631608235948804,
+   "f1": 0.6514322497586096,
+   "alerts": 1310,
+   "alerts_per_tp": 1.2944664031620554,
+   "recall_at_budget": 0.6444073455759599,
+   "precision_at_budget": 0.5701624815361891,
+   "pr_auc_core": 0.48533110171643323,
+   "family": "deep",
+   "features": "all + sender/receiver sequences",
+   "train_secs": 36.3
+  },
+  "LSTM (sequence)": {
+   "pr_auc": 0.6619774870962483,
+   "roc_auc": 0.9915374701220901,
+   "precision": 0.7729610580455547,
+   "recall": 0.5854201446855871,
+   "f1": 0.6662444585180495,
+   "alerts": 1361,
+   "alerts_per_tp": 1.293726235741445,
+   "recall_at_budget": 0.6432943795214245,
+   "precision_at_budget": 0.569177744953225,
+   "pr_auc_core": 0.4968237602980216,
+   "family": "deep",
+   "features": "all + sender/receiver sequences",
+   "train_secs": 47.2
+  },
+  "Transformer (sequence)": {
+   "pr_auc": 0.6553997484800921,
+   "roc_auc": 0.991685083530722,
+   "precision": 0.7477224947442186,
+   "recall": 0.5937673900946021,
+   "f1": 0.6619106699751861,
+   "alerts": 1427,
+   "alerts_per_tp": 1.337394564198688,
+   "recall_at_budget": 0.6488592097941013,
+   "precision_at_budget": 0.5741014278680453,
+   "pr_auc_core": 0.49849116717458924,
+   "family": "deep",
+   "features": "all + sender/receiver sequences",
+   "train_secs": 309.6
+  },
+  "XGBoost+graph + GAN aug": {
+   "pr_auc": 0.7106768844963272,
+   "roc_auc": 0.9880794283908425,
+   "precision": 0.8221872541306058,
+   "recall": 0.5815247634947134,
+   "f1": 0.6812255541069101,
+   "alerts": 1271,
+   "alerts_per_tp": 1.2162679425837322,
+   "recall_at_budget": 0.6700055648302726,
+   "precision_at_budget": 0.5928114229443624,
+   "pr_auc_core": 0.5740991466572465,
+   "family": "deep (generative)",
+   "features": "all + 3x GAN-synthetic positives",
+   "train_secs": 17.0
+  },
+  "GNN (raw payment fields)": {
+   "pr_auc": 0.1509579947603177,
+   "roc_auc": 0.9437651581732333,
+   "precision": 0.198,
+   "recall": 0.27545909849749584,
+   "f1": 0.23039329764952293,
+   "alerts": 2500,
+   "alerts_per_tp": 5.05050505050505,
+   "recall_at_budget": 0.24485253199777407,
+   "precision_at_budget": 0.21664204825209257,
+   "pr_auc_core": 0.10666198946211149,
+   "family": "graph neural network",
+   "features": "GNN (raw payment fields)",
+   "train_secs": 378.8,
+   "note": "causal: embeddings from past graph only; trained on 40-60% slice"
+  },
+  "GNN + graph features": {
+   "pr_auc": 0.5155897381463108,
+   "roc_auc": 0.9830245858938407,
+   "precision": 0.706209453197405,
+   "recall": 0.4240400667779633,
+   "f1": 0.5299026425591099,
+   "alerts": 1079,
+   "alerts_per_tp": 1.416010498687664,
+   "recall_at_budget": 0.5381190873678353,
+   "precision_at_budget": 0.47612013786312163,
+   "pr_auc_core": 0.42777027816583896,
+   "family": "graph neural network",
+   "features": "GNN + graph features",
+   "train_secs": 380.7,
+   "note": "causal: embeddings from past graph only; trained on 40-60% slice"
+  }
+ },
+ "baf_models": {
+  "LightGBM": {
+   "roc_auc": 0.8917454400245978,
+   "pr_auc": 0.19049439570286653,
+   "recall_at_5fpr": 0.5590687977762335,
+   "fpr_test": 0.05365279296304908,
+   "fpr_ratio_age": 0.3055194780854159,
+   "family": "boosting",
+   "train_secs": 45.2
+  },
+  "XGBoost": {
+   "roc_auc": 0.8893954032708159,
+   "pr_auc": 0.18684018231001173,
+   "recall_at_5fpr": 0.5521195274496178,
+   "fpr_test": 0.05282165702779853,
+   "fpr_ratio_age": 0.29767035637549716,
+   "family": "boosting",
+   "train_secs": 24.2
+  },
+  "CatBoost": {
+   "roc_auc": 0.886559129373075,
+   "pr_auc": 0.1833465839288086,
+   "recall_at_5fpr": 0.5375260597637248,
+   "fpr_test": 0.05115938515729742,
+   "fpr_ratio_age": 0.2851677066650809,
+   "family": "boosting",
+   "train_secs": 265.7
+  },
+  "AdaBoost": {
+   "roc_auc": 0.8902059517868754,
+   "pr_auc": 0.1903012446079105,
+   "recall_at_5fpr": 0.5548992355802641,
+   "fpr_test": 0.0528760766426066,
+   "fpr_ratio_age": 0.25832928922148657,
+   "family": "boosting",
+   "train_secs": 281.2
+  },
+  "LogisticRegression": {
+   "roc_auc": 0.8757631960767324,
+   "pr_auc": 0.15294665813913566,
+   "recall_at_5fpr": 0.48019457956914524,
+   "fpr_test": 0.04733517040760291,
+   "fpr_ratio_age": 0.26415492373357435,
+   "family": "classical",
+   "train_secs": 1.6
+  },
+  "DecisionTree": {
+   "roc_auc": 0.8261359539359155,
+   "pr_auc": 0.10173991560383093,
+   "recall_at_5fpr": 0.453092425295344,
+   "fpr_test": 0.0595993726902584,
+   "fpr_ratio_age": 0.40757261645080617,
+   "family": "classical",
+   "train_secs": 9.1
+  },
+  "RandomForest": {
+   "roc_auc": 0.8819203204770394,
+   "pr_auc": 0.16487987983607746,
+   "recall_at_5fpr": 0.5350938151494093,
+   "fpr_test": 0.05258418961772694,
+   "fpr_ratio_age": 0.2824508579741432,
+   "family": "classical",
+   "train_secs": 229.1
+  },
+  "MLP": {
+   "roc_auc": 0.867884433812899,
+   "pr_auc": 0.14366139770773168,
+   "recall_at_5fpr": 0.4291174426685198,
+   "fpr_test": 0.04183384207427783,
+   "fpr_ratio_age": 0.2772755676066409,
+   "family": "deep",
+   "train_secs": 16.8
+  }
+ },
+ "l0_final": {
+  "roc_auc": 0.8917454400245978,
+  "single_threshold": {
+   "recall": 0.5590687977762335,
+   "fpr": 0.05365279296304908,
+   "fpr_old": 0.12830131137541934,
+   "fpr_young": 0.03919854968909255,
+   "tpr_old": 0.7128412537917088,
+   "tpr_young": 0.47856008470089995,
+   "fpr_ratio": 0.3055194780854159
+  },
+  "group_thresholds": {
+   "recall": 0.5343988881167477,
+   "fpr": 0.05412278054548243,
+   "fpr_old": 0.06001829826166514,
+   "fpr_young": 0.052981227449614095,
+   "tpr_old": 0.5369059656218402,
+   "tpr_young": 0.5330862890418211,
+   "fpr_ratio": 0.8827512439394544
+  },
+  "thresholds": {
+   "global_": 0.21591263661990914,
+   "age_50_plus": 0.3859807127990406,
+   "age_under_50": 0.1710788276802956
+  },
+  "top_features_gain": [
+   [
+    "housing_status",
+    0.258
+   ],
+   [
+    "device_os",
+    0.156
+   ],
+   [
+    "credit_risk_score",
+    0.095
+   ],
+   [
+    "name_email_similarity",
+    0.092
+   ],
+   [
+    "current_address_months_count",
+    0.087
+   ],
+   [
+    "has_other_cards",
+    0.066
+   ],
+   [
+    "bank_branch_count_8w",
+    0.064
+   ],
+   [
+    "keep_alive_session",
+    0.061
+   ],
+   [
+    "prev_address_months_count",
+    0.061
+   ],
+   [
+    "intended_balcon_amount",
+    0.06
+   ]
+  ]
+ },
+ "cascade": {
+  "L1": {
+   "threshold": 0.06022898480296135,
+   "pass_rate_test": 0.20484035645471113,
+   "recall_test": 0.9922092376182526,
+   "dropped_txns": 807619
+  },
+  "comparison": {
+   "XGBoost+graph": {
+    "pr_auc": 0.7222391040966455,
+    "roc_auc": 0.989286678084198,
+    "precision": 0.9157608695652174,
+    "recall": 0.5626043405676127,
+    "f1": 0.6970010341261634,
+    "alerts": 1104,
+    "alerts_per_tp": 1.0919881305637982,
+    "recall_at_budget": 0.6739009460211464,
+    "precision_at_budget": 0.5962580009847366
+   },
+   "L2 ensemble (XGB+LGBM+RF)": {
+    "pr_auc": 0.719729127546874,
+    "roc_auc": 0.9868631942589448,
+    "precision": 0.9613478691774033,
+    "recall": 0.5397885364496383,
+    "f1": 0.6913756236635781,
+    "alerts": 1009,
+    "alerts_per_tp": 1.0402061855670104,
+    "recall_at_budget": 0.672787979966611,
+    "precision_at_budget": 0.5952732644017725
+   },
+   "L3 ensemble (L2 + LSTM/Transformer)": {
+    "pr_auc": 0.7250082993522344,
+    "roc_auc": 0.9895668680831899,
+    "precision": 0.9212669683257918,
+    "recall": 0.5664997217584864,
+    "f1": 0.7015851137146795,
+    "alerts": 1105,
+    "alerts_per_tp": 1.0854616895874263,
+    "recall_at_budget": 0.676126878130217,
+    "precision_at_budget": 0.5982274741506647
+   },
+   "Full cascade (L1 gate -> L2 -> L3)": {
+    "pr_auc": 0.7249600507341188,
+    "roc_auc": 0.9864791198025749,
+    "precision": 0.9212669683257918,
+    "recall": 0.5664997217584864,
+    "f1": 0.7015851137146795,
+    "alerts": 1105,
+    "alerts_per_tp": 1.0854616895874263,
+    "recall_at_budget": 0.676126878130217,
+    "precision_at_budget": 0.5982274741506647
+   }
+  },
+  "bands": {
+   "block_str": 0.8289353039403885,
+   "hold": 0.374910372182638,
+   "verify": 0.06022898480296135
+  },
+  "L4": {
+   "alerts": 1105,
+   "cases": 318,
+   "alerts_per_case": 3.47,
+   "rings_in_test": 192,
+   "rings_caught": 158,
+   "ring_recall": 0.8229166666666666,
+   "ring_recall_by_type": {
+    "BIPARTITE": 0.524,
+    "CYCLE": 0.88,
+    "FAN-IN": 0.9,
+    "FAN-OUT": 0.857,
+    "GATHER-SCATTER": 0.872,
+    "RANDOM": 0.824,
+    "SCATTER-GATHER": 0.87,
+    "STACK": 0.808
+   },
+   "true_positive_alerts": 1018
+  },
+  "funnel": {
+   "test_txns": 1015669,
+   "after_L1": 208050,
+   "alerts_after_L3": 1105,
+   "cases_after_L4": 318,
+   "laundering_txns": 1797,
+   "laundering_after_L1": 1783,
+   "laundering_alerted": 1018
+  },
+  "latency_ms": {
+   "L1": 0.29,
+   "L2": 55.12
+  }
+ },
+ "online_parity": {
+  "test_payments_scored": 60000,
+  "laundering_in_slice": 97,
+  "max_abs_risk_diff": 0.03219700013075777,
+  "mean_abs_risk_diff": 9.313195174206251e-06,
+  "same_decision_rate": 1.0,
+  "pr_auc_live": 0.7060328405352353,
+  "pr_auc_offline": 0.7058979196642119,
+  "latency_ms_p50": 0.33,
+  "latency_ms_p99": 11.74,
+  "l1_exit_rate": 0.8614
+ }
+}

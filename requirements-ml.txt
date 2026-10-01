@@ -1,0 +1,10 @@
+# Training / benchmarking (ml/) and full-history console replay
+-r requirements.txt
+polars>=1.0
+pandas>=2.2
+scikit-learn>=1.4
+lightgbm>=4.0
+catboost>=1.2
+torch>=2.2
+pytest>=8.0
+httpx>=0.27

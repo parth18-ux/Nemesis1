@@ -1,0 +1,6 @@
+# Runtime dependencies for the API (Vercel installs this file).
+fastapi>=0.110
+uvicorn>=0.25
+pydantic>=2.6
+numpy>=1.26
+xgboost-cpu>=3.0
