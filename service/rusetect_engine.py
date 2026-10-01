@@ -62,6 +62,9 @@ class Engine:
     def __init__(self, models_dir: Path = MODELS, load_models: bool = True):
         self.cfg = json.loads((models_dir / "cascade_config.json").read_text())
         self.feats = self.cfg["features"]
+        missing = {"l1_threshold", "block_threshold", "hold_threshold", "verify_threshold"} - set(self.cfg)
+        if missing:
+            raise ValueError(f"cascade_config.json is missing thresholds: {sorted(missing)}")
         self.accts: dict = defaultdict(Acct)
         self.pairs: set = set(); self.bank_pairs: set = set()
         self.parent: dict = {}; self.case_alerts: dict = defaultdict(list)
@@ -153,7 +156,7 @@ class Engine:
                 decision, band = "Block + STR draft", "high"
             elif risk >= self.cfg["hold_threshold"]:
                 decision, band = "Hold for analyst", "med"
-            elif risk >= self.cfg.get("verify_threshold", 0.10):
+            elif risk >= self.cfg["verify_threshold"]:
                 decision, band = "Step-up verification", "med"
             else:
                 decision, band = "Approve", "safe"

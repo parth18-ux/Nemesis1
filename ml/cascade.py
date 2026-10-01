@@ -140,7 +140,13 @@ mx.save_model(f"{MODELS}/l2_xgb.json")
 ml.booster_.save_model(f"{EXPORT}/l2_lgbm.txt")
 json.dump(ml.booster_.dump_model(), open(f"{MODELS}/l2_lgbm.json", "w"), separators=(",", ":"))  # served by service/lgbm_lite.py
 prev = json.load(open(f"{MODELS}/cascade_config.json"))
+# Step-up band for the live path. Fixed policy value (not re-fitted here) so a retrain cannot silently change it:
+# on validation it sends ~0.5% of payments to step-up verification (see docs/model-selection.md).
+VERIFY_THRESHOLD = 0.10
+# NOTE: thr3 and bands["hold"] are fitted on the offline L3 blend score (s3_va). The live engine applies them to
+# mean(L2 XGBoost, L2 LightGBM). See docs/project-audit.md before re-tuning.
 json.dump(dict(fmt_codes=FMT_CODES, cur_codes=CUR_CODES, usd_rates=prev["usd_rates"], features=ALL, l1_threshold=float(thr1), block_threshold=float(thr3), hold_threshold=bands["hold"],
-               l3_sequence_weight=w3, note="RF and sequence models are batch-only; online path uses L1 + XGB + LGBM"),
+               verify_threshold=VERIFY_THRESHOLD, l3_sequence_weight=w3, note="RF and sequence models are batch-only; online path uses L1 + XGB + LGBM",
+               note_bands="block>=block_threshold, hold>=hold_threshold, step-up>=verify_threshold (val: 0.13% / 0.31% / 0.50% of traffic), else approve"),
           open(f"{MODELS}/cascade_config.json", "w"), indent=1)
 print("saved models")

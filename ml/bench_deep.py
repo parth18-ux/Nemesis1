@@ -72,6 +72,18 @@ class CNNEnc(nn.Module):
     def __init__(s, h=32):
         super().__init__(); s.net = nn.Sequential(nn.Conv1d(EV_DIM, h, 3, padding=1), nn.ReLU(), nn.Conv1d(h, h, 3, padding=1), nn.ReLU())
     def forward(s, x, m): z = s.net(x.transpose(1, 2)).transpose(1, 2); z = z.masked_fill(~m[..., None], -1e4); return z.max(1).values.clamp(min=0)
+class TCNEnc(nn.Module):
+    """Temporal convolutional network: stacked causal, dilated 1D convolutions (dilation 1, 2, 4) with residuals.
+    Receptive field 15 events >= K, so the last position sees the whole left-padded history."""
+    def __init__(s, h=32):
+        super().__init__(); s.inp = nn.Conv1d(EV_DIM, h, 1)
+        s.blocks = nn.ModuleList([nn.Conv1d(h, h, 3, dilation=dl) for dl in (1, 2, 4)])
+    def forward(s, x, m):
+        z = s.inp(x.transpose(1, 2))
+        for conv in s.blocks:
+            pad = conv.dilation[0] * (conv.kernel_size[0] - 1)
+            z = z + torch.relu(conv(nn.functional.pad(z, (pad, 0))))   # causal: pad on the left only
+        return z[:, :, -1]                                                 # most recent position
 class LSTMEnc(nn.Module):
     def __init__(s, h=32): super().__init__(); s.rnn = nn.LSTM(EV_DIM, h, batch_first=True)
     def forward(s, x, m): o, _ = s.rnn(x); return o[:, -1]           # left-padded, last step = most recent
@@ -124,13 +136,21 @@ def train_nn(name, enc, epochs=6, bs=1024):
     thr = best_f1_threshold(y[va], p_va); r = evaluate(y[te], p_te, thr)
     r["pr_auc_core"] = float(average_precision_score(y[te][core[te]], p_te[core[te]]))
     r.update(family="deep", features="all" + (" + sender/receiver sequences" if seq else ""), train_secs=round(secs, 1))
+    pred = p_te >= thr; yt = y[te]
+    r.update(threshold=float(thr), tp=int((pred & (yt == 1)).sum()), fp=int((pred & (yt == 0)).sum()), fn=int((~pred & (yt == 1)).sum()),
+             model_size_bytes=int(sum(t.numel() * t.element_size() for t in m.state_dict().values())))
+    lat = []                                                     # single payment: sequence gather + forward pass
+    for i in te[:200]:
+        t1 = time.perf_counter(); predict(m, np.array([i]), seq); lat.append(time.perf_counter() - t1)
+    r["latency_ms_p50"] = float(np.median(lat) * 1e3)
     results[name] = r; json.dump(results, open(OUT, "w"), indent=1)
     np.save(f"{WORK}/pred_{name.split()[0]}_te.npy", p_te); np.save(f"{WORK}/pred_{name.split()[0]}_va.npy", p_va)
     print(f"{name:28s} PR-AUC {r['pr_auc']:.3f} core {r['pr_auc_core']:.3f} F1 {r['f1']:.3f} R@0.2% {r['recall_at_budget']:.3f}", flush=True)
 
-which = sys.argv[1:] or ["mlp", "cnn", "lstm", "transformer", "gan"]
+which = sys.argv[1:] or ["mlp", "cnn", "tcn", "lstm", "transformer", "gan"]
 if "mlp" in which: train_nn("MLP", None, epochs=8)
 if "cnn" in which: train_nn("1D-CNN (sequence)", CNNEnc)
+if "tcn" in which: train_nn("TCN (sequence)", TCNEnc)
 if "lstm" in which: train_nn("LSTM (sequence)", LSTMEnc)
 if "transformer" in which: train_nn("Transformer (sequence)", TransEnc)
 

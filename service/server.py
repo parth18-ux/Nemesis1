@@ -2,7 +2,7 @@
 RuseTect API — layered filtration cascade for mule accounts and scam money flows.
 
   /                    landing page (links to the console, report and API docs)
-  /console             Live Console: replays real IBM AMLworld test-period payments through the cascade
+  /console             Live Console: replays recorded IBM AMLworld (synthetic) test-period payments through the live path
   /report              benchmark report (21 AML models, 8 onboarding models)
   /api/health          engine status
   /api/v2/payment      score one payment (L1 -> L2 -> decision band -> L4 case)
@@ -22,27 +22,29 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 
+from branding import NAME, SLUG, TAGLINE, VERSION
 from rusetect_engine import Engine
 
 ROOT = Path(__file__).parent
 MODELS = ROOT / "models"
-log = logging.getLogger("rusetect")
+log = logging.getLogger(SLUG)
 
-app = FastAPI(title="RuseTect API", version="2.1.0",
-              description="Layered AI filtration cascade: L0 onboarding gate, L1 gatekeeper, L2 graph-boost, L4 ring linker.")
+app = FastAPI(title=f"{NAME} API", version=VERSION,
+              description=f"{TAGLINE}. Live path: L1 XGBoost gatekeeper, L2 XGBoost + LightGBM average, L4 ring linker; "
+                          "L0 LightGBM scores account applications. Trained and evaluated on synthetic datasets (IBM AMLworld, Feedzai BAF).")
 app.add_middleware(CORSMiddleware, allow_origins=os.environ.get("CORS_ORIGINS", "*").split(","), allow_methods=["*"], allow_headers=["*"])
 api = APIRouter(prefix="/api")
 
 try:
     ENGINE = Engine(MODELS)
 except Exception as e:  # pragma: no cover
-    log.warning("RuseTect engine unavailable: %s", e)
+    log.warning("%s engine unavailable: %s", NAME, e)
     ENGINE = None
 
 
 def need_engine() -> Engine:
     if ENGINE is None:
-        raise HTTPException(503, "RuseTect models not loaded")
+        raise HTTPException(503, f"{NAME} models not loaded")
     return ENGINE
 
 
@@ -60,6 +62,11 @@ async def console():
     return FileResponse(ROOT / "static" / "console.html")
 
 
+@app.get("/favicon.svg")
+async def favicon():
+    return FileResponse(ROOT / "static" / "favicon.svg", media_type="image/svg+xml")
+
+
 @app.get("/report")
 async def report():
     return FileResponse(ROOT / "static" / "report.html")
@@ -68,7 +75,7 @@ async def report():
 @api.get("/")
 @api.get("/health")
 async def health():
-    return {"service": "RuseTect API", "version": "2.1.0", "status": "ok", "engine_loaded": ENGINE is not None}
+    return {"service": f"{NAME} API", "name": NAME, "id": SLUG, "version": VERSION, "status": "ok", "engine_loaded": ENGINE is not None}
 
 
 # ---------------------------------------------------------------- scoring
@@ -157,8 +164,9 @@ def demo_payload(r):
 
 
 def full_history_rows():
-    """All payments before the demo window from the full IBM HI-Small CSV(s), if RUSETECT_HISTORY_GLOB is set."""
-    pattern = os.environ.get("RUSETECT_HISTORY_GLOB")
+    """All payments before the demo window from the full IBM HI-Small CSV(s), if RUSETECT_HISTORY_GLOB is set.
+    The legacy name RUSETECT_HISTORY_GLOB is still read as a fallback."""
+    pattern = os.environ.get("RUSETECT_HISTORY_GLOB") or os.environ.get("RUSETECT_HISTORY_GLOB")
     if not pattern:
         return None
     import glob

@@ -4,7 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>RuseTect</title>
-<meta name="description" content="Layered AI filtration for mule accounts and scam money flows. RuseTect.">
+<meta name="description" content="RuseTect: layered AI filtration for mule accounts and scam money flows, benchmarked on synthetic IBM AMLworld and Feedzai BAF data.">
+<meta property="og:title" content="RuseTect">
+<meta property="og:description" content="Layered AI filtration for mule accounts and scam money flows. Gradient-boosted trees on account-history features, benchmarked on synthetic data.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RuseTect">
+<meta name="twitter:description" content="Layered AI filtration for mule accounts and scam money flows.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
@@ -102,6 +109,17 @@ section{padding-block:clamp(72px,10vw,128px)}
 .legend{display:flex;flex-wrap:wrap;gap:6px 18px;font:500 12px var(--mono);margin-top:14px;opacity:.9}
 .legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:6px;vertical-align:-1px}
 
+.mt{overflow-x:auto;margin-top:36px;border-top:1px solid var(--ink)}
+.mt table{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
+.mt th,.mt td{text-align:left;padding:12px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+.mt th{font:500 11.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.mt td.n{font:400 20px var(--serif);white-space:nowrap}
+.mt .live{display:inline-block;font:500 11px var(--mono);padding:2px 8px;border-radius:999px;background:var(--olive);color:var(--olive-ink);white-space:nowrap}
+.mt .off{display:inline-block;font:500 11px var(--mono);padding:2px 8px;border-radius:999px;border:1px solid var(--ink-3);color:var(--ink-2);white-space:nowrap}
+.mt tr.sep td{border-bottom:1px solid var(--ink)}
+.why-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:36px}
+.why-grid div{display:flex;flex-direction:column;gap:6px}.why-grid h3{font:600 16px var(--sans)}.why-grid p{color:var(--ink-2);font-size:14.5px}
+@media (max-width:900px){.why-grid{grid-template-columns:1fr}}
 .specs{margin-top:48px;border-top:1px solid var(--ink)}
 .spec{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:16px;padding:18px 0;border-bottom:1px solid var(--rule)}
 .spec dt{font:500 14px var(--sans)}
@@ -143,7 +161,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-bet
   <div class="wrap">
     <a class="brand" href="#top">RuseTect</a>
     <nav class="links" aria-label="Sections">
-      <a href="#layers">How it works</a><a href="#specs">Specifications</a><a href="#bench">Benchmarks</a><a href="#howto">How-to</a>
+      <a href="#layers">How it works</a><a href="#why">Why this model</a><a href="#bench">Benchmarks</a><a href="#howto">How-to</a>
     </nav>
     <a class="pill" href="/console">Open live console ↗</a>
   </div>
@@ -152,14 +170,14 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-bet
 <main id="top">
   <div class="hero wrap">
     <h1>Catch the ring.<br>Clear the rest.</h1>
-    <p class="sub">A five-layer AI filter for mule accounts and scam money flows. Most payments clear in a third of a millisecond; the few that reach an analyst arrive as linked ring cases, with reasons.</p>
-    <div class="ctas"><a class="pill" href="/console">Watch it on real payments ↗</a><a class="pill ghost" href="/report">Read the benchmark</a></div>
+    <p class="sub">A layered AI filter for mule accounts and scam money flows. A small gatekeeper model clears most payments; the rest are scored by gradient-boosted trees and linked into ring cases, with reasons. Built and benchmarked on synthetic datasets.</p>
+    <div class="ctas"><a class="pill" href="/console">Watch a replay ↗</a><a class="pill ghost" href="/report">Read the benchmark</a></div>
     <div class="stage">
       <div class="slab" aria-hidden="true"></div>
       <div class="device">
-        <div class="screen" role="img" aria-label="Payments remaining after each layer on the 10-day test period">
+        <div class="screen" role="img" aria-label="Offline benchmark: payments remaining after each layer on the 10-day synthetic test period">
           <div class="scr-in">
-            <div class="crumb">Test period › Cascade funnel</div>
+            <div class="crumb">Offline benchmark (synthetic test period) › Cascade funnel</div>
             <div class="big"><b>79.5%</b><span>cleared at the first gate</span><span class="chip">All 1,015,669 payments ▾</span></div>
             <div class="sticks">
               <div class="col"><div class="lolly" style="height:92%"><em>1,015,669</em></div><div class="lolly red" style="height:46%;animation-delay:.1s"><em>1,797</em></div></div>
@@ -180,7 +198,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-bet
       <div class="head">
         <span class="eyebrow">How it works</span>
         <h2>We've cracked the cascade.</h2>
-        <p>Each layer approves what it is confident is clean and passes the rest to a heavier model. Heavy models only see one payment in five, so the system stays fast and the alerts stay few.</p>
+        <p>Each layer approves what it is confident is clean and passes the rest to a heavier model, so heavier models only see about one payment in five. Figures below are committed benchmark results on synthetic data.</p>
       </div>
       <div class="feat">
         <article>
@@ -188,28 +206,28 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-bet
           <span class="tag">L0 · Onboarding gate</span>
           <h3>Stop mule accounts at opening</h3>
           <p>LightGBM scores each new application. Separate thresholds per age group keep false alarms even across customers.</p>
-          <div class="stat num">0.88<small>false-alarm parity, 50+ vs under 50 (was 0.31)</small></div>
+          <div class="stat num">0.88<small>false-alarm parity, 50+ vs under 50 (was 0.31) · reported</small></div>
         </article>
         <article>
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4-2v-4z"/></svg>
           <span class="tag">L1 · Gatekeeper</span>
           <h3>Clear clean traffic instantly</h3>
           <p>A 30-tree XGBoost reads each account's history (fan-out, pass-through, first-time payees) and approves the obvious.</p>
-          <div class="stat num">0.3 ms<small>keeps 99.2% of laundering for the next layer</small></div>
+          <div class="stat num">0.3 ms<small>per payment; kept 99.2% of laundering for the next layer · reported</small></div>
         </article>
         <article>
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M8 7.5l3 8.5M16 7.5l-3 8.5M8.5 6h7"/></svg>
-          <span class="tag">L2 + L3 · Graph-boost &amp; behaviour</span>
+          <span class="tag">L2 · Graph-boost (live)</span>
           <h3>Score what's left, with reasons</h3>
-          <p>XGBoost, LightGBM and Random Forest, blended with LSTM and Transformer models over each account's recent activity.</p>
-          <div class="stat num">0.92<small>precision of auto-blocks on the test period</small></div>
+          <p>The live API averages an XGBoost and a LightGBM model. Reasons come from XGBoost's per-feature contributions. Random Forest and LSTM/Transformer blends exist only in the offline benchmark.</p>
+          <div class="stat num">0.715<small>PR-AUC, XGBoost + graph features · reported</small></div>
         </article>
         <article>
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="4" r="1.6"/><circle cx="19" cy="15" r="1.6"/><circle cx="5" cy="15" r="1.6"/></svg>
           <span class="tag">L4 · Ring linker</span>
           <h3>Turn alerts into ring cases</h3>
           <p>Blocked payments that share accounts are merged into one case per mule cluster, so analysts review rings, not rows.</p>
-          <div class="stat num">3.5×<small>fewer items to review (1,105 alerts → 318 cases)</small></div>
+          <div class="stat num">3.5×<small>fewer items to review (1,105 alerts → 318 cases) · offline benchmark</small></div>
         </article>
       </div>
     </div>
@@ -226,7 +244,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-bet
         <ol class="steps">
           <li><span class="n">01</span><h3>History, not just the payment</h3><p>22 features per payment, each computed only from earlier activity: money in then straight out, sudden fan-out, money flowing back.</p></li>
           <li><span class="n">02</span><h3>Reasons an analyst can use</h3><p>Every block lists its top drivers in plain words, such as "minutes since money came in: 0" or "new counterparty", ready for the STR draft.</p></li>
-          <li><span class="n">03</span><h3>Rings by typology</h3><p>Measured against IBM's labelled rings: fan-in 90%, cycles 88%, gather-scatter 87%, fan-out 86% caught. Bipartite rings are the hardest at 52%.</p></li>
+          <li><span class="n">03</span><h3>Rings by typology</h3><p>Offline benchmark against IBM's labelled synthetic rings: fan-in 90%, cycles 88%, gather-scatter 87%, fan-out 86% caught. Bipartite rings are the hardest at 52%.</p></li>
         </ol>
       </div>
       <div class="card" aria-label="A fan-out ring: one source splits money across mule accounts that converge on a cash-out account">
@@ -248,22 +266,52 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-bet
     </div>
   </section>
 
+  <section id="why" style="padding-top:0">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">Why this model</span>
+        <h2>Boosted trees, because of the data.</h2>
+        <p>Each payment becomes 31 numbers about the accounts' past behaviour: how fast money moves on, how many new payees, how much flows back. Many are missing for new accounts, and laundering is under 0.2% of payments. Gradient-boosted trees fit that shape well: they learn interactions without hand-built crosses, handle missing values natively, train in seconds and score in well under a millisecond, and XGBoost gives per-feature reasons for each alert.</p>
+      </div>
+      <div class="why-grid">
+        <div><h3>Features matter more than the algorithm</h3><p>XGBoost scores 0.172 PR-AUC on raw payment fields and 0.715 with account-history features. The top four tree models sit between 0.699 and 0.715.</p></div>
+        <div><h3>L1 is small on purpose</h3><p>30 shallow trees approve about 80% of payments in about 0.3 ms while keeping about 99% of laundering for L2. The goal is speed with very few misses, not a final decision.</p></div>
+        <div><h3>L2 averages XGBoost and LightGBM</h3><p>Two boosters grown differently give a steadier score. In the audit, the live average scored 0.716 PR-AUC on the test period against 0.722 for its XGBoost half alone, so the case for it is robustness, not accuracy.</p></div>
+      </div>
+      <div class="mt"><table>
+        <thead><tr><th>Model</th><th>Task · features</th><th>PR-AUC</th><th>Strengths</th><th>Limits</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>XGBoost</td><td>Payments · account history</td><td class="n">0.715</td><td>Best single score; native missing values; TreeSHAP reasons</td><td>Needs the engineered history features</td><td><span class="live">live L1 + L2</span></td></tr>
+          <tr><td>LightGBM</td><td>Payments · account history</td><td class="n">0.699</td><td>Fast, compact; second opinion</td><td>Slightly lower alone</td><td><span class="live">live L2</span></td></tr>
+          <tr><td>Random Forest</td><td>Payments · account history</td><td class="n">0.706</td><td>Robust with little tuning</td><td>Large model, slower per payment</td><td><span class="off">offline blend only</span></td></tr>
+          <tr><td>CatBoost</td><td>Payments · account history</td><td class="n">0.700</td><td>Strong defaults, categorical handling</td><td>Slower to train here; no gain</td><td><span class="off">not used</span></td></tr>
+          <tr><td>MLP</td><td>Payments · account history</td><td class="n">0.574</td><td>Flexible</td><td>Needs scaling; weaker on tabular data</td><td><span class="off">not used</span></td></tr>
+          <tr><td>Decision Tree</td><td>Payments · account history</td><td class="n">0.533</td><td>Fully readable</td><td>Unstable, lower ranking quality</td><td><span class="off">not used</span></td></tr>
+          <tr><td>Logistic Regression</td><td>Payments · account history</td><td class="n">0.132</td><td>Simple, calibrated</td><td>Cannot learn interactions</td><td><span class="off">not used</span></td></tr>
+          <tr class="sep"><td>XGBoost</td><td>Payments · raw fields only</td><td class="n">0.172</td><td colspan="2">Same model without account history: shows where the signal comes from</td><td><span class="off">reference</span></td></tr>
+          <tr><td>LightGBM</td><td>Account applications (BAF)</td><td class="n">0.190</td><td>Slightly ahead of XGBoost (0.187); fast</td><td>Different task: not comparable with payment scores</td><td><span class="live">live L0</span></td></tr>
+        </tbody>
+      </table></div>
+      <p class="note">PR-AUC (average precision) summarises precision across all recall levels. With 0.18% positives, a model that flags nothing is 99.8% accurate, so accuracy is meaningless here. Committed results from <code>ml/bench_tabular.py</code> and <code>ml/bench_baf.py</code> on synthetic data; a fresh comparison of more models (including TCN) is in the <a href="/report#why">report</a>. Details: <code>docs/model-selection.md</code>.</p>
+    </div>
+  </section>
+
   <section id="specs" style="background:var(--wash)">
     <div class="wrap">
       <div class="head">
         <span class="eyebrow">Specifications</span>
-        <h2>Measured, not promised.</h2>
-        <p>Every number comes from data later in time than anything the models were trained on.</p>
+        <h2>Reported results.</h2>
+        <p>Committed results from this repository's benchmark scripts, on synthetic data later in time than the training data. They do not show performance on real banking traffic.</p>
       </div>
       <dl class="specs">
         <div class="spec"><dt>Payment data</dt><dd><b class="num">5,078,345</b>IBM AMLworld HI-Small payments, 515,088 accounts, 5,177 laundering, 370 labelled rings</dd></div>
         <div class="spec"><dt>Onboarding data</dt><dd><b class="num">1,000,000</b>Feedzai BAF account applications, 1.1% fraud</dd></div>
         <div class="spec"><dt>Test protocol</dt><dd>Time-ordered 60/20/20 split; thresholds set on validation; BAF trained on months 0–4, tested on 6–7</dd></div>
-        <div class="spec"><dt>Block precision / F1</dt><dd><b class="num">0.921</b>precision, F1 0.702, PR-AUC 0.725 (full cascade)</dd></div>
-        <div class="spec"><dt>Rings caught</dt><dd><b class="num">82–89%</b>of the 192 test-period rings get at least one block (range across two retrains)</dd></div>
+        <div class="spec"><dt>Offline blend (not live)</dt><dd><b class="num">0.725</b>PR-AUC; block precision 0.921, F1 0.702, with Random Forest and LSTM/Transformer in the blend</dd></div>
+        <div class="spec"><dt>Rings caught (offline)</dt><dd><b class="num">82–89%</b>of the 192 test-period rings get at least one block (range across two retrains)</dd></div>
         <div class="spec"><dt>Onboarding recall</dt><dd><b class="num">0.534</b>at a 5% false-positive rate, with age-fair thresholds</dd></div>
-        <div class="spec"><dt>Latency</dt><dd><b class="num">0.33 ms</b>median per payment including feature computation, one CPU core</dd></div>
-        <div class="spec"><dt>Live vs offline</dt><dd><b class="num">100%</b>same block decisions on 60,000 payments replayed through the API</dd></div>
+        <div class="spec"><dt>Latency (live path)</dt><dd><b class="num">0.33 ms</b>median per payment including feature computation, one CPU core, 60,000-payment replay</dd></div>
+        <div class="spec"><dt>Streaming parity</dt><dd><b class="num">100%</b>same block decisions when the live engine and the offline pipeline score the same 60,000 payments with the same L1 + L2 models</dd></div>
       </dl>
     </div>
   </section>
@@ -273,7 +321,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-bet
       <div class="head">
         <span class="eyebrow">Benchmarks</span>
         <h2>21 models, one scoreboard.</h2>
-        <p>Same training rows, same thresholds procedure, same held-out test period. PR-AUC on laundering payments (0.18% of test traffic).</p>
+        <p>Same training rows, same threshold procedure, same held-out test period. PR-AUC on laundering payments (0.18% of test traffic). Reported results from <code>ml/bench_*.py</code>.</p>
       </div>
       <div class="bars" id="bars"></div>
       <p class="note">Account history features matter most: XGBoost goes from 0.172 on raw payment fields to 0.715 with them. The GNN is tested with strictly past-only graph data; published GNN results on this dataset let the test graph include future edges. <a href="/report">Full report →</a></p>
@@ -288,7 +336,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-bet
       </div>
       <div class="how">
         <article><span class="n">01</span><h3>Load account history</h3><p>Open the live console and load earlier payments, so every account has context, as it would in a bank.</p><a class="pill ghost" href="/console" style="align-self:flex-start;margin-top:auto">Open console</a></article>
-        <article><span class="n">02</span><h3>Stream real payments</h3><p>60,000 test-period payments flow through the layers. Watch clears, blocks, reasons and ring cases, checked against ground truth.</p></article>
+        <article><span class="n">02</span><h3>Stream recorded payments</h3><p>60,000 recorded test-period payments from the synthetic IBM dataset flow through the live path. Watch clears, blocks, reasons and ring cases, checked against ground truth.</p></article>
         <article><span class="n">03</span><h3>Call the API</h3><p>Score your own payment or account application.</p>
 <pre>POST /api/v2/payment
 { "timestamp": "2022-09-09 10:00",
@@ -305,7 +353,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-bet
       <div class="cta">
         <span class="eyebrow" style="color:var(--olive-ink);opacity:.7">RuseTect</span>
         <h2>Stop the money,<br>not the customer.</h2>
-        <p>Built and benchmarked on 6 million synthetic records. The pipeline retrains on a bank's own UPI and IMPS data.</p>
+        <p>Built and benchmarked on 6 million synthetic records. Real deployment would need retraining and re-validation on a bank's own data.</p>
         <div class="ctas" style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center"><a class="pill" href="/console">Open live console ↗</a><a class="pill ghost" href="/report">Benchmark report</a></div>
       </div>
     </div>
@@ -314,7 +362,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-bet
 
 <footer>
   <div class="wrap">
-    <span>RuseTect · Parth Sharma, Thapar Institute of Engineering &amp; Technology</span>
+    <span>RuseTect · Parth Sharma</span>
     <span>Data: IBM AMLworld (synthetic), Feedzai BAF (synthetic). Covers account opening and money movement; scam calls and chats are out of scope.</span>
   </div>
 </footer>
@@ -323,7 +371,8 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-bet
 const BARS = [
   ["XGBoost + graph features", .715, 1], ["Random Forest + graph", .706], ["CatBoost + graph", .700], ["LightGBM + graph", .699],
   ["LSTM (sequence)", .662], ["Transformer (sequence)", .655], ["1D-CNN (sequence)", .644], ["MLP", .574],
-  ["GNN (strictly causal)", .516], ["AdaBoost + graph", .501], ["XGBoost, raw fields only", .172], ["Isolation Forest", .004]];
+  ["Decision Tree + graph", .533], ["GNN (strictly causal)", .516], ["AdaBoost + graph", .501], ["XGBoost, raw fields only", .172],
+  ["Logistic Regression + graph", .132], ["Isolation Forest", .004]];
 document.getElementById("bars").innerHTML = BARS.map(([n, v, w]) =>
   `<div class="bar${w ? " win" : ""}"><span>${n}</span><div class="t"><div style="width:${(v / .75 * 100).toFixed(1)}%"></div></div><span class="v">${v.toFixed(3)}</span></div>`).join("");
 </script>
