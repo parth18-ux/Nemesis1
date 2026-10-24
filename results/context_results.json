@@ -1,0 +1,254 @@
+{
+ "summary": {
+  "ruleset": "ctx-1.0",
+  "fixtures": 12,
+  "matches_pdf_table": 12,
+  "scams_escalated_high_or_critical": 6,
+  "scams_verification_medium": 3,
+  "scams": 9,
+  "legitimate_low": 3,
+  "legitimate": 3,
+  "keyword_baseline_scams_flagged": 0,
+  "keyword_baseline_legitimate_flagged": 0,
+  "caveat": "Co-designed fictional fixtures: they show the mechanics of the contract, not generalisation."
+ },
+ "rows": [
+  {
+   "id": "S01",
+   "name": "Phishing impersonation",
+   "label": "scam",
+   "context": 15,
+   "transaction": 30,
+   "graph": 0,
+   "total": 45,
+   "band": "MEDIUM",
+   "action": "verify customer",
+   "reasons": [
+    "message cue: identity",
+    "payment check: amount_deviation",
+    "payment check: new_beneficiary"
+   ],
+   "keyword_baseline_flag": false,
+   "redacted_text": "Dear customer, your KYC verification is pending. Complete it at [LINK] to keep your account active.",
+   "matches_pdf": true
+  },
+  {
+   "id": "S02",
+   "name": "CEO redirection",
+   "label": "scam",
+   "context": 40,
+   "transaction": 30,
+   "graph": 0,
+   "total": 70,
+   "band": "HIGH",
+   "action": "escalate to analyst",
+   "reasons": [
+    "message cue: authority",
+    "message cue: pressure",
+    "message cue: redirection",
+    "payment check: amount_deviation",
+    "payment check: new_beneficiary"
+   ],
+   "keyword_baseline_flag": false,
+   "redacted_text": "This is the CEO. Please pay the vendor into the new account details below immediately, I am in a meeting.",
+   "matches_pdf": true
+  },
+  {
+   "id": "S03",
+   "name": "Fake support",
+   "label": "scam",
+   "context": 40,
+   "transaction": 30,
+   "graph": 0,
+   "total": 70,
+   "band": "HIGH",
+   "action": "escalate to analyst",
+   "reasons": [
+    "message cue: authority",
+    "message cue: pressure",
+    "message cue: remote_access",
+    "payment check: amount_deviation",
+    "payment check: new_beneficiary"
+   ],
+   "keyword_baseline_flag": false,
+   "redacted_text": "This is the customer support team. Install AnyDesk right now so we can fix the failed transaction on your account.",
+   "matches_pdf": true
+  },
+  {
+   "id": "S04",
+   "name": "UPI refund lure",
+   "label": "scam",
+   "context": 40,
+   "transaction": 30,
+   "graph": 0,
+   "total": 70,
+   "band": "HIGH",
+   "action": "escalate to analyst",
+   "reasons": [
+    "message cue: credential",
+    "message cue: pressure",
+    "message cue: refund",
+    "payment check: amount_deviation",
+    "payment check: new_beneficiary"
+   ],
+   "keyword_baseline_flag": false,
+   "redacted_text": "Your refund of Rs 2,499 is ready. Approve the collect request and enter your UPI PIN within 10 minutes.",
+   "matches_pdf": true
+  },
+  {
+   "id": "S05",
+   "name": "Investment lure",
+   "label": "scam",
+   "context": 20,
+   "transaction": 30,
+   "graph": 0,
+   "total": 50,
+   "band": "MEDIUM",
+   "action": "verify customer",
+   "reasons": [
+    "message cue: investment",
+    "payment check: amount_deviation",
+    "payment check: new_beneficiary"
+   ],
+   "keyword_baseline_flag": false,
+   "redacted_text": "Join our trading group VIP for guaranteed returns of 5% daily. Seats are limited.",
+   "matches_pdf": true
+  },
+  {
+   "id": "S06",
+   "name": "Synthetic identity context",
+   "label": "scam",
+   "context": 30,
+   "transaction": 30,
+   "graph": 0,
+   "total": 60,
+   "band": "HIGH",
+   "action": "escalate to analyst",
+   "reasons": [
+    "message cue: authority",
+    "message cue: identity",
+    "payment check: amount_deviation",
+    "payment check: new_beneficiary"
+   ],
+   "keyword_baseline_flag": false,
+   "redacted_text": "Bank officer here. Your Aadhaar verification failed during account opening, please pay the processing fee to reactivate.",
+   "matches_pdf": true
+  },
+  {
+   "id": "S07",
+   "name": "Mule pass through",
+   "label": "scam",
+   "context": 0,
+   "transaction": 15,
+   "graph": 30,
+   "total": 45,
+   "band": "MEDIUM",
+   "action": "verify customer",
+   "reasons": [
+    "payment check: amount_deviation",
+    "account graph: fan_in_4plus",
+    "account graph: rapid_pass_through"
+   ],
+   "keyword_baseline_flag": false,
+   "redacted_text": null,
+   "matches_pdf": true
+  },
+  {
+   "id": "S08",
+   "name": "Coordinated accounts",
+   "label": "scam",
+   "context": 40,
+   "transaction": 30,
+   "graph": 30,
+   "total": 100,
+   "band": "CRITICAL",
+   "action": "escalate to analyst (priority)",
+   "reasons": [
+    "message cue: authority",
+    "message cue: pressure",
+    "message cue: redirection",
+    "message cue: secrecy",
+    "payment check: amount_deviation",
+    "payment check: new_beneficiary",
+    "account graph: coordinated_accounts",
+    "account graph: fan_in_4plus"
+   ],
+   "keyword_baseline_flag": false,
+   "redacted_text": "Police department notice: you are under digital arrest. Transfer the money to this safe account and do not tell anyone.",
+   "matches_pdf": true
+  },
+  {
+   "id": "S09",
+   "name": "Keyword evasion",
+   "label": "scam",
+   "context": 40,
+   "transaction": 30,
+   "graph": 15,
+   "total": 85,
+   "band": "CRITICAL",
+   "action": "escalate to analyst (priority)",
+   "reasons": [
+    "message cue: authority",
+    "message cue: pressure",
+    "message cue: redirection",
+    "payment check: amount_deviation",
+    "payment check: new_beneficiary",
+    "account graph: fan_in_4plus"
+   ],
+   "keyword_baseline_flag": false,
+   "redacted_text": "The finance office has revised the vendor details. Please remit the balance to the replacement beneficiary ahead of the afternoon cutoff.",
+   "matches_pdf": true
+  },
+  {
+   "id": "N01",
+   "name": "AI invoice, legitimate",
+   "label": "legitimate",
+   "context": 0,
+   "transaction": 0,
+   "graph": 0,
+   "total": 0,
+   "band": "LOW",
+   "action": "allow",
+   "reasons": [],
+   "keyword_baseline_flag": false,
+   "redacted_text": "Please find attached invoice INV-[CODE] for October services, payable within 30 days as per our contract.",
+   "matches_pdf": true
+  },
+  {
+   "id": "N02",
+   "name": "AI support, legitimate",
+   "label": "legitimate",
+   "context": 15,
+   "transaction": 0,
+   "graph": 0,
+   "total": 15,
+   "band": "LOW",
+   "action": "allow",
+   "reasons": [
+    "message cue: authority"
+   ],
+   "keyword_baseline_flag": false,
+   "redacted_text": "Hi, this is the support team. Your ticket [CODE] has been resolved and no action is needed from you.",
+   "matches_pdf": true
+  },
+  {
+   "id": "N03",
+   "name": "New recipient, legitimate",
+   "label": "legitimate",
+   "context": 15,
+   "transaction": 15,
+   "graph": 0,
+   "total": 30,
+   "band": "LOW",
+   "action": "allow",
+   "reasons": [
+    "message cue: redirection",
+    "payment check: new_beneficiary"
+   ],
+   "keyword_baseline_flag": false,
+   "redacted_text": "Here are my updated bank details for the rent from this month onwards.",
+   "matches_pdf": true
+  }
+ ],
+ "mismatches": []
+}
