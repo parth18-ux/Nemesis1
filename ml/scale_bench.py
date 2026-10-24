@@ -29,7 +29,7 @@ def one(kind):
     parts = sorted(glob.glob(os.path.join(DATA, "for_claude", "aml_HI-Small_part*.csv.gz")))
     cols = ["ts", "fb", "fa", "tb", "ta", "amt_recv", "cur_recv", "amt_paid", "cur_paid", "fmt", "y"]
     df = pd.concat([pd.read_csv(p, header=0, names=cols, dtype=str, usecols=[0, 1, 2, 3, 4, 6, 7, 8, 9]) for p in parts], ignore_index=True)
-    df["tmin"] = (pd.to_datetime(df["ts"], format="%Y/%m/%d %H:%M").astype("int64") // 60_000_000_000)
+    df["tmin"] = pd.to_datetime(df["ts"], format="%Y/%m/%d %H:%M").astype("datetime64[s]").astype("int64") // 60   # minutes; explicit unit (pandas 3 parses to microseconds)
     df = df.sort_values("tmin", kind="mergesort").reset_index(drop=True)
     cat = {c: df[c].astype("category") for c in ("fb", "fa", "tb", "ta", "cur_recv", "cur_paid", "fmt")}
     C = {c: (v.cat.categories.to_numpy(), v.cat.codes.to_numpy()) for c, v in cat.items()}

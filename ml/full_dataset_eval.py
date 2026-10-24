@@ -32,7 +32,7 @@ dt = {"ts": "string", "fb": "category", "fa": "category", "tb": "category", "ta"
 df = pd.concat([pd.read_csv(p, header=0, names=cols, dtype=dt) for p in parts], ignore_index=True)
 for c in ("fb", "fa", "tb", "ta", "cur_recv", "cur_paid", "fmt"):
     df[c] = df[c].astype("string").astype("category")
-df["tmin"] = (pd.to_datetime(df["ts"], format="%Y/%m/%d %H:%M").astype("int64") // 60_000_000_000).astype("int64")
+df["tmin"] = pd.to_datetime(df["ts"], format="%Y/%m/%d %H:%M").astype("datetime64[s]").astype("int64") // 60   # minutes; explicit unit (pandas 3 parses to microseconds)
 df = df.sort_values("tmin", kind="mergesort").reset_index(drop=True)
 N = len(df)
 collect_from, test_from = int(N * 0.6), int(N * 0.8)   # 60 to 80% = validation (rule tuning only), 80 to 100% = test (all metrics)
