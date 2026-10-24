@@ -1,8 +1,8 @@
 """
-RuseTect context layer (finale Part 1): consent, redaction, a keyword baseline and the interpretable
-context + transaction + graph risk-point fusion described in the Round 1 PDF.
+RuseTect context layer: consent, redaction, a keyword baseline and the interpretable
+context + transaction + graph risk-point fusion described in the design notes.
 
-Contract (Round 1 PDF, Pitch 8 "Fusion contract"):
+Fusion contract:
   * three signal domains, each capped: context 0-40, transaction 0-30, graph 0-30 -> total 0-100
   * bands: CRITICAL >= 85, HIGH >= 60, MEDIUM >= 40, else LOW
   * HIGH and CRITICAL need at least two domains with points (one domain alone caps at MEDIUM)

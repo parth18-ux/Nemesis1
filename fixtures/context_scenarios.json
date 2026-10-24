@@ -1,5 +1,5 @@
 {
- "note": "Twelve fictional, co-designed fixtures from the Round 1 PDF (Pitch 8). Message texts and payment flags are authored inputs, not real customer data. expected = the Round 1 PDF table.",
+ "note": "Twelve fictional fixtures from the project design notes (scenario table). Message texts and payment flags are authored inputs, not real customer data. expected = the design table.",
  "scenarios": [
   {"id": "S01", "name": "Phishing impersonation", "label": "scam", "consent": true,
    "text": "Dear customer, your KYC verification is pending. Complete it at www.kyc-renew-portal.in to keep your account active.",

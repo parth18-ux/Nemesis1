@@ -1,5 +1,5 @@
 {
- "note": "Fictional mule fixture from the Round 1 PDF (Pitch 6): 12 victims pay the same mule account; one minute after each deposit the mule forwards about 98% to one collector. Amounts in Rupee, format ACH (the engine's formats come from the IBM data; UPI is not one of them).",
+ "note": "Fictional mule fixture from the project design notes: 12 victims pay the same mule account; one minute after each deposit the mule forwards about 98% to one collector. Amounts in Rupee, format ACH (the engine's formats come from the IBM data; UPI is not one of them).",
  "start": "2022-09-09 10:00", "gap_minutes": 7,
  "mule": {"bank": "0200", "account": "MULE01"}, "collector": {"bank": "0300", "account": "COLL01"},
  "deposits_inr": [9500, 12000, 18000, 14500, 9900, 16500, 11200, 17800, 10400, 15000, 13300, 19500],

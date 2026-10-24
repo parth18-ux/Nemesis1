@@ -1,4 +1,4 @@
-"""Analyst review, audit trail and evidence packs (finale Part 3).
+"""Analyst review, audit trail and evidence packs .
 
 * Every assessed payment that needs a human (final decision above Approve) becomes an ALERT with an id.
 * Analysts act on alerts: release, verify (ask the customer), hold, or approve_block (two different analysts must
