@@ -49,13 +49,21 @@ def evaluate(df, label):
                                     "recall_50_plus": round(tpr(old), 4), "recall_under_50": round(tpr(~old), 4),
                                     "flag_rate": round(float(flag.mean()), 4)}}
 
-base = load("Base"); v3 = load("Variant_III")
-print(f"loaded Base {len(base):,} and Variant III {len(v3):,} in {time.time() - T0:.0f}s; V3 months {sorted(v3.month.unique())}", flush=True)
+base = load("Base")
 out = {"model": "live L0 LightGBM, trained on BAF Base months 0 to 4; thresholds per age group from l0_config.json",
-       "base_test_months_6_7": evaluate(base[base.month >= 6], "Base, months 6 to 7 (benchmark test period)"),
-       "variant_iii_all": evaluate(v3, "Variant III, all uploaded rows (never trained on)")}
-if (v3.month >= 6).any():
-    out["variant_iii_months_6_7"] = evaluate(v3[v3.month >= 6], "Variant III, months 6 to 7")
+       "base_test_months_6_7": evaluate(base[base.month >= 6], "Base, months 6 to 7 (benchmark test period)"), "variants": {}}
+del base
+# Feedzai's variants shift the population's bias (group prevalence, group size, separability); III and V also add leaked
+# features x1 and x2. None was used for training. Months 6 to 7 match the Base test protocol.
+for name in ("Variant_I", "Variant_II", "Variant_III", "Variant_IV", "Variant_V"):
+    if not glob.glob(os.path.join(DATA, "for_claude", f"baf_{name}_part*.csv.gz")):
+        continue
+    v = load(name); key = name.replace("_", " ")
+    out["variants"][key] = {"months_6_7": evaluate(v[v.month >= 6], f"{key}, months 6 to 7"), "all_months": evaluate(v, f"{key}, all months")}
+    print(key, json.dumps(out["variants"][key]["months_6_7"]), flush=True)
+    if name == "Variant_III":
+        v3 = v
+    del v
 
 # ---- control: what happens if a model may use the leaked bias features
 try:
@@ -81,6 +89,6 @@ try:
 except ImportError:
     out["control_trained_on_variant_iii"] = "lightgbm not installed"
 out["runtime_seconds"] = round(time.time() - T0, 1)
-out["caveats"] = ["Feedzai BAF is synthetic.", "Only the first 200,000 Variant III rows were uploaded."]
+out["caveats"] = ["Feedzai BAF is synthetic.", "The age split (50 and over) is the gate's own fairness check; each variant's bias is defined on the dataset's protected attribute."]
 json.dump(out, open(os.path.join(ROOT, "results", "baf_variant_eval.json"), "w"), indent=1)
 print(json.dumps(out, indent=1))

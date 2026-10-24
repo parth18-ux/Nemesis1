@@ -1,0 +1,452 @@
+{
+ "dataset": "IBM AMLworld HI-Small (all files uploaded)",
+ "payments_total": 5078345,
+ "laundering_total": 5177,
+ "scored_from_row": 4062676,
+ "scored_payments": 1015669,
+ "scored_laundering": 1760,
+ "protocol": "time ordered; history 0 to 80% only builds account state; metrics on the last 20% (benchmark test period)",
+ "ruleset": "ctx-1.2",
+ "live_model_pr_auc": 0.5902,
+ "live_model_roc_auc": 0.976,
+ "l2_average_pr_auc_all_rows": 0.5901,
+ "l1_pass_rate": 0.1781,
+ "l1_laundering_kept": 0.983,
+ "levels": {
+  "payment_model": {
+   "verify_or_more": {
+    "flagged": 8581,
+    "flag_rate": 0.00845,
+    "laundering_caught": 1269,
+    "laundering": 1760,
+    "recall": 0.721,
+    "precision": 0.1479
+   },
+   "hold_or_more": {
+    "flagged": 2115,
+    "flag_rate": 0.00208,
+    "laundering_caught": 992,
+    "laundering": 1760,
+    "recall": 0.5636,
+    "precision": 0.469
+   },
+   "block": {
+    "flagged": 817,
+    "flag_rate": 0.0008,
+    "laundering_caught": 791,
+    "laundering": 1760,
+    "recall": 0.4494,
+    "precision": 0.9682
+   }
+  },
+  "context_layer_alone": {
+   "verify_or_more": {
+    "flagged": 210038,
+    "flag_rate": 0.2068,
+    "laundering_caught": 1125,
+    "laundering": 1760,
+    "recall": 0.6392,
+    "precision": 0.0054
+   },
+   "hold_or_more": {
+    "flagged": 539,
+    "flag_rate": 0.00053,
+    "laundering_caught": 102,
+    "laundering": 1760,
+    "recall": 0.058,
+    "precision": 0.1892
+   }
+  },
+  "combined_final": {
+   "verify_or_more": {
+    "flagged": 215234,
+    "flag_rate": 0.21191,
+    "laundering_caught": 1505,
+    "laundering": 1760,
+    "recall": 0.8551,
+    "precision": 0.007
+   },
+   "hold_or_more": {
+    "flagged": 2559,
+    "flag_rate": 0.00252,
+    "laundering_caught": 1026,
+    "laundering": 1760,
+    "recall": 0.583,
+    "precision": 0.4009
+   }
+  }
+ },
+ "raised_by_context": {
+  "flagged": 206721,
+  "flag_rate": 0.20353,
+  "laundering_caught": 250,
+  "laundering": 1760,
+  "recall": 0.142,
+  "precision": 0.0012
+ },
+ "mule_signature": {
+  "flagged": 194964,
+  "flag_rate": 0.19196,
+  "laundering_caught": 681,
+  "laundering": 1760,
+  "recall": 0.3869,
+  "precision": 0.0035
+ },
+ "context_band_counts": {
+  "LOW": 805631,
+  "MEDIUM": 209499,
+  "HIGH": 539
+ },
+ "rings": {
+  "payment_model": {
+   "verify_or_more": {
+    "rings_in_scored_period": 190,
+    "rings_caught": 184,
+    "rate": 0.968,
+    "by_typology": {
+     "BIPARTITE": {
+      "rings": 21,
+      "caught": 21,
+      "rate": 1.0
+     },
+     "CYCLE": {
+      "rings": 25,
+      "caught": 23,
+      "rate": 0.92
+     },
+     "FAN-IN": {
+      "rings": 20,
+      "caught": 20,
+      "rate": 1.0
+     },
+     "FAN-OUT": {
+      "rings": 21,
+      "caught": 21,
+      "rate": 1.0
+     },
+     "GATHER-SCATTER": {
+      "rings": 39,
+      "caught": 39,
+      "rate": 1.0
+     },
+     "RANDOM": {
+      "rings": 17,
+      "caught": 14,
+      "rate": 0.824
+     },
+     "SCATTER-GATHER": {
+      "rings": 22,
+      "caught": 21,
+      "rate": 0.955
+     },
+     "STACK": {
+      "rings": 25,
+      "caught": 25,
+      "rate": 1.0
+     }
+    }
+   },
+   "hold_or_more": {
+    "rings_in_scored_period": 190,
+    "rings_caught": 173,
+    "rate": 0.911,
+    "by_typology": {
+     "BIPARTITE": {
+      "rings": 21,
+      "caught": 17,
+      "rate": 0.81
+     },
+     "CYCLE": {
+      "rings": 25,
+      "caught": 23,
+      "rate": 0.92
+     },
+     "FAN-IN": {
+      "rings": 20,
+      "caught": 20,
+      "rate": 1.0
+     },
+     "FAN-OUT": {
+      "rings": 21,
+      "caught": 19,
+      "rate": 0.905
+     },
+     "GATHER-SCATTER": {
+      "rings": 39,
+      "caught": 37,
+      "rate": 0.949
+     },
+     "RANDOM": {
+      "rings": 17,
+      "caught": 14,
+      "rate": 0.824
+     },
+     "SCATTER-GATHER": {
+      "rings": 22,
+      "caught": 21,
+      "rate": 0.955
+     },
+     "STACK": {
+      "rings": 25,
+      "caught": 22,
+      "rate": 0.88
+     }
+    }
+   },
+   "block": {
+    "rings_in_scored_period": 190,
+    "rings_caught": 144,
+    "rate": 0.758,
+    "by_typology": {
+     "BIPARTITE": {
+      "rings": 21,
+      "caught": 13,
+      "rate": 0.619
+     },
+     "CYCLE": {
+      "rings": 25,
+      "caught": 19,
+      "rate": 0.76
+     },
+     "FAN-IN": {
+      "rings": 20,
+      "caught": 16,
+      "rate": 0.8
+     },
+     "FAN-OUT": {
+      "rings": 21,
+      "caught": 15,
+      "rate": 0.714
+     },
+     "GATHER-SCATTER": {
+      "rings": 39,
+      "caught": 31,
+      "rate": 0.795
+     },
+     "RANDOM": {
+      "rings": 17,
+      "caught": 14,
+      "rate": 0.824
+     },
+     "SCATTER-GATHER": {
+      "rings": 22,
+      "caught": 19,
+      "rate": 0.864
+     },
+     "STACK": {
+      "rings": 25,
+      "caught": 17,
+      "rate": 0.68
+     }
+    }
+   }
+  },
+  "context_layer_alone": {
+   "verify_or_more": {
+    "rings_in_scored_period": 190,
+    "rings_caught": 171,
+    "rate": 0.9,
+    "by_typology": {
+     "BIPARTITE": {
+      "rings": 21,
+      "caught": 15,
+      "rate": 0.714
+     },
+     "CYCLE": {
+      "rings": 25,
+      "caught": 22,
+      "rate": 0.88
+     },
+     "FAN-IN": {
+      "rings": 20,
+      "caught": 19,
+      "rate": 0.95
+     },
+     "FAN-OUT": {
+      "rings": 21,
+      "caught": 16,
+      "rate": 0.762
+     },
+     "GATHER-SCATTER": {
+      "rings": 39,
+      "caught": 39,
+      "rate": 1.0
+     },
+     "RANDOM": {
+      "rings": 17,
+      "caught": 14,
+      "rate": 0.824
+     },
+     "SCATTER-GATHER": {
+      "rings": 22,
+      "caught": 22,
+      "rate": 1.0
+     },
+     "STACK": {
+      "rings": 25,
+      "caught": 24,
+      "rate": 0.96
+     }
+    }
+   },
+   "hold_or_more": {
+    "rings_in_scored_period": 190,
+    "rings_caught": 56,
+    "rate": 0.295,
+    "by_typology": {
+     "BIPARTITE": {
+      "rings": 21,
+      "caught": 4,
+      "rate": 0.19
+     },
+     "CYCLE": {
+      "rings": 25,
+      "caught": 8,
+      "rate": 0.32
+     },
+     "FAN-IN": {
+      "rings": 20,
+      "caught": 8,
+      "rate": 0.4
+     },
+     "FAN-OUT": {
+      "rings": 21,
+      "caught": 3,
+      "rate": 0.143
+     },
+     "GATHER-SCATTER": {
+      "rings": 39,
+      "caught": 15,
+      "rate": 0.385
+     },
+     "RANDOM": {
+      "rings": 17,
+      "caught": 4,
+      "rate": 0.235
+     },
+     "SCATTER-GATHER": {
+      "rings": 22,
+      "caught": 10,
+      "rate": 0.455
+     },
+     "STACK": {
+      "rings": 25,
+      "caught": 4,
+      "rate": 0.16
+     }
+    }
+   }
+  },
+  "combined_final": {
+   "verify_or_more": {
+    "rings_in_scored_period": 190,
+    "rings_caught": 189,
+    "rate": 0.995,
+    "by_typology": {
+     "BIPARTITE": {
+      "rings": 21,
+      "caught": 21,
+      "rate": 1.0
+     },
+     "CYCLE": {
+      "rings": 25,
+      "caught": 25,
+      "rate": 1.0
+     },
+     "FAN-IN": {
+      "rings": 20,
+      "caught": 20,
+      "rate": 1.0
+     },
+     "FAN-OUT": {
+      "rings": 21,
+      "caught": 21,
+      "rate": 1.0
+     },
+     "GATHER-SCATTER": {
+      "rings": 39,
+      "caught": 39,
+      "rate": 1.0
+     },
+     "RANDOM": {
+      "rings": 17,
+      "caught": 16,
+      "rate": 0.941
+     },
+     "SCATTER-GATHER": {
+      "rings": 22,
+      "caught": 22,
+      "rate": 1.0
+     },
+     "STACK": {
+      "rings": 25,
+      "caught": 25,
+      "rate": 1.0
+     }
+    }
+   },
+   "hold_or_more": {
+    "rings_in_scored_period": 190,
+    "rings_caught": 174,
+    "rate": 0.916,
+    "by_typology": {
+     "BIPARTITE": {
+      "rings": 21,
+      "caught": 17,
+      "rate": 0.81
+     },
+     "CYCLE": {
+      "rings": 25,
+      "caught": 23,
+      "rate": 0.92
+     },
+     "FAN-IN": {
+      "rings": 20,
+      "caught": 20,
+      "rate": 1.0
+     },
+     "FAN-OUT": {
+      "rings": 21,
+      "caught": 19,
+      "rate": 0.905
+     },
+     "GATHER-SCATTER": {
+      "rings": 39,
+      "caught": 37,
+      "rate": 0.949
+     },
+     "RANDOM": {
+      "rings": 17,
+      "caught": 14,
+      "rate": 0.824
+     },
+     "SCATTER-GATHER": {
+      "rings": 22,
+      "caught": 21,
+      "rate": 0.955
+     },
+     "STACK": {
+      "rings": 25,
+      "caught": 23,
+      "rate": 0.92
+     }
+    }
+   }
+  }
+ },
+ "ring_payments_matched": 1301,
+ "l4_cases_from_blocks": 238,
+ "l4_cases_from_holds": 1517,
+ "l4_cases_from_holds_entity_merged": 1071,
+ "accounts_with_entity": 518581,
+ "time_span": [
+  "2022/09/01 00:20",
+  "2022/09/18 16:18"
+ ],
+ "runtime_seconds": 381.2,
+ "caveats": [
+  "IBM AMLworld is synthetic.",
+  "No messages exist in IBM data, so the context layer runs on payment and graph checks only and single domain results cap at MEDIUM by design.",
+  "Context and graph checks were designed after looking at the bundled sample, not at this full file."
+ ]
+}

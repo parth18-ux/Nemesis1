@@ -35,9 +35,9 @@ for c in ("fb", "fa", "tb", "ta", "cur_recv", "cur_paid", "fmt"):
 df["tmin"] = (pd.to_datetime(df["ts"], format="%Y/%m/%d %H:%M").astype("int64") // 60_000_000_000).astype("int64")
 df = df.sort_values("tmin", kind="mergesort").reset_index(drop=True)
 N = len(df)
-test_from = int(N * 0.8) if SET == "HI" else int(N * 0.4)
+collect_from, test_from = int(N * 0.6), int(N * 0.8)   # 60 to 80% = validation (rule tuning only), 80 to 100% = test (all metrics)
 span = (str(df["ts"].iloc[0]), str(df["ts"].iloc[-1]))
-log(f"{SET}: {N:,} payments from {len(parts)} files, {int(df.y.sum()):,} laundering; scoring rows {test_from:,}+")
+log(f"{SET}: {N:,} payments from {len(parts)} files, {int(df.y.sum()):,} laundering; validation rows {collect_from:,}+, test rows {test_from:,}+")
 
 # ------------------------------------------------------------------ ground truth rings
 rings, key2ring = [], {}
@@ -60,9 +60,16 @@ eng = Engine(load_models=True); eng.reset()
 feats = eng.feats
 cat = {c: df[c].cat.categories.to_numpy() for c in ("fb", "fa", "tb", "ta", "cur_recv", "cur_paid", "fmt")}
 codes = {c: df[c].cat.codes.to_numpy() for c in cat}
-ts, amt_s, tmin, ys = df["ts"].to_numpy(), df["amt_paid"].to_numpy(), df["tmin"].to_numpy(), df["y"].to_numpy()
+tmin, ys = df["tmin"].to_numpy(), df["y"].to_numpy()
+amt = df["amt_paid"].astype(float).to_numpy()
+pos_idx = np.flatnonzero(ys)
+pos_key = {int(i): (df["ts"].iat[i], df["amt_paid"].iat[i]) for i in pos_idx}   # strings only for labelled rows (ring matching)
 del df
-nt = N - test_from
+import gc; gc.collect()
+nt = N - collect_from
+RAW = ["new_pair", "amount_deviation", "rapid", "fan_in_24h", "sender_fan_in_24h", "s_uniq_dst", "s_in_n", "s_out_n",
+       "s_out_over_last_in", "s_mins_since_in", "d_uniq_src", "log_usd", "s_passthrough"]
+R = np.zeros((nt, len(RAW)), dtype=np.float32)
 X = np.empty((nt, len(feats)), dtype=np.float32)
 BANDS = ["LOW", "MEDIUM", "HIGH", "CRITICAL"]
 ctx_rank = np.zeros(nt, dtype=np.int8); ctx_band = np.zeros(nt, dtype=np.int8); mule_sig = np.zeros(nt, dtype=bool)
@@ -70,21 +77,24 @@ ring_rows = {}                                     # test row -> ring ids (label
 src_dst = np.zeros((nt, 4), dtype=np.int32)         # category codes (fb, fa, tb, ta) for L4 case linking
 for i in range(N):
     p = {"from_bank": cat["fb"][codes["fb"][i]], "from_account": cat["fa"][codes["fa"][i]], "to_bank": cat["tb"][codes["tb"][i]],
-         "to_account": cat["ta"][codes["ta"][i]], "amount_paid": float(amt_s[i]), "payment_currency": cat["cur_paid"][codes["cur_paid"][i]],
+         "to_account": cat["ta"][codes["ta"][i]], "amount_paid": float(amt[i]), "payment_currency": cat["cur_paid"][codes["cur_paid"][i]],
          "receiving_currency": cat["cur_recv"][codes["cur_recv"][i]], "payment_format": cat["fmt"][codes["fmt"][i]], "tmin": int(tmin[i])}
-    if i < test_from:
+    if i < collect_from:
         eng.features(p)
     else:
-        j = i - test_from
+        j = i - collect_from
         sf = sender_fan_in_24h(eng, p)
         f = eng.features(p)
         X[j] = [f[k] for k in feats]
-        r = assess(None, from_engine_features(f, sf), True)
+        pc = from_engine_features(f, sf)
+        R[j] = (pc.new_beneficiary, pc.amount_deviation, pc.rapid_pass_through, pc.fan_in_24h, sf, f["s_uniq_dst"], f["s_in_n"], f["s_out_n"],
+                f["s_out_over_last_in"], f["s_mins_since_in"], f["d_uniq_src"], f["log_usd"], f["s_passthrough"])
+        r = assess(None, pc, True)
         ctx_band[j] = BANDS.index(r.band); ctx_rank[j] = CONTEXT_TO_RANK[r.band]
         mule_sig[j] = "account graph: sender_mule_signature" in r.reasons
         src_dst[j] = (codes["fb"][i], codes["fa"][i], codes["tb"][i], codes["ta"][i])
         if ys[i]:
-            k = (ts[i], p["from_bank"], p["from_account"], p["to_bank"], p["to_account"], amt_s[i])
+            k = (pos_key[i][0], p["from_bank"], p["from_account"], p["to_bank"], p["to_account"], pos_key[i][1])
             if k in key2ring:
                 ring_rows[j] = key2ring[k]
     if i % 500_000 == 0:
@@ -106,6 +116,17 @@ esc = s1 >= cfg["l1_threshold"]
 pay_rank[esc & (risk >= cfg["verify_threshold"])] = 1
 pay_rank[esc & (risk >= cfg["hold_threshold"])] = 2
 pay_rank[esc & (risk >= cfg["block_threshold"])] = 3
+# validation + test dump for rule tuning (ml/tune_context.py); metrics below use the test rows only
+np.savez_compressed(os.path.join(os.environ.get("RUSETECT_DUMP", "/tmp"), f"ctx_dump_{SET}.npz"), R=R, raw=np.array(RAW), y=ys[collect_from:],
+                    pay_rank=pay_rank, risk=risk, esc=esc, ctx_rank=ctx_rank, split=test_from - collect_from,
+                    src_dst=src_dst, ring_j=np.array(sorted(ring_rows), dtype=np.int64),
+                    ring_id=np.array([ring_rows[j][0] for j in sorted(ring_rows)], dtype=np.int64),
+                    ring_typ=np.array([r["typology"] for r in rings]))
+off = test_from - collect_from
+X, R, ctx_rank, ctx_band, mule_sig, src_dst = X[off:], R[off:], ctx_rank[off:], ctx_band[off:], mule_sig[off:], src_dst[off:]
+s1, risk, esc, pay_rank = s1[off:], risk[off:], esc[off:], pay_rank[off:]
+ring_rows = {j - off: v for j, v in ring_rows.items() if j >= off}
+nt = N - test_from
 final_rank = np.maximum(pay_rank, ctx_rank)
 y = ys[test_from:].astype(bool)
 live_score = np.where(esc, risk, 0.0)
@@ -161,10 +182,10 @@ systems = {
     "combined_final": {"verify_or_more": final_rank >= 1, "hold_or_more": final_rank >= 2},
 }
 out = {
-    "dataset": f"IBM AMLworld {SET}-Small" + (" (all files uploaded)" if SET == "HI" else " sample: first 500,000 payments, never used for training"),
-    "payments_total": N, "laundering_total": int(ys.sum()), "scored_from_row": test_from, "scored_payments": nt, "scored_laundering": int(y.sum()),
-    "protocol": ("time ordered; history 0 to 80% only builds account state; metrics on the last 20% (benchmark test period)" if SET == "HI"
-                 else "time ordered; first 40% builds account state; metrics on the last 60%; models trained on HI-Small only"),
+    "dataset": f"IBM AMLworld {SET}-Small, all payments" + ("" if SET == "HI" else " (never used for training)"),
+    "payments_total": N, "laundering_total": int(ys.sum()), "scored_from_row": test_from, "validation_from_row": collect_from, "scored_payments": nt, "scored_laundering": int(y.sum()),
+    "protocol": "time ordered; 0 to 60% builds account state; 60 to 80% is validation (used only to tune context rules); metrics on the last 20%"
+                + ("" if SET == "HI" else "; payment models were trained on HI-Small only, so every LI payment is unseen"),
     "ruleset": RULESET_VERSION,
     "live_model_pr_auc": round(float(average_precision_score(y, live_score)), 4),
     "live_model_roc_auc": round(float(roc_auc_score(y, live_score)), 4),
@@ -183,8 +204,7 @@ out = {
     "caveats": ["IBM AMLworld is synthetic.", "No messages exist in IBM data, so the context layer runs on payment and graph checks only and "
                 "single domain results cap at MEDIUM by design.",
                 "Context and graph checks were designed after looking at the bundled sample, not at this full file."]
-                + (["LI-Small: only the first 500,000 payments were uploaded, so account history is short and only rings fully "
-                    "inside that window can be matched."] if SET == "LI" else []),
+
 }
 json.dump(out, open(os.path.join(ROOT, "results", f"full_eval_{SET}.json"), "w"), indent=1)
 log(json.dumps({k: v for k, v in out.items() if k not in ("rings",)}, indent=1))
