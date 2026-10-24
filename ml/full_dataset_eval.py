@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.join(ROOT, "service"))
 from rusetect_engine import Engine                                   # noqa: E402
 from context_rules import assess, combine, from_engine_features, sender_fan_in_24h, PAYMENT_RANK, CONTEXT_TO_RANK, RULESET_VERSION  # noqa: E402
 
-DATA = os.environ.get("RUSETECT_DATA", "/mnt/user-data/uploads/iit delhi")
+DATA = os.environ.get("RUSETECT_DATA") or os.path.dirname(next(iter(sorted(glob.glob("/mnt/user-data/uploads/*/for_claude"))), "data/for_claude"))   # folder holding for_claude/ and the archive
 SET = (sys.argv[1] if len(sys.argv) > 1 else "HI").upper()
 T0 = time.time()
 log = lambda *a: print(f"[{time.time() - T0:7.1f}s]", *a, flush=True)

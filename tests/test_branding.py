@@ -15,13 +15,14 @@ from index import app  # noqa: E402
 client = TestClient(app)
 STATIC = ROOT / "service" / "static"
 LEGACY = re.compile(r"rusetect|iit[\s_-]*delhi|track\s*0?2\b|amazon", re.I)
+REPO_URL = "github.com/Parth1681/RuseTect"     # the repository's slug predates the rename; links to it are allowed
 
 
 # ---------------------------------------------------------------- rename
 @pytest.mark.parametrize("path,title", [("/", "<title>RuseTect</title>"), ("/console", "<title>RuseTect Live Console</title>"),
                                         ("/report", "<title>RuseTect Benchmark</title>")])
 def test_pages_use_new_name_and_no_legacy_branding(path, title):
-    html = client.get(path).text
+    html = client.get(path).text.replace(REPO_URL, "")
     assert title in html
     assert not LEGACY.search(html), LEGACY.search(html).group(0)
     assert 'href="/favicon.svg"' in html
@@ -47,7 +48,7 @@ def test_no_legacy_branding_in_source_except_env_fallbacks():
         if rel in notes:
             continue
         for n, line in enumerate(p.read_text(errors="ignore").splitlines(), 1):
-            if LEGACY.search(line) and "RUSETECT_" not in line:
+            if LEGACY.search(line.replace(REPO_URL, "")) and "RUSETECT_" not in line:
                 hits.append(f"{rel}:{n}: {line.strip()[:80]}")
     assert not hits, hits
 

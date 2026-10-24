@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.join(ROOT, "service"))
 from lgbm_lite import LiteBooster  # noqa: E402
 sys.path.insert(0, os.path.join(ROOT, "ml")); import lite_fast  # noqa: E402
 
-DATA = os.environ.get("RUSETECT_DATA", "/mnt/user-data/uploads/iit delhi")
+DATA = os.environ.get("RUSETECT_DATA") or os.path.dirname(next(iter(sorted(glob.glob("/mnt/user-data/uploads/*/for_claude"))), "data/for_claude"))   # folder holding for_claude/ and the archive
 cfg = json.load(open(os.path.join(ROOT, "service", "models", "l0_config.json")))
 L0 = LiteBooster(os.path.join(ROOT, "service", "models", "l0_onboarding_lgbm.json"))
 T0 = time.time()

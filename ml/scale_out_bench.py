@@ -13,7 +13,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "service"))
 import redis  # noqa: E402
 from scale.producer import publish, partition_of  # noqa: E402
-DATA = os.environ.get("RUSETECT_DATA", "/mnt/user-data/uploads/iit delhi")
+DATA = os.environ.get("RUSETECT_DATA") or os.path.dirname(next(iter(sorted(glob.glob("/mnt/user-data/uploads/*/for_claude"))), "data/for_claude"))   # folder holding for_claude/ and the archive
 N = int(sys.argv[1]) if len(sys.argv) > 1 else 200_000
 
 parts = sorted(glob.glob(os.path.join(DATA, "for_claude", "aml_HI-Small_part*.csv.gz")))

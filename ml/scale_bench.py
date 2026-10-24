@@ -11,7 +11,7 @@ import glob, json, os, subprocess, sys, time
 import numpy as np
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATA = os.environ.get("RUSETECT_DATA", "/mnt/user-data/uploads/iit delhi")
+DATA = os.environ.get("RUSETECT_DATA") or os.path.dirname(next(iter(sorted(glob.glob("/mnt/user-data/uploads/*/for_claude"))), "data/for_claude"))   # folder holding for_claude/ and the archive
 TMP = os.environ.get("RUSETECT_DUMP", "/tmp")
 
 
