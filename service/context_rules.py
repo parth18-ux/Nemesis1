@@ -25,7 +25,7 @@ import hashlib, os, re, unicodedata
 from dataclasses import dataclass, field, asdict
 from datetime import datetime, timedelta, timezone
 
-RULESET_VERSION = "ctx-1.1"   # 1.1: negation-aware cues, sender-side mule signature, optional intent model
+RULESET_VERSION = "ctx-1.2"   # 1.1: negation-aware cues, sender mule signature; 1.2: API fuses the intent model by default (Part 4 evidence)
 RETENTION_DAYS = 30
 _SALT = os.environ.get("RUSETECT_HASH_SALT", "rusetect-demo-salt")
 

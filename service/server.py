@@ -142,7 +142,7 @@ class MessageIn(BaseModel):
 class AssessIn(PaymentIn):
     message: Optional[str] = Field(None, max_length=5000, description="Message or call transcript the payer received (optional)")
     consent: bool = Field(False, description="Payer opted in to message context; without it the text is ignored and not stored")
-    use_intent_model: bool = Field(False, description="Also lift the context score with the trained L-1 message model")
+    use_intent_model: bool = Field(True, description="Lift the context score with the trained L-1 message model (default since ctx-1.2; see results/fusion_oof.json)")
 
 
 @api.post("/v2/assess")

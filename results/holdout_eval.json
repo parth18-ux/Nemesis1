@@ -1,0 +1,228 @@
+{
+ "ruleset": "ctx-1.2",
+ "frozen_at_commit": "e8e00a0",
+ "A_message_holdout": {
+  "messages": 412,
+  "scam": 232,
+  "legitimate": 180,
+  "by_setting": {
+   "worst": {
+    "scam_escalated": 0.03,
+    "scam_verify_or_more": 0.302,
+    "legit_escalated": 0.0,
+    "legit_verify_or_more": 0.022
+   },
+   "new": {
+    "scam_escalated": 0.0,
+    "scam_verify_or_more": 0.056,
+    "legit_escalated": 0.0,
+    "legit_verify_or_more": 0.0
+   },
+   "none": {
+    "scam_escalated": 0.0,
+    "scam_verify_or_more": 0.0,
+    "legit_escalated": 0.0,
+    "legit_verify_or_more": 0.0
+   }
+  },
+  "keyword_baseline": {
+   "scam_flagged": 0.177,
+   "legit_flagged": 0.15
+  },
+  "worst_by_workflow": [
+   {
+    "label": "legitimate",
+    "workflow": "bank_debit",
+    "n": 18,
+    "escalated": 0,
+    "rate": 0.0
+   },
+   {
+    "label": "legitimate",
+    "workflow": "otp",
+    "n": 24,
+    "escalated": 0,
+    "rate": 0.0
+   },
+   {
+    "label": "legitimate",
+    "workflow": "bank_notice",
+    "n": 30,
+    "escalated": 0,
+    "rate": 0.0
+   },
+   {
+    "label": "legitimate",
+    "workflow": "utility_bill",
+    "n": 21,
+    "escalated": 0,
+    "rate": 0.0
+   },
+   {
+    "label": "legitimate",
+    "workflow": "delivery",
+    "n": 13,
+    "escalated": 0,
+    "rate": 0.0
+   },
+   {
+    "label": "legitimate",
+    "workflow": "personal",
+    "n": 35,
+    "escalated": 0,
+    "rate": 0.0
+   },
+   {
+    "label": "legitimate",
+    "workflow": "services",
+    "n": 30,
+    "escalated": 0,
+    "rate": 0.0
+   },
+   {
+    "label": "legitimate",
+    "workflow": "marketing",
+    "n": 9,
+    "escalated": 0,
+    "rate": 0.0
+   },
+   {
+    "label": "scam",
+    "workflow": "upi_collect_refund",
+    "n": 18,
+    "escalated": 7,
+    "rate": 0.39
+   },
+   {
+    "label": "scam",
+    "workflow": "digital_arrest",
+    "n": 18,
+    "escalated": 0,
+    "rate": 0.0
+   },
+   {
+    "label": "scam",
+    "workflow": "parcel_customs",
+    "n": 15,
+    "escalated": 0,
+    "rate": 0.0
+   },
+   {
+    "label": "scam",
+    "workflow": "kyc_block",
+    "n": 21,
+    "escalated": 0,
+    "rate": 0.0
+   },
+   {
+    "label": "scam",
+    "workflow": "remote_access",
+    "n": 16,
+    "escalated": 0,
+    "rate": 0.0
+   },
+   {
+    "label": "scam",
+    "workflow": "task_job",
+    "n": 18,
+    "escalated": 0,
+    "rate": 0.0
+   },
+   {
+    "label": "scam",
+    "workflow": "investment",
+    "n": 18,
+    "escalated": 0,
+    "rate": 0.0
+   },
+   {
+    "label": "scam",
+    "workflow": "utility_disconnect",
+    "n": 15,
+    "escalated": 0,
+    "rate": 0.0
+   },
+   {
+    "label": "scam",
+    "workflow": "fake_loan",
+    "n": 15,
+    "escalated": 0,
+    "rate": 0.0
+   },
+   {
+    "label": "scam",
+    "workflow": "lottery_prize",
+    "n": 15,
+    "escalated": 0,
+    "rate": 0.0
+   },
+   {
+    "label": "scam",
+    "workflow": "family_emergency",
+    "n": 18,
+    "escalated": 0,
+    "rate": 0.0
+   },
+   {
+    "label": "scam",
+    "workflow": "sextortion",
+    "n": 9,
+    "escalated": 0,
+    "rate": 0.0
+   },
+   {
+    "label": "scam",
+    "workflow": "govt_scheme",
+    "n": 15,
+    "escalated": 0,
+    "rate": 0.0
+   },
+   {
+    "label": "scam",
+    "workflow": "reward_points",
+    "n": 9,
+    "escalated": 0,
+    "rate": 0.0
+   },
+   {
+    "label": "scam",
+    "workflow": "fake_support",
+    "n": 12,
+    "escalated": 0,
+    "rate": 0.0
+   }
+  ]
+ },
+ "B_payment_ablation_ibm": {
+  "payments": 60000,
+  "full": {
+   "flagged_verify_or_more": 34,
+   "flag_rate": 0.0006,
+   "laundering_caught": 2,
+   "laundering": 97,
+   "recall": 0.021,
+   "precision": 0.059
+  },
+  "without_transaction": {
+   "flagged_verify_or_more": 0,
+   "flag_rate": 0.0,
+   "laundering_caught": 0,
+   "laundering": 97,
+   "recall": 0.0,
+   "precision": null
+  },
+  "without_graph": {
+   "flagged_verify_or_more": 0,
+   "flag_rate": 0.0,
+   "laundering_caught": 0,
+   "laundering": 97,
+   "recall": 0.0,
+   "precision": null
+  },
+  "note": "No messages in IBM data, so the context domain is empty; single-domain payments cap at MEDIUM by contract."
+ },
+ "caveats": [
+  "Message corpus is synthetic and template based; real reported messages are needed before trusting rates.",
+  "IBM AMLworld is synthetic; bundled sample has only 100,000 payments of history."
+ ]
+}

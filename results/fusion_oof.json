@@ -1,0 +1,33 @@
+{
+ "messages": 412,
+ "scam": 232,
+ "templates": 144,
+ "payment_setting": "new beneficiary + amount deviation (worst case)",
+ "oof_model_bands": {
+  "scam": {
+   "high": 63,
+   "caution": 107,
+   "safe": 62
+  },
+  "legit": {
+   "high": 0,
+   "caution": 8,
+   "safe": 172
+  }
+ },
+ "variants": {
+  "B rules + negation (default ctx-1.1)": {
+   "scam_escalated": 0.03,
+   "scam_verify_or_more": 0.302,
+   "legit_escalated": 0.0,
+   "legit_verify_or_more": 0.022
+  },
+  "D + out-of-fold intent model": {
+   "scam_escalated": 0.284,
+   "scam_verify_or_more": 0.767,
+   "legit_escalated": 0.0,
+   "legit_verify_or_more": 0.061
+  }
+ },
+ "caveat": "Hard-signal list and corpus share authors (optimistic); synthetic template text, not real reported messages."
+}
