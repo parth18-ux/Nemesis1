@@ -1,0 +1,15 @@
+{
+ "note": "Probes written AFTER ruleset ctx-1.0 was frozen (commit 532e18e). Not used to tune any rule. Scam probes and legitimate controls are fictional. Every probe uses the same worst-case payment flags (new beneficiary + amount deviation) so the message side decides the difference.",
+ "payment": {"new_beneficiary": true, "amount_deviation": true},
+ "probes": [
+  {"id": "P01", "label": "scam", "kind": "original S09", "text": "The finance office has revised the vendor details. Please remit the balance to the replacement beneficiary ahead of the afternoon cutoff."},
+  {"id": "P02", "label": "scam", "kind": "treasury paraphrase", "text": "Treasury here. Our remittance coordinates changed this quarter, so kindly route today's settlement to the account shown in the attached letter before 3 pm."},
+  {"id": "P03", "label": "scam", "kind": "synonym swap", "text": "Accounts desk update: the supplier now banks elsewhere. Wire the pending amount to their fresh account number at the earliest."},
+  {"id": "P04", "label": "scam", "kind": "Hinglish digital arrest", "text": "Main CBI officer bol raha hoon, aapke naam pe case hai. Abhi turant paisa safe account mein transfer karo warna arrest hoga."},
+  {"id": "P05", "label": "scam", "kind": "voice clone family emergency", "text": "Papa it's me, I met with an accident and my phone is broken. Please send 40,000 to my friend's UPI right now, don't call mummy."},
+  {"id": "P06", "label": "legitimate", "kind": "bank security warning", "text": "Bank officer advisory: never share your OTP or UPI PIN with anyone. If someone asks you to share your OTP, report it immediately."},
+  {"id": "P07", "label": "legitimate", "kind": "regular invoice", "text": "Invoice 7781 for September maintenance is attached. Amount due as per contract; please pay by the 15th."},
+  {"id": "P08", "label": "legitimate", "kind": "verified vendor change", "text": "As confirmed on our call with your finance team yesterday, our bank changed after the merger. Updated bank details are on the signed letterhead."},
+  {"id": "P09", "label": "legitimate", "kind": "negated scam words", "text": "We will not ask you to transfer money to a safe account. Do not install AnyDesk if anyone claiming to be support asks."}
+ ]
+}

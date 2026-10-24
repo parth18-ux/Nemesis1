@@ -1,0 +1,168 @@
+{
+ "summary": {
+  "ruleset": "ctx-1.0",
+  "frozen_before_probes": true,
+  "scams_escalated": "2/5",
+  "legitimate_wrongly_escalated": "3/4",
+  "keyword_baseline_scams": "0/5",
+  "keyword_baseline_legitimate_flagged": "1/4"
+ },
+ "rows": [
+  {
+   "id": "P01",
+   "label": "scam",
+   "kind": "original S09",
+   "context": 40,
+   "total": 70,
+   "band": "HIGH",
+   "families": [
+    "authority",
+    "pressure",
+    "redirection"
+   ],
+   "correct": true,
+   "keyword_baseline": false,
+   "message_model": {
+    "risk": 0.1444,
+    "band": "safe"
+   }
+  },
+  {
+   "id": "P02",
+   "label": "scam",
+   "kind": "treasury paraphrase",
+   "context": 0,
+   "total": 30,
+   "band": "LOW",
+   "families": [],
+   "correct": false,
+   "keyword_baseline": false,
+   "message_model": {
+    "risk": 0.1975,
+    "band": "safe"
+   }
+  },
+  {
+   "id": "P03",
+   "label": "scam",
+   "kind": "synonym swap",
+   "context": 15,
+   "total": 45,
+   "band": "MEDIUM",
+   "families": [
+    "authority"
+   ],
+   "correct": false,
+   "keyword_baseline": false,
+   "message_model": {
+    "risk": 0.4183,
+    "band": "safe"
+   }
+  },
+  {
+   "id": "P04",
+   "label": "scam",
+   "kind": "Hinglish digital arrest",
+   "context": 30,
+   "total": 60,
+   "band": "HIGH",
+   "families": [
+    "authority",
+    "redirection"
+   ],
+   "correct": true,
+   "keyword_baseline": false,
+   "message_model": {
+    "risk": 0.6432,
+    "band": "high"
+   }
+  },
+  {
+   "id": "P05",
+   "label": "scam",
+   "kind": "voice clone family emergency",
+   "context": 10,
+   "total": 40,
+   "band": "MEDIUM",
+   "families": [
+    "pressure"
+   ],
+   "correct": false,
+   "keyword_baseline": false,
+   "message_model": {
+    "risk": 0.26,
+    "band": "safe"
+   }
+  },
+  {
+   "id": "P06",
+   "label": "legitimate",
+   "kind": "bank security warning",
+   "context": 40,
+   "total": 70,
+   "band": "HIGH",
+   "families": [
+    "authority",
+    "credential",
+    "pressure"
+   ],
+   "correct": false,
+   "keyword_baseline": true,
+   "message_model": {
+    "risk": 0.6155,
+    "band": "caution"
+   }
+  },
+  {
+   "id": "P07",
+   "label": "legitimate",
+   "kind": "regular invoice",
+   "context": 0,
+   "total": 30,
+   "band": "LOW",
+   "families": [],
+   "correct": true,
+   "keyword_baseline": false,
+   "message_model": {
+    "risk": 0.3059,
+    "band": "safe"
+   }
+  },
+  {
+   "id": "P08",
+   "label": "legitimate",
+   "kind": "verified vendor change",
+   "context": 30,
+   "total": 60,
+   "band": "HIGH",
+   "families": [
+    "authority",
+    "redirection"
+   ],
+   "correct": false,
+   "keyword_baseline": false,
+   "message_model": {
+    "risk": 0.2112,
+    "band": "safe"
+   }
+  },
+  {
+   "id": "P09",
+   "label": "legitimate",
+   "kind": "negated scam words",
+   "context": 30,
+   "total": 60,
+   "band": "HIGH",
+   "families": [
+    "redirection",
+    "remote_access"
+   ],
+   "correct": false,
+   "keyword_baseline": false,
+   "message_model": {
+    "risk": 0.6155,
+    "band": "high"
+   }
+  }
+ ]
+}
