@@ -25,7 +25,8 @@ import hashlib, os, re, unicodedata
 from dataclasses import dataclass, field, asdict
 from datetime import datetime, timedelta, timezone
 
-RULESET_VERSION = "ctx-1.2"   # 1.1: negation-aware cues, sender mule signature; 1.2: API fuses the intent model by default (Part 4 evidence)
+RULESET_VERSION = "ctx-1.3"   # 1.1: negation-aware cues, sender mule signature; 1.2: API fuses the intent model by default;
+                              # 1.3: tighter mule signature, tuned on the validation weeks of the full IBM HI-Small file (results/context_tuning_HI.json)
 RETENTION_DAYS = 30
 _SALT = os.environ.get("RUSETECT_HASH_SALT", "rusetect-demo-salt")
 
@@ -129,6 +130,8 @@ class PaymentContext:
     fan_in_24h: int = 0                  # distinct senders paying the payee in 24 h
     coordinated: bool = False            # payee or device shared by several flagged accounts
     sender_fan_in_24h: int = 0           # distinct accounts that paid the SENDER in the last 24 h (mule signature)
+    tight_pass_through: bool | None = None   # forwards >= 95% of the latest deposit within 2 minutes (None = unknown)
+    sender_distinct_payees: int | None = None  # how many different accounts the sender has paid so far (None = unknown)
     payee_in_message: bool = False       # payee UPI / account matches an entity hash from the message
 
 
@@ -145,7 +148,9 @@ def graph_points(c: PaymentContext) -> dict:
     if c.fan_in_24h >= 4: parts["fan_in_4plus"] = 15
     if c.rapid_pass_through: parts["rapid_pass_through"] = 15
     if c.coordinated: parts["coordinated_accounts"] = 15
-    if c.sender_fan_in_24h >= 4 and c.rapid_pass_through: parts["sender_mule_signature"] = 15   # ctx-1.1
+    if (c.sender_fan_in_24h >= 4 and c.rapid_pass_through and c.tight_pass_through is not False
+            and (c.sender_distinct_payees is None or c.sender_distinct_payees <= 10)):
+        parts["sender_mule_signature"] = 15   # ctx-1.3: collects from 4+ payers, forwards >= 95% within 2 min, pays out to few accounts
     return {"points": min(GRAPH_CAP, sum(parts.values())), "checks": sorted(parts)}
 
 
@@ -240,5 +245,7 @@ def from_engine_features(f: dict, sender_fan_in: int = 0) -> PaymentContext:
     usd = math.expm1(f["log_usd"]); usual = math.expm1(f["s_out_mean_usd"]) if hist else None
     msi, ratio = f.get("s_mins_since_in"), f.get("s_out_over_last_in")
     rapid = ok(msi) and msi <= 10 and ok(ratio) and ratio >= 0.8
+    tight = ok(msi) and msi <= 2 and ok(ratio) and ratio >= 0.95
     return PaymentContext(new_beneficiary=bool(f["new_pair"]), amount_deviation=bool(hist and usd > 3 * usual),
-                          rapid_pass_through=bool(rapid), fan_in_24h=int(f["d_fanin_24h"]), sender_fan_in_24h=int(sender_fan_in))
+                          rapid_pass_through=bool(rapid), fan_in_24h=int(f["d_fanin_24h"]), sender_fan_in_24h=int(sender_fan_in),
+                          tight_pass_through=bool(tight), sender_distinct_payees=int(f["s_uniq_dst"]))

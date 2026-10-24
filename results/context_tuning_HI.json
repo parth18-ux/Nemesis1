@@ -1,0 +1,290 @@
+{
+ "set": "HI",
+ "selection": "highest validation F1 among signatures flagging at most 0.2% of validation payments",
+ "chosen_rule": {
+  "sender_fan_in_24h_min": 4,
+  "forward_ratio_min": 0.95,
+  "minutes_since_deposit_max": 2,
+  "sender_distinct_payees_max": 10
+ },
+ "validation": {
+  "shipped_ctx_1_2": {
+   "flagged": 336,
+   "flag_rate": 0.00033,
+   "caught": 15,
+   "laundering": 1082,
+   "precision": 0.0446,
+   "recall": 0.0139,
+   "f1": 0.0212
+  },
+  "chosen": {
+   "flagged": 263,
+   "flag_rate": 0.00026,
+   "caught": 15,
+   "laundering": 1082,
+   "precision": 0.057,
+   "recall": 0.0139,
+   "f1": 0.0223
+  }
+ },
+ "test": {
+  "signature": {
+   "shipped_ctx_1_2": {
+    "flagged": 31518,
+    "flag_rate": 0.03103,
+    "caught": 81,
+    "laundering": 1797,
+    "precision": 0.0026,
+    "recall": 0.0451,
+    "f1": 0.0049
+   },
+   "chosen": {
+    "flagged": 477,
+    "flag_rate": 0.00047,
+    "caught": 34,
+    "laundering": 1797,
+    "precision": 0.0713,
+    "recall": 0.0189,
+    "f1": 0.0299
+   }
+  },
+  "context_layer_alone_verify_or_more": {
+   "shipped_ctx_1_2": {
+    "flagged": 32294,
+    "flag_rate": 0.0318,
+    "caught": 292,
+    "laundering": 1797,
+    "precision": 0.009,
+    "recall": 0.1625,
+    "f1": 0.0171
+   },
+   "chosen": {
+    "flagged": 1266,
+    "flag_rate": 0.00125,
+    "caught": 245,
+    "laundering": 1797,
+    "precision": 0.1935,
+    "recall": 0.1363,
+    "f1": 0.16
+   }
+  },
+  "combined_verify_or_more": {
+   "shipped_ctx_1_2": {
+    "flagged": 47751,
+    "flag_rate": 0.04701,
+    "caught": 1633,
+    "laundering": 1797,
+    "precision": 0.0342,
+    "recall": 0.9087,
+    "f1": 0.0659
+   },
+   "chosen": {
+    "flagged": 16862,
+    "flag_rate": 0.0166,
+    "caught": 1586,
+    "laundering": 1797,
+    "precision": 0.0941,
+    "recall": 0.8826,
+    "f1": 0.17
+   }
+  },
+  "combined_hold_or_more": {
+   "shipped_ctx_1_2": {
+    "flagged": 5925,
+    "flag_rate": 0.00583,
+    "caught": 1461,
+    "laundering": 1797,
+    "precision": 0.2466,
+    "recall": 0.813,
+    "f1": 0.3784
+   },
+   "chosen": {
+    "flagged": 5925,
+    "flag_rate": 0.00583,
+    "caught": 1461,
+    "laundering": 1797,
+    "precision": 0.2466,
+    "recall": 0.813,
+    "f1": 0.3784
+   }
+  },
+  "payment_model_verify_or_more": {
+   "flagged": 15900,
+   "flag_rate": 0.01565,
+   "caught": 1585,
+   "laundering": 1797,
+   "precision": 0.0997,
+   "recall": 0.882,
+   "f1": 0.1791
+  },
+  "payment_model_hold_or_more": {
+   "flagged": 5925,
+   "flag_rate": 0.00583,
+   "caught": 1461,
+   "laundering": 1797,
+   "precision": 0.2466,
+   "recall": 0.813,
+   "f1": 0.3784
+  },
+  "raised_by_context_chosen": {
+   "flagged": 962,
+   "flag_rate": 0.00095,
+   "caught": 1,
+   "laundering": 1797,
+   "precision": 0.001,
+   "recall": 0.0006,
+   "f1": 0.0007
+  },
+  "rings_combined_verify_or_more": {
+   "shipped_ctx_1_2": {
+    "rings": 192,
+    "caught": 192,
+    "rate": 1.0
+   },
+   "chosen": {
+    "rings": 192,
+    "caught": 192,
+    "rate": 1.0
+   }
+  },
+  "rings_combined_hold_or_more": {
+   "shipped_ctx_1_2": {
+    "rings": 192,
+    "caught": 190,
+    "rate": 0.99
+   },
+   "chosen": {
+    "rings": 192,
+    "caught": 190,
+    "rate": 0.99
+   }
+  },
+  "rings_payment_model_verify_or_more": {
+   "rings": 192,
+   "caught": 192,
+   "rate": 1.0
+  }
+ },
+ "top_validation_candidates": [
+  {
+   "F": 4,
+   "R": 0.9,
+   "M": 2,
+   "D": 10,
+   "val": {
+    "flagged": 266,
+    "flag_rate": 0.00026,
+    "caught": 15,
+    "laundering": 1082,
+    "precision": 0.0564,
+    "recall": 0.0139,
+    "f1": 0.0223
+   }
+  },
+  {
+   "F": 4,
+   "R": 0.95,
+   "M": 2,
+   "D": 10,
+   "val": {
+    "flagged": 263,
+    "flag_rate": 0.00026,
+    "caught": 15,
+    "laundering": 1082,
+    "precision": 0.057,
+    "recall": 0.0139,
+    "f1": 0.0223
+   }
+  },
+  {
+   "F": 4,
+   "R": 0.95,
+   "M": 2,
+   "D": 1000000000,
+   "val": {
+    "flagged": 265,
+    "flag_rate": 0.00026,
+    "caught": 15,
+    "laundering": 1082,
+    "precision": 0.0566,
+    "recall": 0.0139,
+    "f1": 0.0223
+   }
+  },
+  {
+   "F": 4,
+   "R": 0.8,
+   "M": 2,
+   "D": 10,
+   "val": {
+    "flagged": 268,
+    "flag_rate": 0.00026,
+    "caught": 15,
+    "laundering": 1082,
+    "precision": 0.056,
+    "recall": 0.0139,
+    "f1": 0.0222
+   }
+  },
+  {
+   "F": 4,
+   "R": 0.8,
+   "M": 2,
+   "D": 1000000000,
+   "val": {
+    "flagged": 270,
+    "flag_rate": 0.00027,
+    "caught": 15,
+    "laundering": 1082,
+    "precision": 0.0556,
+    "recall": 0.0139,
+    "f1": 0.0222
+   }
+  },
+  {
+   "F": 4,
+   "R": 0.9,
+   "M": 2,
+   "D": 1000000000,
+   "val": {
+    "flagged": 268,
+    "flag_rate": 0.00026,
+    "caught": 15,
+    "laundering": 1082,
+    "precision": 0.056,
+    "recall": 0.0139,
+    "f1": 0.0222
+   }
+  },
+  {
+   "F": 4,
+   "R": 0.9,
+   "M": 5,
+   "D": 10,
+   "val": {
+    "flagged": 288,
+    "flag_rate": 0.00028,
+    "caught": 15,
+    "laundering": 1082,
+    "precision": 0.0521,
+    "recall": 0.0139,
+    "f1": 0.0219
+   }
+  },
+  {
+   "F": 4,
+   "R": 0.9,
+   "M": 5,
+   "D": 1000000000,
+   "val": {
+    "flagged": 290,
+    "flag_rate": 0.00029,
+    "caught": 15,
+    "laundering": 1082,
+    "precision": 0.0517,
+    "recall": 0.0139,
+    "f1": 0.0219
+   }
+  }
+ ]
+}

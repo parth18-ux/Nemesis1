@@ -1,6 +1,6 @@
 {
  "summary": {
-  "ruleset": "ctx-1.2",
+  "ruleset": "ctx-1.3",
   "payments": 24,
   "engine_decisions": {
    "Approve": 23,
