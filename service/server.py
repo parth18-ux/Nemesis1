@@ -29,6 +29,7 @@ from lure_fusion import LureMemory
 from rusetect_engine import Engine
 from scam_text import MessageModel
 import context_rules as CTX
+from review import ReviewDesk
 
 ROOT = Path(__file__).parent
 MODELS = ROOT / "models"
@@ -53,6 +54,7 @@ except Exception as e:  # pragma: no cover
     log.warning("%s message model unavailable: %s", NAME, e)
     MESSAGES = None
 LURES = LureMemory()
+DESK = ReviewDesk()
 
 
 def need_engine() -> Engine:
@@ -73,6 +75,11 @@ async def landing():
 @app.get("/console")
 async def console():
     return FileResponse(ROOT / "static" / "console.html")
+
+
+@app.get("/investigate", include_in_schema=False)
+async def investigate():
+    return FileResponse(ROOT / "static" / "investigate.html")
 
 
 @app.get("/favicon.svg")
@@ -149,8 +156,54 @@ async def v2_assess(a: AssessIn):
     band = MESSAGES.score(a.message)["band"] if (a.use_intent_model and a.consent and a.message and MESSAGES) else None
     ctx = CTX.assess(a.message, CTX.from_engine_features(pay["features"], sf), consent=a.consent, model_band=band)
     comb = CTX.combine(pay["decision"], ctx)
-    return {"payment": {k: pay.get(k) for k in ("l1_score", "layer_exit", "risk", "decision", "reasons", "case_id", "latency_ms")},
-            "context": ctx.to_dict(), **comb}
+    out = {"payment": {k: pay.get(k) for k in ("l1_score", "layer_exit", "risk", "decision", "reasons", "case_id", "latency_ms")},
+           "context": ctx.to_dict(), **comb}
+    alert = DESK.open_alert(a.model_dump(exclude={"message"}), out)
+    out["alert_id"] = alert["alert_id"] if alert else None
+    out["shown_decision"] = alert["shown_decision"] if alert else "Approve"
+    return out
+
+
+class ReviewIn(BaseModel):
+    analyst: str = Field(min_length=1, max_length=64)
+    action: str = Field(description="release, verify, hold or approve_block (a block needs two different analysts)")
+    note: str = Field("", max_length=500)
+
+
+@api.get("/v2/alerts")
+async def v2_alerts(status: Optional[str] = None):
+    """Alerts awaiting or after human review, newest first."""
+    al = [a for a in DESK.alerts.values() if status is None or a["status"] == status]
+    return list(reversed(al))
+
+
+@api.post("/v2/alerts/{alert_id}/review")
+async def v2_review(alert_id: str, r: ReviewIn):
+    try:
+        return DESK.act(alert_id, r.analyst, r.action, r.note)
+    except KeyError:
+        raise HTTPException(404, "unknown alert")
+    except ValueError as e:
+        raise HTTPException(400, str(e))
+
+
+@api.get("/v2/alerts/{alert_id}/evidence")
+async def v2_evidence(alert_id: str):
+    if alert_id not in DESK.alerts:
+        raise HTTPException(404, "unknown alert")
+    return DESK.evidence(alert_id)
+
+
+@api.get("/v2/fixtures/mule")
+async def v2_fixture_mule():
+    """The fictional mule replay fixture (fixtures/mule_replay.json) used by the investigator demo."""
+    import json as _json
+    return _json.loads((Path(__file__).resolve().parents[1] / "fixtures" / "mule_replay.json").read_text())
+
+
+@api.get("/v2/audit")
+async def v2_audit():
+    return {"entries": DESK.log, "chain_valid": DESK.verify_chain()}
 
 
 @api.post("/v2/message")
@@ -258,7 +311,7 @@ def full_history_rows():
 @api.post("/v2/demo/reset")
 async def demo_reset(warm: bool = True):
     """Clear state, then ingest earlier payments as account history (features only, no scoring)."""
-    eng = need_engine(); eng.reset(); LURES.reset(); rows = demo_rows(); t = time.perf_counter(); source = "bundled sample"
+    eng = need_engine(); eng.reset(); LURES.reset(); DESK.reset(); rows = demo_rows(); t = time.perf_counter(); source = "bundled sample"
     hist = full_history_rows() if warm else None
     if hist is not None:
         for fb, fa, tb, ta, ap, cp, cr, fm, tm in hist.select("fb", "fa", "tb", "ta", "amt_paid", "cur_paid", "cur_recv", "fmt", "tmin").iter_rows():

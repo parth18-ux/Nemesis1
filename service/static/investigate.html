@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RuseTect Investigator</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<style>
+:root{--bg:#eef2f5;--panel:#fff;--ink:#15202b;--ink-2:#4a5866;--ink-3:#7d8a97;--rule:#d9e0e6;--accent:#0b6e7a;--accent-soft:#d9eef0;--bad:#b4232c;--bad-soft:#f8e1e2;--warn:#9a6100;--warn-soft:#f6ead5;--ok:#2c7a3f;--ok-soft:#ddf0e1;
+--body:ui-sans-serif,system-ui,"Segoe UI",sans-serif;--mono:ui-monospace,Menlo,Consolas,monospace}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0d1419;--panel:#152029;--ink:#e6edf2;--ink-2:#a9b6c1;--ink-3:#77858f;--rule:#24313b;--accent:#4fc3cf;--accent-soft:#143338;--bad:#f07b82;--bad-soft:#3a1c1f;--warn:#e3a54a;--warn-soft:#3a2c14;--ok:#6fcf8a;--ok-soft:#173222;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0d1419;--panel:#152029;--ink:#e6edf2;--ink-2:#a9b6c1;--ink-3:#77858f;--rule:#24313b;--accent:#4fc3cf;--accent-soft:#143338;--bad:#f07b82;--bad-soft:#3a1c1f;--warn:#e3a54a;--warn-soft:#3a2c14;--ok:#6fcf8a;--ok-soft:#173222;color-scheme:dark}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:14px/1.5 var(--body);padding:20px 16px 40px}
+.wrap{max-width:1360px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px}
+h1{font:700 24px/1.1 var(--body);margin:0}h1 small{display:block;font:500 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+button,input,textarea{font:500 13px var(--body);border:1px solid var(--rule);background:var(--panel);color:var(--ink);border-radius:6px;padding:8px 12px}
+button{cursor:pointer}button.primary{background:var(--accent);border-color:var(--accent);color:var(--panel)}button:disabled{opacity:.45;cursor:default}
+.panel{background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:14px 16px;min-width:0}
+.label{font:500 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:16px}
+@media (max-width:900px){.grid{grid-template-columns:1fr}}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.alerts{display:flex;flex-direction:column;max-height:560px;overflow:auto;margin-top:8px}
+.al{padding:10px 8px;border-top:1px solid var(--rule);cursor:pointer;display:flex;justify-content:space-between;gap:8px}
+.al:hover,.al.sel{background:var(--accent-soft)}
+.mono{font-family:var(--mono);font-size:12px}
+.pill{font:500 12px var(--mono);padding:2px 8px;border-radius:999px;white-space:nowrap;align-self:flex-start;line-height:1.6}
+.p-high{background:var(--bad-soft);color:var(--bad)}.p-med{background:var(--warn-soft);color:var(--warn)}.p-ok{background:var(--ok-soft);color:var(--ok)}.p-info{background:var(--accent-soft);color:var(--accent)}
+.bars{display:grid;grid-template-columns:110px 1fr 60px;gap:6px 10px;align-items:center;margin:8px 0}
+.bar{height:10px;background:var(--rule);border-radius:5px;overflow:hidden}.bar>div{height:100%;background:var(--accent)}
+ul{margin:4px 0;padding-left:18px}
+.msg{background:var(--bg);border-radius:8px;padding:10px 12px;font-size:13px;color:var(--ink-2)}
+table{width:100%;border-collapse:collapse}td,th{text-align:left;padding:5px 6px;border-top:1px solid var(--rule);font-size:12px}th{color:var(--ink-3);font-weight:500}
+.empty{color:var(--ink-3);padding:12px 0}
+textarea{width:100%;min-height:70px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1><small>RuseTect · analyst review</small>Investigator</h1>
+  <div class="row">
+    <button id="bReset">Reset</button>
+    <button id="bMule" class="primary">Replay mule fixture</button>
+    <span class="mono" id="status">ready</span>
+  </div>
+</header>
+
+<section class="panel">
+  <div class="label">Score a payment with message context (synthetic demo)</div>
+  <div class="row" style="margin-top:8px">
+    <input id="fFrom" value="V900" size="8" aria-label="payer account"> →
+    <input id="fTo" value="MULE01" size="8" aria-label="payee account">
+    <input id="fAmt" value="15000" size="8" aria-label="amount in rupees"> INR
+    <label class="row" style="gap:4px"><input type="checkbox" id="fConsent" checked> customer consented to message context</label>
+    <label class="row" style="gap:4px"><input type="checkbox" id="fModel"> use intent model</label>
+  </div>
+  <textarea id="fMsg" style="margin-top:8px">The finance office has revised the vendor details. Please remit the balance to the replacement beneficiary ahead of the afternoon cutoff.</textarea>
+  <div class="row" style="margin-top:8px"><button id="bAssess" class="primary">Assess</button><span class="mono" id="aOut"></span></div>
+</section>
+
+<div class="grid">
+  <section class="panel">
+    <div class="row" style="justify-content:space-between"><span class="label">Alerts needing a human</span><span class="mono" id="nAlerts">0</span></div>
+    <div class="alerts" id="alerts"><div class="empty">No alerts yet. Replay the mule fixture or assess a payment.</div></div>
+  </section>
+  <section class="panel" id="card"><div class="empty">Select an alert to see the evidence.</div></section>
+</div>
+
+<section class="panel">
+  <div class="row" style="justify-content:space-between"><span class="label">Audit log (hash chained)</span><span class="mono" id="chain"></span></div>
+  <table><thead><tr><th>#</th><th>time</th><th>event</th><th>alert</th><th>detail</th><th>hash</th></tr></thead><tbody id="audit"></tbody></table>
+</section>
+</div>
+<script>
+const $ = id => document.getElementById(id);
+let SEL = null, CLOCK = Date.UTC(2022, 8, 9, 10, 0) / 60000;
+async function api(path, opts = {}) {
+  const r = await fetch(path, {method: opts.method || "GET", headers: {"Content-Type": "application/json"}, body: opts.body ? JSON.stringify(opts.body) : undefined});
+  if (!r.ok) throw new Error((await r.json()).detail || r.status);
+  return r.json();
+}
+const ts = m => new Date(m * 60000).toISOString().slice(0, 16).replace("T", " ");
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+const label = d => d === "Step-up verification" ? "Verify customer" : d;
+const pillFor = d => /block/i.test(d) ? "p-high" : /Hold/.test(d) ? "p-med" : /Step|verif/i.test(d) ? "p-info" : "p-ok";
+
+async function assess(p) { return api("/api/v2/assess", {method: "POST", body: p}); }
+
+$("bReset").onclick = async () => { await api("/api/v2/demo/reset?warm=false", {method: "POST"}); SEL = null; $("card").innerHTML = '<div class="empty">Select an alert to see the evidence.</div>'; $("status").textContent = "state cleared"; refresh(); };
+$("bMule").onclick = async () => {
+  $("bMule").disabled = true; const F = await api("/api/v2/fixtures/mule"); let i = 0;
+  for (const amt of F.deposits_inr) {
+    const v = "V" + String(i + 1).padStart(2, "0"), t = CLOCK + i * F.gap_minutes;
+    await assess({timestamp: ts(t), from_bank: "01" + String(i + 1).padStart(2, "0"), from_account: v, to_bank: F.mule.bank, to_account: F.mule.account, amount_paid: amt,
+                  payment_currency: "Rupee", payment_format: "ACH", message: v === "V01" ? F.victim_message_for_V01 : null, consent: v === "V01"});
+    await assess({timestamp: ts(t + 1), from_bank: F.mule.bank, from_account: F.mule.account, to_bank: F.collector.bank, to_account: F.collector.account,
+                  amount_paid: Math.round(amt * F.forward_share * 100) / 100, payment_currency: "Rupee", payment_format: "ACH"});
+    i++; $("status").textContent = `replayed ${2 * i} of ${2 * F.deposits_inr.length} payments`; await refresh();
+  }
+  CLOCK += F.deposits_inr.length * F.gap_minutes + 30; $("bMule").disabled = false;
+};
+$("bAssess").onclick = async () => {
+  CLOCK += 2;
+  const r = await assess({timestamp: ts(CLOCK), from_bank: "0900", from_account: $("fFrom").value, to_bank: "0200", to_account: $("fTo").value, amount_paid: +$("fAmt").value,
+                          payment_currency: "Rupee", payment_format: "ACH", message: $("fMsg").value, consent: $("fConsent").checked, use_intent_model: $("fModel").checked});
+  $("aOut").textContent = `payment: ${r.payment_decision} · context: ${r.context_band} (${r.context.total} pts) · final: ${r.shown_decision}`;
+  await refresh(); if (r.alert_id) show(r.alert_id);
+};
+
+async function refresh() {
+  const al = await api("/api/v2/alerts");
+  $("nAlerts").textContent = al.length;
+  $("alerts").innerHTML = al.length ? al.map(a => `<div class="al ${a.alert_id === SEL ? "sel" : ""}" data-id="${a.alert_id}">
+      <div><div class="mono">${a.alert_id} · ${esc(a.payment.from_account)} → ${esc(a.payment.to_account)}</div>
+      <div style="font-size:12px;color:var(--ink-2)">${esc(a.payment.timestamp)} · ₹${a.payment.amount_paid.toLocaleString("en-IN")} · ${esc(a.status.replace(/_/g, " "))}</div></div>
+      <span class="pill ${pillFor(a.shown_decision)}">${esc(label(a.shown_decision))}</span></div>`).join("") : '<div class="empty">No alerts yet.</div>';
+  document.querySelectorAll(".al").forEach(el => el.onclick = () => show(el.dataset.id));
+  window._alerts = al; audit();
+}
+
+function ring(sel, al) {
+  // accounts linked to the selected alert through other alerts that share an account (union of connected payments)
+  const edges = al.map(a => [a.payment.from_account, a.payment.to_account, a.alert_id]);
+  const comp = new Set([sel.payment.from_account, sel.payment.to_account]); let grew = true;
+  while (grew) { grew = false; for (const [s, t] of edges) if ((comp.has(s) || comp.has(t)) && !(comp.has(s) && comp.has(t))) { comp.add(s); comp.add(t); grew = true; } }
+  const E = edges.filter(([s, t]) => comp.has(s) && comp.has(t)), nodes = [...comp];
+  const deg = Object.fromEntries(nodes.map(n => [n, E.filter(e => e[0] === n || e[1] === n).length]));
+  const hub = nodes.slice().sort((a, b) => deg[b] - deg[a])[0], others = nodes.filter(n => n !== hub);
+  const W = 520, H = 220, cx = W / 2, cy = H / 2, R = 90, pos = {[hub]: [cx, cy]};
+  others.forEach((n, i) => { const a = 2 * Math.PI * i / Math.max(others.length, 1); pos[n] = [cx + 2.2 * R * Math.cos(a) * 0.95, cy + R * Math.sin(a)]; });
+  const lines = E.map(([s, t, id]) => `<line x1="${pos[s][0]}" y1="${pos[s][1]}" x2="${pos[t][0]}" y2="${pos[t][1]}" stroke="${id === sel.alert_id ? "var(--bad)" : "var(--ink-3)"}" stroke-width="${id === sel.alert_id ? 2.5 : 1.2}"/>`).join("");
+  const dots = nodes.map(n => `<circle cx="${pos[n][0]}" cy="${pos[n][1]}" r="${n === hub ? 9 : 6}" fill="${n === hub ? "var(--warn)" : "var(--panel)"}" stroke="var(--accent)" stroke-width="2"/><text x="${pos[n][0]}" y="${pos[n][1] - 12}" text-anchor="middle" font-size="10" fill="var(--ink-2)" font-family="monospace">${esc(n)}</text>`).join("");
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Accounts linked to this alert">${lines}${dots}</svg>
+    <div style="font-size:12px;color:var(--ink-3)">${nodes.length} accounts and ${E.length} alerted payments linked through shared accounts; red = this payment.</div>`;
+}
+
+async function show(id) {
+  SEL = id; const a = (window._alerts || await api("/api/v2/alerts")).find(x => x.alert_id === id); if (!a) return;
+  const x = a.assessed, c = x.context, P = x.payment;
+  const bar = (name, v, max) => `<span>${name}</span><div class="bar"><div style="width:${100 * v / max}%"></div></div><span class="mono">${v} / ${max}</span>`;
+  $("card").innerHTML = `
+    <div class="row" style="justify-content:space-between;align-items:flex-start">
+      <div><div class="label">${a.alert_id} · ${esc(a.payment.from_account)} → ${esc(a.payment.to_account)} · ₹${a.payment.amount_paid.toLocaleString("en-IN")}</div>
+      <h2 style="margin:4px 0 0;font-size:20px">${esc(label(a.shown_decision))}</h2></div>
+      <span class="pill ${pillFor(a.shown_decision)}">status: ${esc(a.status.replace(/_/g, " "))}</span></div>
+    <div class="row" style="margin-top:8px"><span class="pill p-info">payment model: ${esc(P.decision)} (risk ${P.risk ?? "L1 exit"})</span>
+      <span class="pill ${c.band === "LOW" ? "p-ok" : c.band === "MEDIUM" ? "p-info" : "p-med"}">context: ${c.band} · ${c.total} pts</span>
+      ${x.raised_by_context ? '<span class="pill p-med">raised by context veto</span>' : ""}</div>
+    <div class="bars">${bar("message", c.context, 40)}${bar("payment", c.transaction, 30)}${bar("account graph", c.graph, 30)}</div>
+    <div class="label">Why</div><ul>${[...c.reasons, ...(P.reasons || []).map(r => `model: ${r.feature} = ${r.display}`)].map(r => `<li>${esc(r)}</li>`).join("") || "<li>no reasons</li>"}</ul>
+    ${c.redacted_text ? `<div class="label">Message (redacted, consented)</div><div class="msg">${esc(c.redacted_text)}</div>` : `<div class="label">Message</div><div class="msg">${c.consent ? "none" : "not used: no consent"}</div>`}
+    <div class="label" style="margin-top:10px">Linked accounts</div>${ring(a, window._alerts || [])}
+    <div class="row" style="margin-top:10px"><input id="analyst" placeholder="analyst id" size="10" value="analyst1">
+      <button data-act="release">Release</button><button data-act="verify">Verify customer</button><button data-act="hold">Hold</button><button data-act="approve_block">Approve block (needs 2)</button>
+      <a href="/api/v2/alerts/${a.alert_id}/evidence" target="_blank" class="mono">evidence pack</a></div>
+    <div class="mono" id="actOut" style="margin-top:6px;color:var(--ink-3)">ruleset ${esc(c.ruleset)} · risk points are rule outputs, not probabilities</div>`;
+  document.querySelectorAll("[data-act]").forEach(b => b.onclick = async () => {
+    try { await api(`/api/v2/alerts/${a.alert_id}/review`, {method: "POST", body: {analyst: $("analyst").value, action: b.dataset.act}}); await refresh(); show(a.alert_id); }
+    catch (e) { $("actOut").textContent = "refused: " + e.message; }
+  });
+  refresh_sel();
+}
+function refresh_sel() { document.querySelectorAll(".al").forEach(el => el.classList.toggle("sel", el.dataset.id === SEL)); }
+async function audit() {
+  const a = await api("/api/v2/audit");
+  $("chain").textContent = a.chain_valid ? "chain valid ✓" : "chain BROKEN";
+  $("audit").innerHTML = a.entries.slice(-12).reverse().map(e => `<tr><td>${e.seq}</td><td class="mono">${e.at.slice(11, 19)}</td><td>${esc(e.type.replace("_", " "))}</td><td class="mono">${esc(e.alert_id || "")}</td>
+    <td>${esc(e.action || e.decision || "")} ${e.analyst ? "by " + esc(e.analyst) : ""}</td><td class="mono">${e.hash.slice(0, 10)}…</td></tr>`).join("");
+}
+refresh();
+</script>
+</body>
+</html>
