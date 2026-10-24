@@ -14,6 +14,7 @@ import numpy as np
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SET = (sys.argv[1] if len(sys.argv) > 1 else "HI").upper()
+FIXED = sys.argv[sys.argv.index("--fixed") + 1] if "--fixed" in sys.argv else None   # apply a rule chosen elsewhere (no tuning here)
 D = np.load(os.path.join(os.environ.get("RUSETECT_DUMP", "/tmp"), f"ctx_dump_{SET}.npz"), allow_pickle=False)
 RAW = list(D["raw"]); R = D["R"]; y = D["y"].astype(bool); split = int(D["split"])
 col = lambda k: R[:, RAW.index(k)]
@@ -47,12 +48,18 @@ for F, Rmin, M, Dmax in itertools.product([4, 6, 8, 12, 20], [0.8, 0.9, 0.95], [
     v = stats(sig, val)
     grid.append({"F": F, "R": Rmin, "M": M, "D": Dmax, "val": v})
 ok = [g for g in grid if g["val"]["flag_rate"] <= 0.002 and g["val"]["caught"] > 0]
-best = max(ok, key=lambda g: (g["val"]["f1"], g["val"]["precision"]))
+best = max(ok or grid, key=lambda g: (g["val"]["f1"], g["val"]["precision"]))
 F, Rmin, M, Dmax = best["F"], best["R"], best["M"], best["D"]
+if FIXED:
+    cr = json.load(open(FIXED))["chosen_rule"]
+    F, Rmin, M = cr["sender_fan_in_24h_min"], cr["forward_ratio_min"], cr["minutes_since_deposit_max"]
+    Dmax = cr["sender_distinct_payees_max"] if cr["sender_distinct_payees_max"] is not None else 10 ** 9
+    best = {"val": stats((sf >= F) & okr & (ratio >= Rmin) & okm & (msi <= M) & (uniq_dst <= Dmax), val)}
 new_sig = (sf >= F) & okr & (ratio >= Rmin) & okm & (msi <= M) & (uniq_dst <= Dmax)
 old_ctx, new_ctx = bands(shipped_sig), bands(new_sig)
 
-out = {"set": SET, "selection": "highest validation F1 among signatures flagging at most 0.2% of validation payments",
+out = {"set": SET, "selection": (f"fixed rule from {os.path.basename(FIXED)} (chosen on another dataset; nothing tuned here)" if FIXED
+                                  else "highest validation F1 among signatures flagging at most 0.2% of validation payments"),
        "chosen_rule": {"sender_fan_in_24h_min": F, "forward_ratio_min": Rmin, "minutes_since_deposit_max": M, "sender_distinct_payees_max": None if Dmax > 10 ** 8 else Dmax},
        "validation": {"shipped_ctx_1_2": stats(shipped_sig, val), "chosen": best["val"]},
        "test": {
@@ -76,5 +83,5 @@ def rings(mask):
 out["test"]["rings_combined_verify_or_more"] = {"shipped_ctx_1_2": rings(np.maximum(pay_rank, old_ctx) >= 1), "chosen": rings(np.maximum(pay_rank, new_ctx) >= 1)}
 out["test"]["rings_combined_hold_or_more"] = {"shipped_ctx_1_2": rings(np.maximum(pay_rank, old_ctx) >= 2), "chosen": rings(np.maximum(pay_rank, new_ctx) >= 2)}
 out["test"]["rings_payment_model_verify_or_more"] = rings(pay_rank >= 1)
-json.dump(out, open(os.path.join(ROOT, "results", f"context_tuning_{SET}.json"), "w"), indent=1)
+json.dump(out, open(os.path.join(ROOT, "results", f"context_tuning_{SET}" + ("_fixed" if FIXED else "") + ".json"), "w"), indent=1)
 print(json.dumps({k: v for k, v in out.items() if k != "top_validation_candidates"}, indent=1))
