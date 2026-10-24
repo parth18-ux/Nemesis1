@@ -20,16 +20,16 @@ MIN24 = 1440
 
 READABLE = {
     "log_usd": "Payment amount", "fmt_code": "Payment format", "cur_code": "Currency", "hour": "Hour of day",
-    "dow": "Day of week", "cross_bank": "Cross-bank transfer", "cross_cur": "Currency conversion",
-    "self_loop": "Self-transfer", "round_100": "Round amount",
+    "dow": "Day of week", "cross_bank": "Cross bank transfer", "cross_cur": "Currency conversion",
+    "self_loop": "Self transfer", "round_100": "Round amount",
     "s_out_n": "Sender: past payments", "s_out_mean_usd": "Sender: usual amount", "s_gap_out": "Sender: time since last payment",
     "s_age_out": "Sender: time active", "new_pair": "First payment to this receiver", "s_uniq_dst": "Sender: distinct receivers",
     "d_in_n": "Receiver: past receipts", "d_gap_in": "Receiver: time since last receipt", "d_uniq_src": "Receiver: distinct senders",
     "s_in_n": "Sender: money received before", "s_mins_since_in": "Sender: minutes since money came in",
-    "s_out_over_last_in": "Amount vs. last money received", "s_passthrough": "Sender: pass-through ratio",
+    "s_out_over_last_in": "Amount vs. last money received", "s_passthrough": "Sender: pass through ratio",
     "d_out_n": "Receiver: onward payments", "d_in_usd_log": "Receiver: money received so far",
-    "s_fanout_24h": "Sender fan-out (24h)", "s_cnt_24h": "Sender payments (24h)", "s_usd_24h": "Sender volume (24h)",
-    "d_fanin_24h": "Receiver fan-in (24h)", "d_cnt_24h": "Receiver receipts (24h)", "reciprocal": "Money flowing back (cycle)",
+    "s_fanout_24h": "Sender fan out (24h)", "s_cnt_24h": "Sender payments (24h)", "s_usd_24h": "Sender volume (24h)",
+    "d_fanin_24h": "Receiver fan in (24h)", "d_cnt_24h": "Receiver receipts (24h)", "reciprocal": "Money flowing back (cycle)",
     "new_bank_pair": "New bank corridor",
 }
 

@@ -103,7 +103,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   </header>
 
   <div class="panel" style="display:flex;flex-direction:column;gap:8px">
-    <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap"><span class="label">Replay of recorded IBM AMLworld test-period payments (synthetic dataset)</span><span class="status" id="simtime">sim time —</span></div>
+    <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap"><span class="label">Replay of recorded IBM AMLworld test period payments (synthetic dataset)</span><span class="status" id="simtime">sim time —</span></div>
     <div class="progress"><div id="prog"></div></div>
   </div>
 
@@ -111,8 +111,8 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
     <div class="fstep"><span class="label">Scored</span><span class="v" id="fScored">0</span><span class="s">payments through the cascade</span></div>
     <div class="fstep l1"><span class="label">L1 cleared</span><span class="v" id="fL1">0</span><span class="s" id="fL1p">approved by gatekeeper</span><div class="meter"><div id="mL1" style="width:0"></div></div></div>
     <div class="fstep"><span class="label">L2 escalated</span><span class="v" id="fL2">0</span><span class="s">sent to XGBoost + LightGBM</span></div>
-    <div class="fstep hold"><span class="label">Step-up / hold</span><span class="v" id="fMed">0</span><span class="s">OTP re-check or analyst hold</span></div>
-    <div class="fstep block"><span class="label">Block + STR</span><span class="v" id="fBlock">0</span><span class="s">auto-blocked, STR drafted</span></div>
+    <div class="fstep hold"><span class="label">Verify / hold</span><span class="v" id="fMed">0</span><span class="s">OTP recheck or analyst hold</span></div>
+    <div class="fstep block"><span class="label">Block + STR</span><span class="v" id="fBlock">0</span><span class="s">auto blocked, STR drafted</span></div>
     <div class="fstep"><span class="label">L4 cases</span><span class="v" id="fCases">0</span><span class="s">mule clusters to review</span></div>
   </div>
 
@@ -137,7 +137,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
   <div class="cols">
     <div class="panel">
-      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:6px"><span class="label">Alert feed · newest first</span><span class="status">ground-truth label shown for the demo only</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:6px"><span class="label">Alert feed · newest first</span><span class="status">ground truth label shown for the demo only</span></div>
       <div class="feed" id="feed"><div class="empty">Load account history, then stream payments. Blocks and holds appear here with the reasons the model gave.</div></div>
     </div>
     <div class="side">
@@ -148,7 +148,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
       <div class="panel ob">
         <span class="label">L0 onboarding gate · new account applications (Feedzai BAF, test months)</span>
         <div class="row"><button id="obMule">Score application A</button><button id="obGen">Score application B</button></div>
-        <div class="obres" id="obres">Two held-out applications from the synthetic Feedzai BAF dataset. One is labelled fraud, one genuine. The model sees neither label.</div>
+        <div class="obres" id="obres">Two held out applications from the synthetic Feedzai BAF dataset. One is labelled fraud, one genuine. The model sees neither label.</div>
       </div>
     </div>
   </div>
@@ -209,15 +209,15 @@ function renderFeed(feed) {
   if (!feed.length) return;
   $("feed").innerHTML = feed.map(a => {
     const cls = a.decision.startsWith("Block") ? "block" : a.decision.startsWith("Hold") ? "hold" : "verify";
-    return `<div class="alert"><div><div class="route">${a.from} → ${a.to}</div><div class="meta">${a.ts} · ${nf(a.amount)} ${a.currency} · ${a.format} · risk ${a.risk.toFixed(3)}${a.case_id ? " · " + a.case_id : ""}</div></div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><span class="pill ${cls}">${a.decision}</span><span class="verdict ${a.truth ? "y" : "n"}">${a.truth ? "laundering ✓" : "not laundering"}</span></div>
+    return `<div class="alert"><div><div class="route">${a.from} → ${a.to}</div><div class="meta">${a.ts} · ${nf(a.amount)} ${a.currency} · ${a.format} · risk ${a.risk.toFixed(3)}${a.case_id ? " · " + a.case_id.replace("CASE-", "Case ") : ""}</div></div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><span class="pill ${cls}">${a.decision === "Step-up verification" ? "Verify customer" : a.decision}</span><span class="verdict ${a.truth ? "y" : "n"}">${a.truth ? "laundering ✓" : "not laundering"}</span></div>
       <div class="reasons">${a.reasons.map(x => `<span class="chip">${x.feature}: ${x.display}</span>`).join("")}</div></div>`;
   }).join("");
 }
 
 function renderCases(cases) {
   if (!cases.length) return;
-  $("cases").innerHTML = cases.slice(0, 5).map(c => `<div class="case">${miniGraph(c.edges)}<div><b>${c.case_id}</b><span>${c.alerts} blocked payments · ${c.accounts} accounts</span><span>${nf(c.total_amount)} moved · ${c.formats.join(", ")}</span></div></div>`).join("");
+  $("cases").innerHTML = cases.slice(0, 5).map(c => `<div class="case">${miniGraph(c.edges)}<div><b>${c.case_id.replace("CASE-", "Case ")}</b><span>${c.alerts} blocked payments · ${c.accounts} accounts</span><span>${nf(c.total_amount)} moved · ${c.formats.join(", ")}</span></div></div>`).join("");
 }
 
 function miniGraph(edges) {
@@ -232,7 +232,7 @@ function miniGraph(edges) {
 async function onboard(kind) {
   const r = await api("/api/v2/onboard", {method: "POST", body: SAMPLES[kind]});
   const s = SAMPLES[kind];
-  $("obres").innerHTML = `<b>${r.decision}</b><br>Risk ${r.risk.toFixed(4)} vs. threshold ${r.threshold.toFixed(4)} for age ${s.customer_age >= 50 ? "50+" : "under 50"} · device ${s.device_os} · housing ${s.housing_status} · name–email similarity ${s.name_email_similarity.toFixed(2)}<br><span style="color:var(--ink-3)">Dataset label: ${kind === "mule" ? "fraud" : "genuine"}</span>`;
+  $("obres").innerHTML = `<b>${r.decision}</b><br>Risk ${r.risk.toFixed(4)} vs. threshold ${r.threshold.toFixed(4)} for age ${s.customer_age >= 50 ? "50+" : "under 50"} · device ${s.device_os} · housing ${s.housing_status} · name/email similarity ${s.name_email_similarity.toFixed(2)}<br><span style="color:var(--ink-3)">Dataset label: ${kind === "mule" ? "fraud" : "genuine"}</span>`;
 }
 // ---- L-1 lure detector
 const MSG_SAMPLES = {

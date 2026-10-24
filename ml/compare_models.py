@@ -145,7 +145,10 @@ def best_thr(yt, p, w=None):
     f1 = 2 * pr * rc / np.clip(pr + rc, 1e-12, None); return float(th[int(np.nanargmax(f1[:-1]))])
 
 results = {}
+if os.environ.get("RESUME") and os.path.exists(OUT.replace(".json", ".partial.json")):   # skip models already finished with identical data/protocol
+    results = json.load(open(OUT.replace(".json", ".partial.json")))["models"]
 for name, spec in MODELS.items():
+    if name in results: print("   skip (resumed)", name, flush=True); continue
     P = PREP[spec["prep"]]; how = spec.get("scorer", "proba")
     fit_idx = np.arange(len(tr))
     if spec.get("subsample_fit"):

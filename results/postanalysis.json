@@ -1,0 +1,687 @@
+{
+ "cross_verifier": {
+  "operating_threshold_on_fused_score": 5.764243907072077,
+  "supervised_alerts": 1140,
+  "supervised_caught": 1033,
+  "laundering_total": 1797,
+  "missed_by_supervised": 764,
+  "autoencoder_top_0.05pct": {
+   "extra_alerts": 507,
+   "extra_laundering_caught": 25,
+   "precision": 0.04930966469428008,
+   "recall_gain": 0.013912075681691708
+  },
+  "isolation_forest_top_0.05pct": {
+   "extra_alerts": 507,
+   "extra_laundering_caught": 0,
+   "precision": 0.0,
+   "recall_gain": 0.0
+  },
+  "autoencoder_top_0.10pct": {
+   "extra_alerts": 1015,
+   "extra_laundering_caught": 32,
+   "precision": 0.03152709359605911,
+   "recall_gain": 0.017807456872565387
+  },
+  "isolation_forest_top_0.10pct": {
+   "extra_alerts": 1015,
+   "extra_laundering_caught": 0,
+   "precision": 0.0,
+   "recall_gain": 0.0
+  },
+  "rules_ge_3_on_cleared": {
+   "extra_alerts": 1185,
+   "extra_laundering_caught": 8,
+   "precision": 0.006751054852320675
+  },
+  "rules_ge_4_on_cleared": {
+   "extra_alerts": 7,
+   "extra_laundering_caught": 1,
+   "precision": 0.14285714285714285
+  }
+ },
+ "example_alerts": {
+  "true_positive": [
+   {
+    "row": 1015109,
+    "typology": "GATHER-SCATTER",
+    "is_laundering": true,
+    "fused_score": 15.827566706018208,
+    "calibrated_probability": 1.0,
+    "amount_usd": 12650.8359375,
+    "channel": "ACH",
+    "anomaly_percentile_autoencoder": 99.39773686112306,
+    "rules_triggered": [
+     "money leaves <= 0 min after it arrived",
+     "first payment between these two accounts to a different bank"
+    ],
+    "reasons": [
+     {
+      "feature": "fmt_code",
+      "phrase": "payment channel unusual",
+      "shap": 4.152430057525635
+     },
+     {
+      "feature": "s_mins_since_in",
+      "phrase": "sent money 0 min after money arrived",
+      "shap": 2.1116316318511963
+     },
+     {
+      "feature": "new_pair",
+      "phrase": "first payment between these two accounts",
+      "shap": 1.1591702699661255
+     },
+     {
+      "feature": "log_usd",
+      "phrase": "amount $12,651",
+      "shap": 0.6309337019920349
+     }
+    ]
+   },
+   {
+    "row": 1015072,
+    "typology": "GATHER-SCATTER",
+    "is_laundering": true,
+    "fused_score": 15.12585184273725,
+    "calibrated_probability": 1.0,
+    "amount_usd": 14408.416015625,
+    "channel": "ACH",
+    "anomaly_percentile_autoencoder": 98.40991504121914,
+    "rules_triggered": [
+     "money leaves <= 0 min after it arrived",
+     "first payment between these two accounts to a different bank"
+    ],
+    "reasons": [
+     {
+      "feature": "fmt_code",
+      "phrase": "payment channel unusual",
+      "shap": 3.943208694458008
+     },
+     {
+      "feature": "s_mins_since_in",
+      "phrase": "sent money 0 min after money arrived",
+      "shap": 2.001211643218994
+     },
+     {
+      "feature": "new_pair",
+      "phrase": "first payment between these two accounts",
+      "shap": 0.929894745349884
+     },
+     {
+      "feature": "log_usd",
+      "phrase": "amount $14,408",
+      "shap": 0.6354365348815918
+     }
+    ]
+   },
+   {
+    "row": 1015299,
+    "typology": "SCATTER-GATHER",
+    "is_laundering": true,
+    "fused_score": 15.106746740430578,
+    "calibrated_probability": 1.0,
+    "amount_usd": 11893.1689453125,
+    "channel": "ACH",
+    "anomaly_percentile_autoencoder": 99.00282473916207,
+    "rules_triggered": [
+     "money leaves <= 0 min after it arrived",
+     "first payment between these two accounts to a different bank"
+    ],
+    "reasons": [
+     {
+      "feature": "fmt_code",
+      "phrase": "payment channel unusual",
+      "shap": 4.12375020980835
+     },
+     {
+      "feature": "s_mins_since_in",
+      "phrase": "sent money 0 min after money arrived",
+      "shap": 1.9873347282409668
+     },
+     {
+      "feature": "new_pair",
+      "phrase": "first payment between these two accounts",
+      "shap": 1.0681997537612915
+     },
+     {
+      "feature": "log_usd",
+      "phrase": "amount $11,893",
+      "shap": 0.5486510396003723
+     }
+    ]
+   }
+  ],
+  "false_positive": [
+   {
+    "row": 1015343,
+    "typology": "",
+    "is_laundering": false,
+    "fused_score": 7.853239761929137,
+    "calibrated_probability": 1.0,
+    "amount_usd": 12419.9404296875,
+    "channel": "ACH",
+    "anomaly_percentile_autoencoder": 74.52811890487945,
+    "rules_triggered": [
+     "first payment between these two accounts to a different bank"
+    ],
+    "reasons": [
+     {
+      "feature": "fmt_code",
+      "phrase": "payment channel unusual",
+      "shap": 2.686513662338257
+     },
+     {
+      "feature": "s_gap_out",
+      "phrase": "12430 min since sender's previous payment",
+      "shap": 0.8544382452964783
+     },
+     {
+      "feature": "log_usd",
+      "phrase": "amount $12,420",
+      "shap": 0.8384015560150146
+     },
+     {
+      "feature": "d_uniq_src",
+      "phrase": "receiver has 13 distinct payers",
+      "shap": 0.7315104603767395
+     }
+    ]
+   },
+   {
+    "row": 1015493,
+    "typology": "",
+    "is_laundering": false,
+    "fused_score": 7.5893687806394645,
+    "calibrated_probability": 1.0,
+    "amount_usd": 17680.8203125,
+    "channel": "ACH",
+    "anomaly_percentile_autoencoder": 92.70293766965419,
+    "rules_triggered": [
+     "first payment between these two accounts to a different bank"
+    ],
+    "reasons": [
+     {
+      "feature": "fmt_code",
+      "phrase": "payment channel unusual",
+      "shap": 3.3696672916412354
+     },
+     {
+      "feature": "new_pair",
+      "phrase": "first payment between these two accounts",
+      "shap": 0.8327315449714661
+     },
+     {
+      "feature": "log_usd",
+      "phrase": "amount $17,681",
+      "shap": 0.7788923382759094
+     },
+     {
+      "feature": "d_gap_in",
+      "phrase": "receiver's previous incoming payment 19482 min ago",
+      "shap": 0.49422553181648254
+     }
+    ]
+   }
+  ]
+ },
+ "ring": {
+  "ring": 333,
+  "typology": "SCATTER-GATHER",
+  "payments": 32,
+  "accounts": 18,
+  "flagged": 28,
+  "median_amount_percentile": 86.203723850979,
+  "median_transaction_layer_percentile": 99.80682683039456,
+  "median_fused_percentile": 99.9351658857364,
+  "edges": [
+   {
+    "src": "A01",
+    "dst": "A02",
+    "usd": 2232050.25,
+    "amount_percentile": 99.0063692009897,
+    "transaction_layer_percentile": 88.64315047520402,
+    "fused_percentile": 99.93452591346197,
+    "flagged": true,
+    "t_min": 0,
+    "rules_triggered": 2,
+    "autoencoder_percentile": 95.90732807637133,
+    "fused_score": 7.829736526781447,
+    "calibrated": 1.0
+   },
+   {
+    "src": "A01",
+    "dst": "A03",
+    "usd": 5925.6201171875,
+    "amount_percentile": 79.07231588243808,
+    "transaction_layer_percentile": 99.87299011784351,
+    "fused_percentile": 99.98139157540497,
+    "flagged": true,
+    "t_min": 483,
+    "rules_triggered": 2,
+    "autoencoder_percentile": 98.03380825839915,
+    "fused_score": 10.84580185354554,
+    "calibrated": 1.0
+   },
+   {
+    "src": "A01",
+    "dst": "A04",
+    "usd": 19841.509765625,
+    "amount_percentile": 88.95476774421589,
+    "transaction_layer_percentile": 99.98129311813199,
+    "fused_percentile": 99.98907124269816,
+    "flagged": true,
+    "t_min": 508,
+    "rules_triggered": 2,
+    "autoencoder_percentile": 97.92668674538653,
+    "fused_score": 11.53318189227839,
+    "calibrated": 1.0
+   },
+   {
+    "src": "A01",
+    "dst": "A05",
+    "usd": 15793.66015625,
+    "amount_percentile": 87.31397728984541,
+    "transaction_layer_percentile": 99.98926815724414,
+    "fused_percentile": 99.9115853688554,
+    "flagged": true,
+    "t_min": 557,
+    "rules_triggered": 1,
+    "autoencoder_percentile": 74.1994685276404,
+    "fused_score": 6.446699466855202,
+    "calibrated": 0.9230769230769231
+   },
+   {
+    "src": "A01",
+    "dst": "A06",
+    "usd": 12592.560546875,
+    "amount_percentile": 85.58201540068664,
+    "transaction_layer_percentile": 99.9876928408763,
+    "fused_percentile": 99.9915326745229,
+    "flagged": true,
+    "t_min": 631,
+    "rules_triggered": 2,
+    "autoencoder_percentile": 95.929284048248,
+    "fused_score": 11.886426323301587,
+    "calibrated": 1.0
+   },
+   {
+    "src": "A01",
+    "dst": "A07",
+    "usd": 6117.7099609375,
+    "amount_percentile": 79.37182290687223,
+    "transaction_layer_percentile": 99.89898283791274,
+    "fused_percentile": 99.98818512724125,
+    "flagged": true,
+    "t_min": 695,
+    "rules_triggered": 2,
+    "autoencoder_percentile": 98.11355864952066,
+    "fused_score": 11.422545111852399,
+    "calibrated": 1.0
+   },
+   {
+    "src": "A01",
+    "dst": "A08",
+    "usd": 14780.501953125,
+    "amount_percentile": 86.82543230127138,
+    "transaction_layer_percentile": 99.990646559066,
+    "fused_percentile": 99.91345605704221,
+    "flagged": true,
+    "t_min": 890,
+    "rules_triggered": 1,
+    "autoencoder_percentile": 91.69394753605752,
+    "fused_score": 6.53958907152264,
+    "calibrated": 0.9230769230769231
+   },
+   {
+    "src": "A01",
+    "dst": "A09",
+    "usd": 15574.806640625,
+    "amount_percentile": 87.21660304685876,
+    "transaction_layer_percentile": 99.79707956036859,
+    "fused_percentile": 99.88766025151895,
+    "flagged": false,
+    "t_min": 1176,
+    "rules_triggered": 1,
+    "autoencoder_percentile": 77.73615223069721,
+    "fused_score": 5.762990586429041,
+    "calibrated": 0.2857142857142857
+   },
+   {
+    "src": "A01",
+    "dst": "A10",
+    "usd": 2370.295166015625,
+    "amount_percentile": 66.91875010461087,
+    "transaction_layer_percentile": 98.62317349451445,
+    "fused_percentile": 99.75740127935381,
+    "flagged": false,
+    "t_min": 1334,
+    "rules_triggered": 1,
+    "autoencoder_percentile": 98.74850960303012,
+    "fused_score": 4.44219055218791,
+    "calibrated": 0.06206896551724138
+   },
+   {
+    "src": "A01",
+    "dst": "A11",
+    "usd": 16027.005859375,
+    "amount_percentile": 87.42868001287822,
+    "transaction_layer_percentile": 99.94624232894772,
+    "fused_percentile": 99.9990154272701,
+    "flagged": true,
+    "t_min": 1788,
+    "rules_triggered": 2,
+    "autoencoder_percentile": 98.63744979909794,
+    "fused_score": 14.643404114375612,
+    "calibrated": 1.0
+   },
+   {
+    "src": "A01",
+    "dst": "A12",
+    "usd": 1892.72998046875,
+    "amount_percentile": 63.54550547471667,
+    "transaction_layer_percentile": 99.36278452921178,
+    "fused_percentile": 99.9830653490458,
+    "flagged": true,
+    "t_min": 1891,
+    "rules_triggered": 2,
+    "autoencoder_percentile": 99.17315582143395,
+    "fused_score": 11.015270637834154,
+    "calibrated": 1.0
+   },
+   {
+    "src": "A01",
+    "dst": "A13",
+    "usd": 16826.470703125,
+    "amount_percentile": 87.79582718385616,
+    "transaction_layer_percentile": 99.98237614813488,
+    "fused_percentile": 99.92123418160837,
+    "flagged": true,
+    "t_min": 2004,
+    "rules_triggered": 1,
+    "autoencoder_percentile": 91.88121326928359,
+    "fused_score": 6.914188520478909,
+    "calibrated": 0.9523809523809523
+   },
+   {
+    "src": "A01",
+    "dst": "A14",
+    "usd": 11028.720703125,
+    "amount_percentile": 84.50991415510369,
+    "transaction_layer_percentile": 99.97065973264912,
+    "fused_percentile": 99.91985577978653,
+    "flagged": true,
+    "t_min": 2057,
+    "rules_triggered": 1,
+    "autoencoder_percentile": 95.84845062712361,
+    "fused_score": 6.863267136042246,
+    "calibrated": 0.9523809523809523
+   },
+   {
+    "src": "A01",
+    "dst": "A15",
+    "usd": 8886.1376953125,
+    "amount_percentile": 82.71986247488108,
+    "transaction_layer_percentile": 99.93216293891022,
+    "fused_percentile": 99.99832622635918,
+    "flagged": true,
+    "t_min": 2165,
+    "rules_triggered": 2,
+    "autoencoder_percentile": 99.02281156557893,
+    "fused_score": 14.1788981281399,
+    "calibrated": 1.0
+   },
+   {
+    "src": "A01",
+    "dst": "A16",
+    "usd": 3050.0087890625,
+    "amount_percentile": 70.64181342543682,
+    "transaction_layer_percentile": 99.00390776916495,
+    "fused_percentile": 99.99232033270683,
+    "flagged": true,
+    "t_min": 2255,
+    "rules_triggered": 2,
+    "autoencoder_percentile": 98.9404028280867,
+    "fused_score": 11.9277971935693,
+    "calibrated": 1.0
+   },
+   {
+    "src": "A01",
+    "dst": "A17",
+    "usd": 18499.23046875,
+    "amount_percentile": 88.48355123568801,
+    "transaction_layer_percentile": 99.77699427667872,
+    "fused_percentile": 99.99517559362351,
+    "flagged": true,
+    "t_min": 2938,
+    "rules_triggered": 2,
+    "autoencoder_percentile": 98.63360996545134,
+    "fused_score": 12.167518054801034,
+    "calibrated": 1.0
+   },
+   {
+    "src": "A02",
+    "dst": "A18",
+    "usd": 2308425.75,
+    "amount_percentile": 99.02359922376286,
+    "transaction_layer_percentile": 93.56886938559708,
+    "fused_percentile": 99.93501819982691,
+    "flagged": true,
+    "t_min": 3191,
+    "rules_triggered": 2,
+    "autoencoder_percentile": 99.18812132692835,
+    "fused_score": 7.875432274179369,
+    "calibrated": 1.0
+   },
+   {
+    "src": "A03",
+    "dst": "A18",
+    "usd": 4859.421875,
+    "amount_percentile": 76.98758158415782,
+    "transaction_layer_percentile": 97.97857372825202,
+    "fused_percentile": 99.96032171898523,
+    "flagged": true,
+    "t_min": 3368,
+    "rules_triggered": 2,
+    "autoencoder_percentile": 97.81513465508941,
+    "fused_score": 9.571290115681398,
+    "calibrated": 1.0
+   },
+   {
+    "src": "A04",
+    "dst": "A18",
+    "usd": 16393.673828125,
+    "amount_percentile": 87.60600156153235,
+    "transaction_layer_percentile": 99.86688576691816,
+    "fused_percentile": 99.99192650361486,
+    "flagged": true,
+    "t_min": 3425,
+    "rules_triggered": 2,
+    "autoencoder_percentile": 94.71796421865784,
+    "fused_score": 11.903343565911525,
+    "calibrated": 1.0
+   },
+   {
+    "src": "A05",
+    "dst": "A18",
+    "usd": 15793.66015625,
+    "amount_percentile": 87.31407574711841,
+    "transaction_layer_percentile": 99.81657410042051,
+    "fused_percentile": 99.93659351619475,
+    "flagged": true,
+    "t_min": 3740,
+    "rules_triggered": 1,
+    "autoencoder_percentile": 82.80020360964055,
+    "fused_score": 7.987546572700692,
+    "calibrated": 1.0
+   },
+   {
+    "src": "A06",
+    "dst": "A18",
+    "usd": 12592.5615234375,
+    "amount_percentile": 85.58211385795963,
+    "transaction_layer_percentile": 99.8439452223116,
+    "fused_percentile": 99.90804090702778,
+    "flagged": true,
+    "t_min": 3891,
+    "rules_triggered": 1,
+    "autoencoder_percentile": 88.17921980487738,
+    "fused_score": 6.30914824696244,
+    "calibrated": 0.9230769230769231
+   },
+   {
+    "src": "A07",
+    "dst": "A18",
+    "usd": 7425.5654296875,
+    "amount_percentile": 81.15872395435915,
+    "transaction_layer_percentile": 97.81257476599168,
+    "fused_percentile": 99.95402045351389,
+    "flagged": true,
+    "t_min": 4024,
+    "rules_triggered": 3,
+    "autoencoder_percentile": 99.20013311423308,
+    "fused_score": 9.25801753644271,
+    "calibrated": 1.0
+   },
+   {
+    "src": "A08",
+    "dst": "A18",
+    "usd": 14780.5,
+    "amount_percentile": 86.8253338439984,
+    "transaction_layer_percentile": 99.66445761365169,
+    "fused_percentile": 99.72500883654025,
+    "flagged": false,
+    "t_min": 4145,
+    "rules_triggered": 2,
+    "autoencoder_percentile": 92.75256013524091,
+    "fused_score": 4.243253277102399,
+    "calibrated": 0.04861111111111111
+   },
+   {
+    "src": "A09",
+    "dst": "A18",
+    "usd": 15574.810546875,
+    "amount_percentile": 87.21670150413175,
+    "transaction_layer_percentile": 99.77551741758388,
+    "fused_percentile": 99.91050233885252,
+    "flagged": true,
+    "t_min": 4334,
+    "rules_triggered": 2,
+    "autoencoder_percentile": 82.43512404139538,
+    "fused_score": 6.408053374548464,
+    "calibrated": 0.9230769230769231
+   },
+   {
+    "src": "A10",
+    "dst": "A18",
+    "usd": 2075.15087890625,
+    "amount_percentile": 64.9271563865787,
+    "transaction_layer_percentile": 98.4140502466847,
+    "fused_percentile": 99.91128999703643,
+    "flagged": true,
+    "t_min": 4527,
+    "rules_triggered": 3,
+    "autoencoder_percentile": 98.33183842373843,
+    "fused_score": 6.437300375779387,
+    "calibrated": 0.9230769230769231
+   },
+   {
+    "src": "A11",
+    "dst": "A18",
+    "usd": 16027.005859375,
+    "amount_percentile": 87.4287784701512,
+    "transaction_layer_percentile": 99.88578956333215,
+    "fused_percentile": 99.93098145163434,
+    "flagged": true,
+    "t_min": 4815,
+    "rules_triggered": 2,
+    "autoencoder_percentile": 84.72839084386744,
+    "fused_score": 7.588831663122331,
+    "calibrated": 1.0
+   },
+   {
+    "src": "A12",
+    "dst": "A18",
+    "usd": 1617.509521484375,
+    "amount_percentile": 61.11764758006791,
+    "transaction_layer_percentile": 98.55297345887291,
+    "fused_percentile": 99.94378089712298,
+    "flagged": true,
+    "t_min": 4913,
+    "rules_triggered": 3,
+    "autoencoder_percentile": 98.06698835939662,
+    "fused_score": 8.601667561045309,
+    "calibrated": 1.0
+   },
+   {
+    "src": "A13",
+    "dst": "A18",
+    "usd": 17045.65234375,
+    "amount_percentile": 87.89664743139744,
+    "transaction_layer_percentile": 99.91768971978075,
+    "fused_percentile": 99.93432899891599,
+    "flagged": true,
+    "t_min": 5017,
+    "rules_triggered": 3,
+    "autoencoder_percentile": 99.3664274483124,
+    "fused_score": 7.822336497919748,
+    "calibrated": 1.0
+   },
+   {
+    "src": "A14",
+    "dst": "A18",
+    "usd": 10713.63671875,
+    "amount_percentile": 84.27381361447479,
+    "transaction_layer_percentile": 99.86993794238084,
+    "fused_percentile": 99.92812619071765,
+    "flagged": true,
+    "t_min": 5064,
+    "rules_triggered": 3,
+    "autoencoder_percentile": 99.52130073872492,
+    "fused_score": 7.380536020394102,
+    "calibrated": 1.0
+   },
+   {
+    "src": "A15",
+    "dst": "A18",
+    "usd": 7152.0546875,
+    "amount_percentile": 80.81737258890446,
+    "transaction_layer_percentile": 99.73081781564663,
+    "fused_percentile": 99.94043334984134,
+    "flagged": true,
+    "t_min": 5187,
+    "rules_triggered": 3,
+    "autoencoder_percentile": 99.0992144094188,
+    "fused_score": 8.327989123870646,
+    "calibrated": 1.0
+   },
+   {
+    "src": "A16",
+    "dst": "A18",
+    "usd": 2760.33203125,
+    "amount_percentile": 69.2177274289163,
+    "transaction_layer_percentile": 99.22366440247757,
+    "fused_percentile": 99.93531357164588,
+    "flagged": true,
+    "t_min": 5265,
+    "rules_triggered": 3,
+    "autoencoder_percentile": 99.0919285712176,
+    "fused_score": 7.896627946730062,
+    "calibrated": 1.0
+   },
+   {
+    "src": "A17",
+    "dst": "A18",
+    "usd": 18499.23046875,
+    "amount_percentile": 88.483649692961,
+    "transaction_layer_percentile": 99.54561968515333,
+    "fused_percentile": 99.64112323995317,
+    "flagged": false,
+    "t_min": 5456,
+    "rules_triggered": 1,
+    "autoencoder_percentile": 81.07857973414568,
+    "fused_score": 3.8129640306375467,
+    "calibrated": 0.04861111111111111
+   }
+  ]
+ }
+}

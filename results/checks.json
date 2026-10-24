@@ -1,0 +1,85 @@
+{
+ "queue_note": "expected alerts when tied scores are reviewed in random order",
+ "queue": {
+  "rules: count of triggered rules": {
+   "catch_30pct": 13318,
+   "catch_50pct": 23903,
+   "catch_70pct": 65576
+  },
+  "rules: learned weights (logistic regression on 9 rule flags)": {
+   "catch_30pct": 2173,
+   "catch_50pct": 16881,
+   "catch_70pct": 34128
+  },
+  "Isolation Forest": {
+   "catch_30pct": 105123,
+   "catch_50pct": 148744,
+   "catch_70pct": 229391
+  },
+  "Autoencoder": {
+   "catch_30pct": 14397,
+   "catch_50pct": 44818,
+   "catch_70pct": 133624
+  },
+  "XGBoost, payment fields only": {
+   "catch_30pct": 1876,
+   "catch_50pct": 7367,
+   "catch_70pct": 22986
+  },
+  "XGBoost, + sender behaviour": {
+   "catch_30pct": 613,
+   "catch_50pct": 1744,
+   "catch_70pct": 5478
+  },
+  "XGBoost, + network features": {
+   "catch_30pct": 558,
+   "catch_50pct": 1040,
+   "catch_70pct": 3623
+  },
+  "XGBoost, all features": {
+   "catch_30pct": 540,
+   "catch_50pct": 909,
+   "catch_70pct": 2375
+  },
+  "LightGBM, all features": {
+   "catch_30pct": 540,
+   "catch_50pct": 924,
+   "catch_70pct": 2326
+  },
+  "Random Forest, all features": {
+   "catch_30pct": 540,
+   "catch_50pct": 928,
+   "catch_70pct": 2666
+  },
+  "RuseTect stacked ensemble (raw stacker score)": {
+   "catch_30pct": 540,
+   "catch_50pct": 914,
+   "catch_70pct": 2282
+  }
+ },
+ "pr_auc": {
+  "rules: count of triggered rules": 0.02673449427274821,
+  "rules: learned weights (logistic regression on 9 rule flags)": 0.14527460818485705,
+  "Isolation Forest": 0.004499778254752012,
+  "Autoencoder": 0.024054958497164856,
+  "XGBoost, payment fields only": 0.18048737611619958,
+  "XGBoost, + sender behaviour": 0.539889014352512,
+  "XGBoost, + network features": 0.6476927800863157,
+  "XGBoost, all features": 0.7279000542810337,
+  "LightGBM, all features": 0.7246502320192667,
+  "Random Forest, all features": 0.7064442057234399,
+  "RuseTect stacked ensemble (raw stacker score)": 0.7253807489509002,
+  "RuseTect calibrated probability (isotonic, has ties)": 0.706390078337036
+ },
+ "ring_linker_current": {
+  "alerts": 1140,
+  "cases": 349,
+  "largest_case_payments": 46,
+  "cases_with_2plus_payments": 128,
+  "laundering_in_alerts": 1033
+ },
+ "shortcut_check": {
+  "all features": 0.7279000542810337,
+  "without payment format": 0.7009533220010993
+ }
+}
