@@ -122,6 +122,7 @@ np.savez_compressed(os.path.join(os.environ.get("RUSETECT_DUMP", "/tmp"), f"ctx_
                     src_dst=src_dst, ring_j=np.array(sorted(ring_rows), dtype=np.int64),
                     ring_id=np.array([ring_rows[j][0] for j in sorted(ring_rows)], dtype=np.int64),
                     ring_typ=np.array([r["typology"] for r in rings]))
+np.save(os.path.join(os.environ.get("RUSETECT_DUMP", "/tmp"), f"live_X_{SET}.npy"), X)   # live features, rows collect_from.., for offline parity checks
 off = test_from - collect_from
 X, R, ctx_rank, ctx_band, mule_sig, src_dst = X[off:], R[off:], ctx_rank[off:], ctx_band[off:], mule_sig[off:], src_dst[off:]
 s1, risk, esc, pay_rank = s1[off:], risk[off:], esc[off:], pay_rank[off:]
