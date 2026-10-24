@@ -1,6 +1,6 @@
 {
  "summary": {
-  "ruleset": "ctx-1.0",
+  "ruleset": "ctx-1.1",
   "payments": 24,
   "engine_decisions": {
    "Approve": 23,
@@ -11,14 +11,14 @@
    0.20032
   ],
   "context_bands": {
-   "MEDIUM": 1,
-   "LOW": 23
+   "MEDIUM": 10,
+   "LOW": 14
   },
   "final_decisions": {
-   "Step-up verification": 2,
-   "Approve": 22
+   "Step-up verification": 11,
+   "Approve": 13
   },
-  "raised_by_context": 1,
+  "raised_by_context": 10,
   "caveat": "One fictional fixture with no prior account history; it shows a gap and the veto mechanics, not a recall measurement."
  },
  "rows": [
@@ -201,15 +201,16 @@
    "context_points": {
     "context": 0,
     "transaction": 0,
-    "graph": 15,
-    "total": 15
+    "graph": 30,
+    "total": 30
    },
-   "context_band": "LOW",
+   "context_band": "MEDIUM",
    "context_reasons": [
-    "account graph: rapid_pass_through"
+    "account graph: rapid_pass_through",
+    "account graph: sender_mule_signature"
    ],
-   "final_decision": "Approve",
-   "raised_by_context": false
+   "final_decision": "Step-up verification",
+   "raised_by_context": true
   },
   {
    "who": "victim deposit",
@@ -248,15 +249,16 @@
    "context_points": {
     "context": 0,
     "transaction": 0,
-    "graph": 15,
-    "total": 15
+    "graph": 30,
+    "total": 30
    },
-   "context_band": "LOW",
+   "context_band": "MEDIUM",
    "context_reasons": [
-    "account graph: rapid_pass_through"
+    "account graph: rapid_pass_through",
+    "account graph: sender_mule_signature"
    ],
-   "final_decision": "Approve",
-   "raised_by_context": false
+   "final_decision": "Step-up verification",
+   "raised_by_context": true
   },
   {
    "who": "victim deposit",
@@ -295,15 +297,16 @@
    "context_points": {
     "context": 0,
     "transaction": 0,
-    "graph": 15,
-    "total": 15
+    "graph": 30,
+    "total": 30
    },
-   "context_band": "LOW",
+   "context_band": "MEDIUM",
    "context_reasons": [
-    "account graph: rapid_pass_through"
+    "account graph: rapid_pass_through",
+    "account graph: sender_mule_signature"
    ],
-   "final_decision": "Approve",
-   "raised_by_context": false
+   "final_decision": "Step-up verification",
+   "raised_by_context": true
   },
   {
    "who": "victim deposit",
@@ -342,15 +345,16 @@
    "context_points": {
     "context": 0,
     "transaction": 0,
-    "graph": 15,
-    "total": 15
+    "graph": 30,
+    "total": 30
    },
-   "context_band": "LOW",
+   "context_band": "MEDIUM",
    "context_reasons": [
-    "account graph: rapid_pass_through"
+    "account graph: rapid_pass_through",
+    "account graph: sender_mule_signature"
    ],
-   "final_decision": "Approve",
-   "raised_by_context": false
+   "final_decision": "Step-up verification",
+   "raised_by_context": true
   },
   {
    "who": "victim deposit",
@@ -389,15 +393,16 @@
    "context_points": {
     "context": 0,
     "transaction": 0,
-    "graph": 15,
-    "total": 15
+    "graph": 30,
+    "total": 30
    },
-   "context_band": "LOW",
+   "context_band": "MEDIUM",
    "context_reasons": [
-    "account graph: rapid_pass_through"
+    "account graph: rapid_pass_through",
+    "account graph: sender_mule_signature"
    ],
-   "final_decision": "Approve",
-   "raised_by_context": false
+   "final_decision": "Step-up verification",
+   "raised_by_context": true
   },
   {
    "who": "victim deposit",
@@ -436,15 +441,16 @@
    "context_points": {
     "context": 0,
     "transaction": 0,
-    "graph": 15,
-    "total": 15
+    "graph": 30,
+    "total": 30
    },
-   "context_band": "LOW",
+   "context_band": "MEDIUM",
    "context_reasons": [
-    "account graph: rapid_pass_through"
+    "account graph: rapid_pass_through",
+    "account graph: sender_mule_signature"
    ],
-   "final_decision": "Approve",
-   "raised_by_context": false
+   "final_decision": "Step-up verification",
+   "raised_by_context": true
   },
   {
    "who": "victim deposit",
@@ -483,15 +489,16 @@
    "context_points": {
     "context": 0,
     "transaction": 0,
-    "graph": 15,
-    "total": 15
+    "graph": 30,
+    "total": 30
    },
-   "context_band": "LOW",
+   "context_band": "MEDIUM",
    "context_reasons": [
-    "account graph: rapid_pass_through"
+    "account graph: rapid_pass_through",
+    "account graph: sender_mule_signature"
    ],
-   "final_decision": "Approve",
-   "raised_by_context": false
+   "final_decision": "Step-up verification",
+   "raised_by_context": true
   },
   {
    "who": "victim deposit",
@@ -530,15 +537,16 @@
    "context_points": {
     "context": 0,
     "transaction": 0,
-    "graph": 15,
-    "total": 15
+    "graph": 30,
+    "total": 30
    },
-   "context_band": "LOW",
+   "context_band": "MEDIUM",
    "context_reasons": [
-    "account graph: rapid_pass_through"
+    "account graph: rapid_pass_through",
+    "account graph: sender_mule_signature"
    ],
-   "final_decision": "Approve",
-   "raised_by_context": false
+   "final_decision": "Step-up verification",
+   "raised_by_context": true
   },
   {
    "who": "victim deposit",
@@ -577,15 +585,16 @@
    "context_points": {
     "context": 0,
     "transaction": 0,
-    "graph": 15,
-    "total": 15
+    "graph": 30,
+    "total": 30
    },
-   "context_band": "LOW",
+   "context_band": "MEDIUM",
    "context_reasons": [
-    "account graph: rapid_pass_through"
+    "account graph: rapid_pass_through",
+    "account graph: sender_mule_signature"
    ],
-   "final_decision": "Approve",
-   "raised_by_context": false
+   "final_decision": "Step-up verification",
+   "raised_by_context": true
   }
  ]
 }

@@ -1,0 +1,12 @@
+{
+ "test_payments": 60000,
+ "laundering": 97,
+ "base_rate": 0.0016166666666666666,
+ "rapid_pass_through": 1601,
+ "signature_flagged": 0,
+ "signature_flag_rate": 0.0,
+ "laundering_among_flagged": 0,
+ "precision": null,
+ "recall": 0.0,
+ "caveat": "Bundled 100k-payment history only, so account history is shorter than in a bank; synthetic data."
+}

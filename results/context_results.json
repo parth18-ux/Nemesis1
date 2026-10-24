@@ -1,6 +1,6 @@
 {
  "summary": {
-  "ruleset": "ctx-1.0",
+  "ruleset": "ctx-1.1",
   "fixtures": 12,
   "matches_pdf_table": 12,
   "scams_escalated_high_or_critical": 6,

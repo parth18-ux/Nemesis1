@@ -1,0 +1,657 @@
+{
+ "note": "probes are development data after ctx-1.1 design; a fresh frozen holdout is Part 4",
+ "variants": {
+  "A ctx-1.0": {
+   "fixtures": {
+    "scams_escalated": "6/9",
+    "scams_verify_or_more": "9/9",
+    "legit_escalated": "0/3",
+    "legit_low": "3/3"
+   },
+   "probes": {
+    "scams_escalated": "2/5",
+    "scams_verify_or_more": "4/5",
+    "legit_escalated": "3/4",
+    "legit_low": "1/4"
+   },
+   "rows": [
+    {
+     "id": "S01",
+     "kind": "fixture",
+     "label": "scam",
+     "total": 45,
+     "band": "MEDIUM"
+    },
+    {
+     "id": "S02",
+     "kind": "fixture",
+     "label": "scam",
+     "total": 70,
+     "band": "HIGH"
+    },
+    {
+     "id": "S03",
+     "kind": "fixture",
+     "label": "scam",
+     "total": 70,
+     "band": "HIGH"
+    },
+    {
+     "id": "S04",
+     "kind": "fixture",
+     "label": "scam",
+     "total": 70,
+     "band": "HIGH"
+    },
+    {
+     "id": "S05",
+     "kind": "fixture",
+     "label": "scam",
+     "total": 50,
+     "band": "MEDIUM"
+    },
+    {
+     "id": "S06",
+     "kind": "fixture",
+     "label": "scam",
+     "total": 60,
+     "band": "HIGH"
+    },
+    {
+     "id": "S07",
+     "kind": "fixture",
+     "label": "scam",
+     "total": 45,
+     "band": "MEDIUM"
+    },
+    {
+     "id": "S08",
+     "kind": "fixture",
+     "label": "scam",
+     "total": 100,
+     "band": "CRITICAL"
+    },
+    {
+     "id": "S09",
+     "kind": "fixture",
+     "label": "scam",
+     "total": 85,
+     "band": "CRITICAL"
+    },
+    {
+     "id": "N01",
+     "kind": "fixture",
+     "label": "legitimate",
+     "total": 0,
+     "band": "LOW"
+    },
+    {
+     "id": "N02",
+     "kind": "fixture",
+     "label": "legitimate",
+     "total": 15,
+     "band": "LOW"
+    },
+    {
+     "id": "N03",
+     "kind": "fixture",
+     "label": "legitimate",
+     "total": 30,
+     "band": "LOW"
+    },
+    {
+     "id": "P01",
+     "kind": "probe",
+     "label": "scam",
+     "total": 70,
+     "band": "HIGH"
+    },
+    {
+     "id": "P02",
+     "kind": "probe",
+     "label": "scam",
+     "total": 30,
+     "band": "LOW"
+    },
+    {
+     "id": "P03",
+     "kind": "probe",
+     "label": "scam",
+     "total": 45,
+     "band": "MEDIUM"
+    },
+    {
+     "id": "P04",
+     "kind": "probe",
+     "label": "scam",
+     "total": 60,
+     "band": "HIGH"
+    },
+    {
+     "id": "P05",
+     "kind": "probe",
+     "label": "scam",
+     "total": 40,
+     "band": "MEDIUM"
+    },
+    {
+     "id": "P06",
+     "kind": "probe",
+     "label": "legitimate",
+     "total": 70,
+     "band": "HIGH"
+    },
+    {
+     "id": "P07",
+     "kind": "probe",
+     "label": "legitimate",
+     "total": 30,
+     "band": "LOW"
+    },
+    {
+     "id": "P08",
+     "kind": "probe",
+     "label": "legitimate",
+     "total": 60,
+     "band": "HIGH"
+    },
+    {
+     "id": "P09",
+     "kind": "probe",
+     "label": "legitimate",
+     "total": 60,
+     "band": "HIGH"
+    }
+   ]
+  },
+  "B + negation": {
+   "fixtures": {
+    "scams_escalated": "6/9",
+    "scams_verify_or_more": "9/9",
+    "legit_escalated": "0/3",
+    "legit_low": "3/3"
+   },
+   "probes": {
+    "scams_escalated": "2/5",
+    "scams_verify_or_more": "4/5",
+    "legit_escalated": "1/4",
+    "legit_low": "2/4"
+   },
+   "rows": [
+    {
+     "id": "S01",
+     "kind": "fixture",
+     "label": "scam",
+     "total": 45,
+     "band": "MEDIUM"
+    },
+    {
+     "id": "S02",
+     "kind": "fixture",
+     "label": "scam",
+     "total": 70,
+     "band": "HIGH"
+    },
+    {
+     "id": "S03",
+     "kind": "fixture",
+     "label": "scam",
+     "total": 70,
+     "band": "HIGH"
+    },
+    {
+     "id": "S04",
+     "kind": "fixture",
+     "label": "scam",
+     "total": 70,
+     "band": "HIGH"
+    },
+    {
+     "id": "S05",
+     "kind": "fixture",
+     "label": "scam",
+     "total": 50,
+     "band": "MEDIUM"
+    },
+    {
+     "id": "S06",
+     "kind": "fixture",
+     "label": "scam",
+     "total": 60,
+     "band": "HIGH"
+    },
+    {
+     "id": "S07",
+     "kind": "fixture",
+     "label": "scam",
+     "total": 45,
+     "band": "MEDIUM"
+    },
+    {
+     "id": "S08",
+     "kind": "fixture",
+     "label": "scam",
+     "total": 100,
+     "band": "CRITICAL"
+    },
+    {
+     "id": "S09",
+     "kind": "fixture",
+     "label": "scam",
+     "total": 85,
+     "band": "CRITICAL"
+    },
+    {
+     "id": "N01",
+     "kind": "fixture",
+     "label": "legitimate",
+     "total": 0,
+     "band": "LOW"
+    },
+    {
+     "id": "N02",
+     "kind": "fixture",
+     "label": "legitimate",
+     "total": 15,
+     "band": "LOW"
+    },
+    {
+     "id": "N03",
+     "kind": "fixture",
+     "label": "legitimate",
+     "total": 30,
+     "band": "LOW"
+    },
+    {
+     "id": "P01",
+     "kind": "probe",
+     "label": "scam",
+     "total": 70,
+     "band": "HIGH"
+    },
+    {
+     "id": "P02",
+     "kind": "probe",
+     "label": "scam",
+     "total": 30,
+     "band": "LOW"
+    },
+    {
+     "id": "P03",
+     "kind": "probe",
+     "label": "scam",
+     "total": 45,
+     "band": "MEDIUM"
+    },
+    {
+     "id": "P04",
+     "kind": "probe",
+     "label": "scam",
+     "total": 60,
+     "band": "HIGH"
+    },
+    {
+     "id": "P05",
+     "kind": "probe",
+     "label": "scam",
+     "total": 40,
+     "band": "MEDIUM"
+    },
+    {
+     "id": "P06",
+     "kind": "probe",
+     "label": "legitimate",
+     "total": 45,
+     "band": "MEDIUM"
+    },
+    {
+     "id": "P07",
+     "kind": "probe",
+     "label": "legitimate",
+     "total": 30,
+     "band": "LOW"
+    },
+    {
+     "id": "P08",
+     "kind": "probe",
+     "label": "legitimate",
+     "total": 60,
+     "band": "HIGH"
+    },
+    {
+     "id": "P09",
+     "kind": "probe",
+     "label": "legitimate",
+     "total": 30,
+     "band": "LOW"
+    }
+   ]
+  },
+  "C + intent model": {
+   "fixtures": {
+    "scams_escalated": "8/9",
+    "scams_verify_or_more": "9/9",
+    "legit_escalated": "0/3",
+    "legit_low": "3/3"
+   },
+   "probes": {
+    "scams_escalated": "2/5",
+    "scams_verify_or_more": "4/5",
+    "legit_escalated": "3/4",
+    "legit_low": "1/4"
+   },
+   "rows": [
+    {
+     "id": "S01",
+     "kind": "fixture",
+     "label": "scam",
+     "total": 60,
+     "band": "HIGH"
+    },
+    {
+     "id": "S02",
+     "kind": "fixture",
+     "label": "scam",
+     "total": 70,
+     "band": "HIGH"
+    },
+    {
+     "id": "S03",
+     "kind": "fixture",
+     "label": "scam",
+     "total": 70,
+     "band": "HIGH"
+    },
+    {
+     "id": "S04",
+     "kind": "fixture",
+     "label": "scam",
+     "total": 70,
+     "band": "HIGH"
+    },
+    {
+     "id": "S05",
+     "kind": "fixture",
+     "label": "scam",
+     "total": 60,
+     "band": "HIGH"
+    },
+    {
+     "id": "S06",
+     "kind": "fixture",
+     "label": "scam",
+     "total": 60,
+     "band": "HIGH"
+    },
+    {
+     "id": "S07",
+     "kind": "fixture",
+     "label": "scam",
+     "total": 45,
+     "band": "MEDIUM"
+    },
+    {
+     "id": "S08",
+     "kind": "fixture",
+     "label": "scam",
+     "total": 100,
+     "band": "CRITICAL"
+    },
+    {
+     "id": "S09",
+     "kind": "fixture",
+     "label": "scam",
+     "total": 85,
+     "band": "CRITICAL"
+    },
+    {
+     "id": "N01",
+     "kind": "fixture",
+     "label": "legitimate",
+     "total": 0,
+     "band": "LOW"
+    },
+    {
+     "id": "N02",
+     "kind": "fixture",
+     "label": "legitimate",
+     "total": 15,
+     "band": "LOW"
+    },
+    {
+     "id": "N03",
+     "kind": "fixture",
+     "label": "legitimate",
+     "total": 30,
+     "band": "LOW"
+    },
+    {
+     "id": "P01",
+     "kind": "probe",
+     "label": "scam",
+     "total": 70,
+     "band": "HIGH"
+    },
+    {
+     "id": "P02",
+     "kind": "probe",
+     "label": "scam",
+     "total": 30,
+     "band": "LOW"
+    },
+    {
+     "id": "P03",
+     "kind": "probe",
+     "label": "scam",
+     "total": 45,
+     "band": "MEDIUM"
+    },
+    {
+     "id": "P04",
+     "kind": "probe",
+     "label": "scam",
+     "total": 60,
+     "band": "HIGH"
+    },
+    {
+     "id": "P05",
+     "kind": "probe",
+     "label": "scam",
+     "total": 40,
+     "band": "MEDIUM"
+    },
+    {
+     "id": "P06",
+     "kind": "probe",
+     "label": "legitimate",
+     "total": 70,
+     "band": "HIGH"
+    },
+    {
+     "id": "P07",
+     "kind": "probe",
+     "label": "legitimate",
+     "total": 30,
+     "band": "LOW"
+    },
+    {
+     "id": "P08",
+     "kind": "probe",
+     "label": "legitimate",
+     "total": 60,
+     "band": "HIGH"
+    },
+    {
+     "id": "P09",
+     "kind": "probe",
+     "label": "legitimate",
+     "total": 60,
+     "band": "HIGH"
+    }
+   ]
+  },
+  "D + negation + model": {
+   "fixtures": {
+    "scams_escalated": "8/9",
+    "scams_verify_or_more": "9/9",
+    "legit_escalated": "0/3",
+    "legit_low": "3/3"
+   },
+   "probes": {
+    "scams_escalated": "2/5",
+    "scams_verify_or_more": "4/5",
+    "legit_escalated": "2/4",
+    "legit_low": "1/4"
+   },
+   "rows": [
+    {
+     "id": "S01",
+     "kind": "fixture",
+     "label": "scam",
+     "total": 60,
+     "band": "HIGH"
+    },
+    {
+     "id": "S02",
+     "kind": "fixture",
+     "label": "scam",
+     "total": 70,
+     "band": "HIGH"
+    },
+    {
+     "id": "S03",
+     "kind": "fixture",
+     "label": "scam",
+     "total": 70,
+     "band": "HIGH"
+    },
+    {
+     "id": "S04",
+     "kind": "fixture",
+     "label": "scam",
+     "total": 70,
+     "band": "HIGH"
+    },
+    {
+     "id": "S05",
+     "kind": "fixture",
+     "label": "scam",
+     "total": 60,
+     "band": "HIGH"
+    },
+    {
+     "id": "S06",
+     "kind": "fixture",
+     "label": "scam",
+     "total": 60,
+     "band": "HIGH"
+    },
+    {
+     "id": "S07",
+     "kind": "fixture",
+     "label": "scam",
+     "total": 45,
+     "band": "MEDIUM"
+    },
+    {
+     "id": "S08",
+     "kind": "fixture",
+     "label": "scam",
+     "total": 100,
+     "band": "CRITICAL"
+    },
+    {
+     "id": "S09",
+     "kind": "fixture",
+     "label": "scam",
+     "total": 85,
+     "band": "CRITICAL"
+    },
+    {
+     "id": "N01",
+     "kind": "fixture",
+     "label": "legitimate",
+     "total": 0,
+     "band": "LOW"
+    },
+    {
+     "id": "N02",
+     "kind": "fixture",
+     "label": "legitimate",
+     "total": 15,
+     "band": "LOW"
+    },
+    {
+     "id": "N03",
+     "kind": "fixture",
+     "label": "legitimate",
+     "total": 30,
+     "band": "LOW"
+    },
+    {
+     "id": "P01",
+     "kind": "probe",
+     "label": "scam",
+     "total": 70,
+     "band": "HIGH"
+    },
+    {
+     "id": "P02",
+     "kind": "probe",
+     "label": "scam",
+     "total": 30,
+     "band": "LOW"
+    },
+    {
+     "id": "P03",
+     "kind": "probe",
+     "label": "scam",
+     "total": 45,
+     "band": "MEDIUM"
+    },
+    {
+     "id": "P04",
+     "kind": "probe",
+     "label": "scam",
+     "total": 60,
+     "band": "HIGH"
+    },
+    {
+     "id": "P05",
+     "kind": "probe",
+     "label": "scam",
+     "total": 40,
+     "band": "MEDIUM"
+    },
+    {
+     "id": "P06",
+     "kind": "probe",
+     "label": "legitimate",
+     "total": 45,
+     "band": "MEDIUM"
+    },
+    {
+     "id": "P07",
+     "kind": "probe",
+     "label": "legitimate",
+     "total": 30,
+     "band": "LOW"
+    },
+    {
+     "id": "P08",
+     "kind": "probe",
+     "label": "legitimate",
+     "total": 60,
+     "band": "HIGH"
+    },
+    {
+     "id": "P09",
+     "kind": "probe",
+     "label": "legitimate",
+     "total": 60,
+     "band": "HIGH"
+    }
+   ]
+  }
+ }
+}

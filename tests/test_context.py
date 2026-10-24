@@ -42,3 +42,19 @@ def test_context_veto_raises_but_never_blocks():
     assert combine("Block + STR draft", hi)["final_decision"] == "Block + STR draft"      # context never lowers a decision
     low = assess(None, PaymentContext(), True)
     assert combine("Approve", low)["final_decision"] == "Approve"
+
+
+def test_assess_endpoint_veto_and_consent():
+    from fastapi.testclient import TestClient
+    sys.path.insert(0, str(ROOT))
+    from index import app
+    c = TestClient(app)
+    c.post("/api/v2/demo/reset", params={"warm": False})
+    body = {"timestamp": "2022-09-09 10:00", "from_bank": "070", "from_account": "VX1", "to_bank": "011", "to_account": "MX1",
+            "amount_paid": 9300, "payment_format": "ACH",
+            "message": "The finance office has revised the vendor details. Please remit the balance to the replacement beneficiary ahead of the afternoon cutoff. Call 9876543210."}
+    r = c.post("/api/v2/assess", json={**body, "consent": True}).json()
+    assert r["context"]["context"] == 40 and "9876543210" not in (r["context"]["redacted_text"] or "")
+    assert r["final_decision"] != "Block + STR draft" or r["payment_decision"] == "Block + STR draft"
+    r2 = c.post("/api/v2/assess", json={**body, "from_account": "VX2", "consent": False}).json()
+    assert r2["context"]["context"] == 0 and r2["context"]["redacted_text"] is None

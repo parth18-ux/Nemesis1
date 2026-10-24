@@ -25,7 +25,7 @@ import hashlib, os, re, unicodedata
 from dataclasses import dataclass, field, asdict
 from datetime import datetime, timedelta, timezone
 
-RULESET_VERSION = "ctx-1.0"
+RULESET_VERSION = "ctx-1.1"   # 1.1: negation-aware cues, sender-side mule signature, optional intent model
 RETENTION_DAYS = 30
 _SALT = os.environ.get("RUSETECT_HASH_SALT", "rusetect-demo-salt")
 
@@ -91,11 +91,33 @@ CUES = {
 }
 
 
-def context_cues(text: str) -> dict:
+_NEG = re.compile(r"\b(?:never|not|no one|nobody|don't|dont|do not|won't|will not|cannot|can't|if (?:someone|anyone|anybody) (?:asks|calls|tells))\b")
+NO_NEGATION = {"secrecy"}          # "do not tell anyone" IS the cue
+
+
+def _negated(t: str, start: int) -> bool:
+    """True if the sentence holding the match has a negation before the match ("we will NOT ask you to ...")."""
+    s0 = max(t.rfind(".", 0, start), t.rfind("!", 0, start), t.rfind("?", 0, start), t.rfind("\n", 0, start)) + 1
+    return bool(_NEG.search(t[s0:start]))
+
+
+def context_cues(text: str, negation: bool = True) -> dict:
     t = unicodedata.normalize("NFKC", text).lower()
-    fam = {name: w for name, (w, pats) in CUES.items() if any(re.search(p, t) for p in pats)}
+    fam, negated = {}, []
+    for name, (w, pats) in CUES.items():
+        hits = [m for p in pats for m in re.finditer(p, t)]
+        if not hits:
+            continue
+        if negation and name not in NO_NEGATION and all(_negated(t, m.start()) for m in hits):
+            negated.append(name); continue
+        fam[name] = w
     pts = min(CONTEXT_CAP, sum(fam.values()))
-    return {"points": pts, "families": sorted(fam)}
+    return {"points": pts, "families": sorted(fam), "negated": sorted(negated)}
+
+
+def intent_points(model_band: str | None) -> int:
+    """Map the trained L-1 message model's band to context points (used only when a model result is supplied)."""
+    return {"high": 30, "caution": 15}.get(model_band or "", 0)
 
 
 # ------------------------------------------------------------------ transaction and graph checks
@@ -106,6 +128,7 @@ class PaymentContext:
     rapid_pass_through: bool = False     # payee forwards most of what it received within minutes
     fan_in_24h: int = 0                  # distinct senders paying the payee in 24 h
     coordinated: bool = False            # payee or device shared by several flagged accounts
+    sender_fan_in_24h: int = 0           # distinct accounts that paid the SENDER in the last 24 h (mule signature)
     payee_in_message: bool = False       # payee UPI / account matches an entity hash from the message
 
 
@@ -122,6 +145,7 @@ def graph_points(c: PaymentContext) -> dict:
     if c.fan_in_24h >= 4: parts["fan_in_4plus"] = 15
     if c.rapid_pass_through: parts["rapid_pass_through"] = 15
     if c.coordinated: parts["coordinated_accounts"] = 15
+    if c.sender_fan_in_24h >= 4 and c.rapid_pass_through: parts["sender_mule_signature"] = 15   # ctx-1.1
     return {"points": min(GRAPH_CAP, sum(parts.values())), "checks": sorted(parts)}
 
 
@@ -153,20 +177,29 @@ class ContextResult:
         return asdict(self)
 
 
-def assess(text: str | None, payment: PaymentContext, consent: bool, now: datetime | None = None) -> ContextResult:
-    """Score one payment with optional message context. Text is used only if consent is True."""
+def assess(text: str | None, payment: PaymentContext, consent: bool, now: datetime | None = None,
+           negation: bool = True, model_band: str | None = None) -> ContextResult:
+    """Score one payment with optional message context. Text is used only if consent is True.
+    negation=False reproduces ruleset ctx-1.0 cue matching; model_band ('high' / 'caution' / 'safe') from the
+    trained L-1 message model, when given, can lift the context score: context = max(phrase cues, model points)."""
     now = now or datetime.now(timezone.utc)
-    ctx = {"points": 0, "families": []}; red, ents, base = None, [], {}
+    ctx = {"points": 0, "families": [], "negated": []}; red, ents, base = None, [], {}
     if consent and text:
         red, ents = redact(text)
-        ctx = context_cues(text)
+        ctx = context_cues(text, negation=negation)
         base = keyword_baseline(text)
+        mp = intent_points(model_band)
+        if mp > ctx["points"]:
+            ctx = {**ctx, "points": min(CONTEXT_CAP, mp), "families": ctx["families"] + [f"intent model ({model_band})"]}
     tx, gr = transaction_points(payment), graph_points(payment)
     total = ctx["points"] + tx["points"] + gr["points"]
     n_dom = sum(1 for p in (ctx["points"], tx["points"], gr["points"]) if p > 0)
     band = band_for(total, n_dom)
+    if "sender_mule_signature" in gr["checks"] and band == "LOW":
+        band = "MEDIUM"          # ctx-1.1: a payer that collects from many accounts and forwards within minutes is reviewed even without other domains
     reasons = ([f"message cue: {f}" for f in ctx["families"]] + [f"payment check: {c}" for c in tx["checks"]]
                + [f"account graph: {c}" for c in gr["checks"]])
+    reasons += [f"negated, not counted: {f}" for f in ctx.get("negated", [])]
     if not consent and text:
         reasons.append("message context not used: no consent")
     return ContextResult(ctx["points"], tx["points"], gr["points"], total, band, ACTION[band], reasons, consent, red, ents, base,
@@ -186,3 +219,26 @@ def combine(payment_decision: str, ctx: ContextResult) -> dict:
     final = names[max(p, c)]
     return {"payment_decision": payment_decision, "context_band": ctx.band, "final_decision": final,
             "raised_by_context": c > p}
+
+
+# ------------------------------------------------------------------ bridge from the live payment engine (ctx-1.1)
+def sender_fan_in_24h(engine, payload: dict) -> int:
+    """Distinct accounts that paid the sender in the 24 h before this payment (read before scoring)."""
+    src = (str(payload["from_bank"]), str(payload["from_account"]))
+    if src not in engine.accts:
+        return 0
+    t = int(payload["tmin"]); q = engine.accts[src].win_in.q
+    return len({k for (tt, k, _) in q if tt > t - 24 * 60})
+
+
+def from_engine_features(f: dict, sender_fan_in: int = 0) -> PaymentContext:
+    """Transaction and graph checks from the engine's own live (past-only) features."""
+    import math
+    def ok(v):
+        return v is not None and not (isinstance(v, float) and math.isnan(v))
+    hist = f["s_out_n"] >= 3
+    usd = math.expm1(f["log_usd"]); usual = math.expm1(f["s_out_mean_usd"]) if hist else None
+    msi, ratio = f.get("s_mins_since_in"), f.get("s_out_over_last_in")
+    rapid = ok(msi) and msi <= 10 and ok(ratio) and ratio >= 0.8
+    return PaymentContext(new_beneficiary=bool(f["new_pair"]), amount_deviation=bool(hist and usd > 3 * usual),
+                          rapid_pass_through=bool(rapid), fan_in_24h=int(f["d_fanin_24h"]), sender_fan_in_24h=int(sender_fan_in))

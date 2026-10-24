@@ -10,29 +10,19 @@ from datetime import datetime, timedelta, timezone
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "service"))
 from rusetect_engine import Engine
-from context_rules import assess, combine, PaymentContext, RULESET_VERSION
+from context_rules import assess, combine, PaymentContext, RULESET_VERSION, from_engine_features, sender_fan_in_24h
 
 F = json.load(open(os.path.join(ROOT, "fixtures", "mule_replay.json")))
 eng = Engine(); eng.reset()
 t0 = datetime.strptime(F["start"], "%Y-%m-%d %H:%M").replace(tzinfo=timezone.utc)
 
 
-def ctx_from_features(f):
-    hist = f["s_out_n"] >= 3
-    usual = math.expm1(f["s_out_mean_usd"]) if hist else None
-    usd = math.expm1(f["log_usd"])
-    msi, ratio = f.get("s_mins_since_in"), f.get("s_out_over_last_in")
-    rapid = (msi is not None and not (isinstance(msi, float) and math.isnan(msi)) and msi <= 10
-             and ratio is not None and not (isinstance(ratio, float) and math.isnan(ratio)) and ratio >= 0.8)
-    return PaymentContext(new_beneficiary=bool(f["new_pair"]), amount_deviation=bool(hist and usd > 3 * usual),
-                          rapid_pass_through=bool(rapid), fan_in_24h=int(f["d_fanin_24h"]))
-
-
 rows = []
 def run(p, who, text=None, consent=False):
+    sf = sender_fan_in_24h(eng, p)
     out = eng.score_payment(p)
     f = out["features"]
-    c = assess(text, ctx_from_features(f), consent=consent)
+    c = assess(text, from_engine_features(f, sf), consent=consent)
     comb = combine(out["decision"], c)
     rows.append({"who": who, "time": p["ts"], "from": p["from_account"], "to": p["to_account"], "amount_inr": p["amount_paid"],
                  "l1_score": out["l1_score"], "layer_exit": out.get("layer_exit"), "engine_risk": out.get("risk"), "engine_decision": out["decision"],

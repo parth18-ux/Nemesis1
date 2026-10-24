@@ -28,6 +28,7 @@ from branding import NAME, SLUG, TAGLINE, VERSION
 from lure_fusion import LureMemory
 from rusetect_engine import Engine
 from scam_text import MessageModel
+import context_rules as CTX
 
 ROOT = Path(__file__).parent
 MODELS = ROOT / "models"
@@ -129,6 +130,27 @@ class MessageIn(BaseModel):
     timestamp: Optional[str] = Field(None, description="YYYY-MM-DD HH:MM (UTC); defaults to now")
     bank: Optional[str] = Field(None, description="Recipient's bank code, to link the message to their later payments")
     account: Optional[str] = Field(None, description="Recipient's account id (same id as from_account in /v2/payment)")
+
+
+class AssessIn(PaymentIn):
+    message: Optional[str] = Field(None, max_length=5000, description="Message or call transcript the payer received (optional)")
+    consent: bool = Field(False, description="Payer opted in to message context; without it the text is ignored and not stored")
+    use_intent_model: bool = Field(False, description="Also lift the context score with the trained L-1 message model")
+
+
+@api.post("/v2/assess")
+async def v2_assess(a: AssessIn):
+    """Payment cascade + context layer (ruleset in the response). The final decision is the stricter of the two;
+    context alone never goes beyond an analyst hold. Message text is redacted before it is returned or stored."""
+    eng = need_engine()
+    d = to_payload(a)
+    sf = CTX.sender_fan_in_24h(eng, d)
+    pay = LURES.apply_to_payment(d, eng.score_payment(d))
+    band = MESSAGES.score(a.message)["band"] if (a.use_intent_model and a.consent and a.message and MESSAGES) else None
+    ctx = CTX.assess(a.message, CTX.from_engine_features(pay["features"], sf), consent=a.consent, model_band=band)
+    comb = CTX.combine(pay["decision"], ctx)
+    return {"payment": {k: pay.get(k) for k in ("l1_score", "layer_exit", "risk", "decision", "reasons", "case_id", "latency_ms")},
+            "context": ctx.to_dict(), **comb}
 
 
 @api.post("/v2/message")

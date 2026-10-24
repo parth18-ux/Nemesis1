@@ -1,9 +1,9 @@
 {
  "summary": {
-  "ruleset": "ctx-1.0",
+  "ruleset": "ctx-1.1",
   "frozen_before_probes": true,
   "scams_escalated": "2/5",
-  "legitimate_wrongly_escalated": "3/4",
+  "legitimate_wrongly_escalated": "1/4",
   "keyword_baseline_scams": "0/5",
   "keyword_baseline_legitimate_flagged": "1/4"
  },
@@ -98,15 +98,13 @@
    "id": "P06",
    "label": "legitimate",
    "kind": "bank security warning",
-   "context": 40,
-   "total": 70,
-   "band": "HIGH",
+   "context": 15,
+   "total": 45,
+   "band": "MEDIUM",
    "families": [
-    "authority",
-    "credential",
-    "pressure"
+    "authority"
    ],
-   "correct": false,
+   "correct": true,
    "keyword_baseline": true,
    "message_model": {
     "risk": 0.6155,
@@ -150,14 +148,11 @@
    "id": "P09",
    "label": "legitimate",
    "kind": "negated scam words",
-   "context": 30,
-   "total": 60,
-   "band": "HIGH",
-   "families": [
-    "redirection",
-    "remote_access"
-   ],
-   "correct": false,
+   "context": 0,
+   "total": 30,
+   "band": "LOW",
+   "families": [],
+   "correct": true,
    "keyword_baseline": false,
    "message_model": {
     "risk": 0.6155,
