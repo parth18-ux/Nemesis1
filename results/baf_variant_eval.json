@@ -1,0 +1,302 @@
+{
+ "model": "live L0 LightGBM, trained on BAF Base months 0 to 4; thresholds per age group from l0_config.json",
+ "base_test_months_6_7": {
+  "set": "Base, months 6 to 7 (benchmark test period)",
+  "applications": 205011,
+  "fraud": 2878,
+  "months": [
+   6,
+   7
+  ],
+  "roc_auc": 0.8917,
+  "recall_at_5pct_fpr": 0.5413,
+  "with_age_thresholds": {
+   "recall": 0.5344,
+   "fpr": 0.0541,
+   "fpr_50_plus": 0.06,
+   "fpr_under_50": 0.053,
+   "fpr_parity_ratio": 0.883,
+   "recall_50_plus": 0.5369,
+   "recall_under_50": 0.5331,
+   "flag_rate": 0.0609
+  }
+ },
+ "variants": {
+  "Variant I": {
+   "months_6_7": {
+    "set": "Variant I, months 6 to 7",
+    "applications": 205010,
+    "fraud": 2878,
+    "months": [
+     6,
+     7
+    ],
+    "roc_auc": 0.8823,
+    "recall_at_5pct_fpr": 0.5104,
+    "with_age_thresholds": {
+     "recall": 0.5351,
+     "fpr": 0.0544,
+     "fpr_50_plus": 0.0611,
+     "fpr_under_50": 0.0536,
+     "fpr_parity_ratio": 0.878,
+     "recall_50_plus": 0.5043,
+     "recall_under_50": 0.5394,
+     "flag_rate": 0.0612
+    }
+   },
+   "all_months": {
+    "set": "Variant I, all months",
+    "applications": 1000000,
+    "fraud": 11029,
+    "months": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7
+    ],
+    "roc_auc": 0.8887,
+    "recall_at_5pct_fpr": 0.5214,
+    "with_age_thresholds": {
+     "recall": 0.563,
+     "fpr": 0.0569,
+     "fpr_50_plus": 0.0646,
+     "fpr_under_50": 0.056,
+     "fpr_parity_ratio": 0.866,
+     "recall_50_plus": 0.529,
+     "recall_under_50": 0.5677,
+     "flag_rate": 0.0625
+    }
+   }
+  },
+  "Variant II": {
+   "months_6_7": {
+    "set": "Variant II, months 6 to 7",
+    "applications": 205010,
+    "fraud": 2878,
+    "months": [
+     6,
+     7
+    ],
+    "roc_auc": 0.8968,
+    "recall_at_5pct_fpr": 0.5493,
+    "with_age_thresholds": {
+     "recall": 0.5229,
+     "fpr": 0.0568,
+     "fpr_50_plus": 0.06,
+     "fpr_under_50": 0.0535,
+     "fpr_parity_ratio": 0.891,
+     "recall_50_plus": 0.5262,
+     "recall_under_50": 0.5064,
+     "flag_rate": 0.0633
+    }
+   },
+   "all_months": {
+    "set": "Variant II, all months",
+    "applications": 1000000,
+    "fraud": 11029,
+    "months": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7
+    ],
+    "roc_auc": 0.9045,
+    "recall_at_5pct_fpr": 0.5574,
+    "with_age_thresholds": {
+     "recall": 0.5486,
+     "fpr": 0.0602,
+     "fpr_50_plus": 0.0646,
+     "fpr_under_50": 0.0557,
+     "fpr_parity_ratio": 0.863,
+     "recall_50_plus": 0.5443,
+     "recall_under_50": 0.5703,
+     "flag_rate": 0.0656
+    }
+   }
+  },
+  "Variant III": {
+   "months_6_7": {
+    "set": "Variant III, months 6 to 7",
+    "applications": 241672,
+    "fraud": 2652,
+    "months": [
+     6,
+     7
+    ],
+    "roc_auc": 0.8701,
+    "recall_at_5pct_fpr": 0.4755,
+    "with_age_thresholds": {
+     "recall": 0.5294,
+     "fpr": 0.0573,
+     "fpr_50_plus": 0.0606,
+     "fpr_under_50": 0.054,
+     "fpr_parity_ratio": 0.891,
+     "recall_50_plus": 0.5269,
+     "recall_under_50": 0.5321,
+     "flag_rate": 0.0625
+    }
+   },
+   "all_months": {
+    "set": "Variant III, all months",
+    "applications": 1000000,
+    "fraud": 11030,
+    "months": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7
+    ],
+    "roc_auc": 0.8826,
+    "recall_at_5pct_fpr": 0.4982,
+    "with_age_thresholds": {
+     "recall": 0.5665,
+     "fpr": 0.0599,
+     "fpr_50_plus": 0.0642,
+     "fpr_under_50": 0.0555,
+     "fpr_parity_ratio": 0.864,
+     "recall_50_plus": 0.5538,
+     "recall_under_50": 0.5798,
+     "flag_rate": 0.0655
+    }
+   }
+  },
+  "Variant IV": {
+   "months_6_7": {
+    "set": "Variant IV, months 6 to 7",
+    "applications": 241672,
+    "fraud": 2652,
+    "months": [
+     6,
+     7
+    ],
+    "roc_auc": 0.8701,
+    "recall_at_5pct_fpr": 0.4755,
+    "with_age_thresholds": {
+     "recall": 0.5294,
+     "fpr": 0.0573,
+     "fpr_50_plus": 0.0606,
+     "fpr_under_50": 0.054,
+     "fpr_parity_ratio": 0.891,
+     "recall_50_plus": 0.5269,
+     "recall_under_50": 0.5321,
+     "flag_rate": 0.0625
+    }
+   },
+   "all_months": {
+    "set": "Variant IV, all months",
+    "applications": 1000000,
+    "fraud": 11030,
+    "months": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7
+    ],
+    "roc_auc": 0.9019,
+    "recall_at_5pct_fpr": 0.5557,
+    "with_age_thresholds": {
+     "recall": 0.5626,
+     "fpr": 0.0599,
+     "fpr_50_plus": 0.0642,
+     "fpr_under_50": 0.0555,
+     "fpr_parity_ratio": 0.864,
+     "recall_50_plus": 0.5591,
+     "recall_under_50": 0.5734,
+     "flag_rate": 0.0654
+    }
+   }
+  },
+  "Variant V": {
+   "months_6_7": {
+    "set": "Variant V, months 6 to 7",
+    "applications": 241672,
+    "fraud": 2652,
+    "months": [
+     6,
+     7
+    ],
+    "roc_auc": 0.8723,
+    "recall_at_5pct_fpr": 0.4857,
+    "with_age_thresholds": {
+     "recall": 0.5411,
+     "fpr": 0.0567,
+     "fpr_50_plus": 0.0598,
+     "fpr_under_50": 0.0534,
+     "fpr_parity_ratio": 0.893,
+     "recall_50_plus": 0.5489,
+     "recall_under_50": 0.533,
+     "flag_rate": 0.062
+    }
+   },
+   "all_months": {
+    "set": "Variant V, all months",
+    "applications": 1000000,
+    "fraud": 11030,
+    "months": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7
+    ],
+    "roc_auc": 0.8826,
+    "recall_at_5pct_fpr": 0.5021,
+    "with_age_thresholds": {
+     "recall": 0.5721,
+     "fpr": 0.0597,
+     "fpr_50_plus": 0.0643,
+     "fpr_under_50": 0.055,
+     "fpr_parity_ratio": 0.856,
+     "recall_50_plus": 0.5616,
+     "recall_under_50": 0.5831,
+     "flag_rate": 0.0653
+    }
+   }
+  }
+ },
+ "control_trained_on_variant_iii": {
+  "note": "Fresh LightGBM trained on Variant III months 0 to 4 and tested on its later months, one global threshold at 5% FPR.",
+  "without_bias_features": {
+   "roc_auc": 0.8778,
+   "recall_at_5pct_fpr": 0.4887,
+   "fpr_50_plus": 0.0514,
+   "fpr_under_50": 0.0486,
+   "fpr_parity_ratio": 0.946
+  },
+  "with_bias_features_x1_x2": {
+   "roc_auc": 0.9535,
+   "recall_at_5pct_fpr": 0.7508,
+   "fpr_50_plus": 0.0839,
+   "fpr_under_50": 0.0155,
+   "fpr_parity_ratio": 0.185
+  }
+ },
+ "runtime_seconds": 1516.7,
+ "caveats": [
+  "Feedzai BAF is synthetic.",
+  "The age split (50 and over) is the gate's own fairness check; each variant's bias is defined on the dataset's protected attribute."
+ ],
+ "notes": [
+  "Variant IV's months 6 to 7 hold exactly the same applications as Variant III's, in a different order (checked by sorting all shared columns), so its test result necessarily equals Variant III's; it is not an independent test.",
+  "Base, Variant I and Variant II test months share size and fraud count (205,010 to 205,011 applications, 2,878 fraud) but differ in content."
+ ]
+}
