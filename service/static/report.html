@@ -7,17 +7,13 @@
 <title>RuseTect Benchmark</title>
 <meta name="description" content="RuseTect model benchmark on synthetic IBM AMLworld and Feedzai BAF data: committed results and a fresh comparison.">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
 /* Layout: a single reading column (max 980px) with full-width data blocks; funnel diagram leads, evidence follows. */
 :root{
   --bg:#f5f7f9; --panel:#ffffff; --ink:#15202b; --ink-2:#4a5866; --ink-3:#7d8a97; --rule:#dbe1e7;
   --accent:#0b6e7a; --accent-soft:#d9eef0; --bad:#b4232c; --bad-soft:#f7dfe0; --warn:#9a6100;
   --f-boost:#0b6e7a; --f-classic:#6b7fa3; --f-deep:#8e5bb5; --f-graph:#c07a12; --f-unsup:#9aa5b1;
-  --display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
-  --body:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;
-  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --display:ui-sans-serif,system-ui,"Segoe UI",sans-serif; --body:ui-sans-serif,system-ui,"Segoe UI",sans-serif; --mono:ui-monospace,Menlo,Consolas,monospace;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0f161c; --panel:#162029; --ink:#e6edf2; --ink-2:#a9b6c1; --ink-3:#7c8a96; --rule:#26323d;
@@ -28,10 +24,11 @@
   --accent:#4fc3cf; --accent-soft:#16363b; --bad:#f07b82; --bad-soft:#3a1c1f; --warn:#e3a54a;
   --f-boost:#4fc3cf; --f-classic:#8fa3c9; --f-deep:#b58ad8; --f-graph:#e3a54a; --f-unsup:#6f7c88; color-scheme:dark}
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--ink);font:15px/1.6 var(--body);padding-inline:16px;padding-block:40px 80px}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 var(--body);padding-inline:16px;padding-block:20px 80px}
+nav.site{max-width:980px;margin:0 auto 32px}
 main{max-width:980px;margin:0 auto;display:flex;flex-direction:column;gap:56px}
 h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;letter-spacing:-.01em}
-h1{font-size:clamp(34px,6vw,54px);line-height:1.05;font-weight:700}
+h1{font-size:clamp(28px,4.4vw,40px);line-height:1.1;font-weight:700;letter-spacing:-.02em}
 h2{font-size:26px;font-weight:700}
 h3{font-size:17px;font-weight:600;font-family:var(--body)}
 p{margin:0;max-width:68ch;color:var(--ink-2)}
@@ -93,9 +90,19 @@ code{font:13px var(--mono);background:var(--accent-soft);padding:1px 5px;border-
 .track{height:5px;border-radius:3px;background:var(--rule);overflow:hidden}
 .track div{height:100%;background:var(--accent)}
 .foot{font-size:12.5px;color:var(--ink-3);max-width:80ch}
+
+/* shared site nav (same on every page) */
+nav.site{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:8px 10px 8px 14px}
+nav.site .brand{font:700 15px var(--body);color:var(--ink);text-decoration:none;letter-spacing:-.01em}
+nav.site .brand i{display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--accent);margin-right:8px;vertical-align:1px}
+nav.site .links{display:flex;flex-wrap:wrap;gap:2px}
+nav.site .links a{font:500 13px var(--body);color:var(--ink-2);text-decoration:none;padding:6px 10px;border-radius:6px}
+nav.site .links a:hover{background:var(--accent-soft);color:var(--accent)}
+nav.site .links a[aria-current]{background:var(--accent);color:var(--panel)}
 </style>
 </head>
 <body>
+<nav class="site" aria-label="Pages"><a class="brand" href="/"><i></i>RuseTect</a><div class="links"><a href="/">Home</a><a href="/console">Live console</a><a href="/investigate">Investigator</a><a href="/report" aria-current="page">Benchmark report</a><a href="/docs">API docs</a></div></nav>
 <main>
 <header style="display:flex;flex-direction:column;gap:16px">
   <div class="eyebrow">RuseTect · model benchmark · synthetic data</div>

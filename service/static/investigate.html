@@ -35,10 +35,20 @@ ul{margin:4px 0;padding-left:18px}
 table{width:100%;border-collapse:collapse}td,th{text-align:left;padding:5px 6px;border-top:1px solid var(--rule);font-size:12px}th{color:var(--ink-3);font-weight:500}
 .empty{color:var(--ink-3);padding:12px 0}
 textarea{width:100%;min-height:70px}
+
+/* shared site nav (same on every page) */
+nav.site{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:8px 10px 8px 14px}
+nav.site .brand{font:700 15px var(--body);color:var(--ink);text-decoration:none;letter-spacing:-.01em}
+nav.site .brand i{display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--accent);margin-right:8px;vertical-align:1px}
+nav.site .links{display:flex;flex-wrap:wrap;gap:2px}
+nav.site .links a{font:500 13px var(--body);color:var(--ink-2);text-decoration:none;padding:6px 10px;border-radius:6px}
+nav.site .links a:hover{background:var(--accent-soft);color:var(--accent)}
+nav.site .links a[aria-current]{background:var(--accent);color:var(--panel)}
 </style>
 </head>
 <body>
 <div class="wrap">
+<nav class="site" aria-label="Pages"><a class="brand" href="/"><i></i>RuseTect</a><div class="links"><a href="/">Home</a><a href="/console">Live console</a><a href="/investigate" aria-current="page">Investigator</a><a href="/report">Benchmark report</a><a href="/docs">API docs</a></div></nav>
 <header>
   <h1><small>RuseTect · analyst review</small>Investigator</h1>
   <div class="row">
