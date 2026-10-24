@@ -44,8 +44,102 @@ def fresh_data():
     return dict(models=models, note=" ".join(notes))
 
 
+def _load(name):
+    path = os.path.join(REPO, "results", name)
+    return json.load(open(path)) if os.path.exists(path) else None
+
+
+def pct(x, d=1):
+    return f"{100 * x:.{d}f}%"
+
+
+def full_eval_html():
+    """Static section built from the full dataset runs (ml/full_dataset_eval.py, tune_context.py, baf_variant_eval.py, scale benches)."""
+    hi, tu, li, lif, baf = (_load("full_eval_HI.json"), _load("context_tuning_HI.json"), _load("full_eval_LI.json"),
+                            _load("context_tuning_LI_fixed.json"), _load("baf_variant_eval.json"))
+    sb, so = _load("scale_bench.json"), _load("scale_out_bench.json")
+    if not hi:
+        return ""
+    out = ['<section id="full">', '<div class="eyebrow">Full dataset evaluation · every payment streamed through the live path</div>',
+           "<h2>All 5.08 million HI-Small payments, in time order</h2>",
+           f"<p>Each payment goes through the live engine's past-only account state, the live L1 gatekeeper and the L2 average, "
+           f"exactly as the API scores it. Metrics are on the last 20% ({hi['scored_payments']:,} payments, {hi['scored_laundering']:,} laundering); "
+           f"the 60 to 80% weeks are used only to tune the context rules.</p>"]
+    L = hi["levels"]["payment_model"]; R = hi["rings"]["payment_model"]
+    out.append('<div class="kpis">'
+               f'<div class="kpi"><span class="v">{hi["live_model_pr_auc"]:.3f}</span><span class="k">PR-AUC of the live streaming score (offline benchmark 0.716)</span></div>'
+               f'<div class="kpi"><span class="v">{pct(L["verify_or_more"]["recall"])}</span><span class="k">of laundering sent to verification or more, at {pct(L["verify_or_more"]["flag_rate"], 2)} of payments</span></div>'
+               f'<div class="kpi"><span class="v">{pct(L["hold_or_more"]["recall"])}</span><span class="k">held for an analyst, at {pct(L["hold_or_more"]["flag_rate"], 2)} of payments (precision {pct(L["hold_or_more"]["precision"])})</span></div>'
+               f'<div class="kpi"><span class="v">{R["verify_or_more"]["rings_caught"]}/{R["verify_or_more"]["rings_in_scored_period"]}</span><span class="k">labelled rings in the test weeks with at least one payment flagged</span></div></div>')
+    rows = "".join(f"<tr><td>{t}</td><td>{v['rings']}</td><td>{v['caught']}</td><td>{pct(v['rate'], 0)}</td></tr>"
+                   for t, v in R["block"]["by_typology"].items())
+    out.append('<div class="tbl"><table><thead><tr><th>Typology</th><th>Rings in test weeks</th><th>Caught at block level</th><th>Rate</th></tr></thead>'
+               f"<tbody>{rows}</tbody></table></div>")
+    out.append(f'<p class="foot">Owner linking from the accounts file merges held payments into {hi["l4_cases_from_holds_entity_merged"]:,} cases '
+               f'instead of {hi["l4_cases_from_holds"]:,} by shared accounts alone.</p>')
+    if tu:
+        a, b = tu["test"]["signature"]["shipped_ctx_1_2"], tu["test"]["signature"]["chosen"]
+        c1, c2 = tu["test"]["context_layer_alone_verify_or_more"]["shipped_ctx_1_2"], tu["test"]["context_layer_alone_verify_or_more"]["chosen"]
+        out.append('<div class="card fix"><h3>The mule signature was too loose; ctx-1.3 fixes it</h3><p>'
+                   f"On the test weeks the ctx-1.2 signature fired on {pct(a['flag_rate'], 2)} of payments (precision {a['precision']:.3f}). "
+                   f"A stricter rule chosen on the validation weeks only (payer collected from 4+ accounts in 24 h, forwards at least 95% "
+                   f"of the latest deposit within 2 minutes, has paid at most 10 accounts) fires on {pct(b['flag_rate'], 2)} (precision {b['precision']:.3f}). "
+                   f"The context layer alone now asks for verification on {pct(c2['flag_rate'], 2)} of payments instead of {pct(c1['flag_rate'], 2)}. "
+                   "IBM data has no messages, so on these payments the context layer adds little beyond the payment model; its value is on "
+                   "message-led scams, which this dataset cannot measure.</p></div>")
+    if li:
+        Ll = li["levels"]["payment_model"]
+        txt = (f"<h3>LI-Small: {li['payments_total']:,} payments the models never saw</h3><p>A lower laundering intensity population. "
+               f"Live streaming PR-AUC {li['live_model_pr_auc']:.3f}; at verification or more the live path catches {pct(Ll['verify_or_more']['recall'])} "
+               f"of laundering at {pct(Ll['verify_or_more']['flag_rate'], 2)} of payments; held for an analyst {pct(Ll['hold_or_more']['recall'])} "
+               f"(precision {pct(Ll['hold_or_more']['precision'])}). ")
+        rr = li["rings"]["payment_model"]["verify_or_more"]
+        if rr["rings_in_scored_period"]:
+            txt += f"{rr['rings_caught']} of {rr['rings_in_scored_period']} labelled rings in its test weeks get at least one flag. "
+        if lif:
+            s2 = lif["test"]["signature"]["chosen"]
+            txt += f"The ctx-1.3 signature, applied unchanged, fires on {pct(s2['flag_rate'], 3)} of LI payments (precision {s2['precision']:.3f})."
+        out.append(f'<div class="card">{txt}</p></div>')
+    if baf:
+        rows = [("Base (benchmark test)", baf["base_test_months_6_7"])] + [(k, v["months_6_7"]) for k, v in baf["variants"].items()]
+        body = "".join(f"<tr><td>{n}</td><td>{r['roc_auc']:.3f}</td><td>{pct(r['with_age_thresholds']['recall'])}</td>"
+                       f"<td>{pct(r['with_age_thresholds']['fpr'])}</td><td>{r['with_age_thresholds']['fpr_parity_ratio']:.2f}</td></tr>" for n, r in rows)
+        ctl = baf.get("control_trained_on_variant_iii", {})
+        out += ['<h2>Account opening gate on all five BAF variants</h2>',
+                "<p>The live L0 model was trained on BAF Base months 0 to 4 only. Each variant shifts the population's bias; months 6 to 7 are scored "
+                "with the gate's age group thresholds. Parity is the lower age group false alarm rate divided by the higher one (1.0 is equal).</p>",
+                '<div class="tbl"><table><thead><tr><th>Population</th><th>ROC-AUC</th><th>Recall</th><th>False alarms</th><th>Parity, 50+ vs under 50</th></tr></thead>'
+                f"<tbody>{body}</tbody></table></div>"]
+        if isinstance(ctl, dict) and "with_bias_features_x1_x2" in ctl:
+            w, wo = ctl["with_bias_features_x1_x2"], ctl["without_bias_features"]
+            out.append(f'<p class="foot">Control: a model trained on Variant III that may use its leaked features x1 and x2 reaches {w["roc_auc"]:.3f} ROC-AUC '
+                       f'but its false alarm parity falls to {w["fpr_parity_ratio"]:.2f} (people 50+ falsely flagged {w["fpr_50_plus"] / max(w["fpr_under_50"], 1e-9):.1f}x as often); '
+                       f'without them {wo["roc_auc"]:.3f} at parity {wo["fpr_parity_ratio"]:.2f}. L0 does not read x1 or x2. '
+                       "Variant IV's test months are the same applications as Variant III's, reordered, so its row repeats Variant III.</p>")
+    if sb and "exact" in sb:
+        e, x, bl = sb["engine"], sb["exact"], sb["bloom"]
+        out += ["<h2>Scaling the account state</h2>",
+                f"<p>Streaming all {e['payments']:,} payments in one Python process: the prototype's object state holds {e['state_mb']:,} MB; the compact "
+                f"layout (integer ids, typed arrays, counters instead of sets) holds {x['state_mb']:,} MB with identical features, and {bl['state_mb']:,} MB with a "
+                f"fixed size Bloom pair index. Throughput {e['payments_per_second']:,} vs {x['payments_per_second']:,} vs {bl['payments_per_second']:,} payments per second per core.</p>"]
+        ag = sb.get("agreement_bloom_vs_exact")
+        if ag:
+            out.append(f'<p class="foot">Bloom vs exact on the test weeks: {pct(ag["rows_with_any_feature_difference"], 3)} of payments see any feature '
+                       f'change; live decisions agree on {pct(ag["decision_agreement"], 3)}.</p>')
+    if so and "throughput" in so:
+        t = so["throughput"]; lat = so.get("latency", {})
+        out.append(f"<p>Redis state with stateless workers partitioned by payer: {t[0]['payments_per_second']:,} payments per second with one worker, "
+                   f"{t[-1]['payments_per_second']:,} with {t[-1]['workers']} on this {so['cores']} core machine (Redis and workers share the cores); "
+                   f"publish to decision latency p50 {lat.get('p50_ms')} ms, p99 {lat.get('p99_ms')} ms at {lat.get('target_rate_per_second'):,} per second. "
+                   f"Redis holds about {t[-1]['redis_bytes_per_account']:,} bytes per account.</p>")
+    out.append('<p class="foot">Code: <code>ml/full_dataset_eval.py</code>, <code>ml/tune_context.py</code>, <code>ml/baf_variant_eval.py</code>, '
+               '<code>ml/scale_bench.py</code>, <code>ml/scale_out_bench.py</code>, <code>service/compact_state.py</code>, <code>service/scale/</code>. All data synthetic.</p></section>')
+    return "\n".join(out)
+
+
 def build():
     html = open(TEMPLATE).read()
+    html = html.replace("<!--FULL_EVAL-->", full_eval_html())
     html = html.replace("__BENCHMARK_DATA__", json.dumps(benchmark_data(), separators=(",", ":")))
     html = html.replace("__FRESH_DATA__", json.dumps(fresh_data(), separators=(",", ":")))
     return html

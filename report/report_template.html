@@ -187,6 +187,8 @@ button.primary{background:var(--olive);border-color:var(--olive);color:var(--oli
   <p id="online"></p>
 </section>
 
+<!--FULL_EVAL-->
+
 <section>
   <div class="card fix">
     <h3>Live API vs offline benchmark</h3>
@@ -212,9 +214,9 @@ button.primary{background:var(--olive);border-color:var(--olive);color:var(--oli
   <div class="eyebrow">Limits</div>
   <ul class="plain">
     <li>Both datasets are synthetic (IBM's agent-based simulator, Feedzai's privacy-preserving generator). Real UPI/IMPS data will shift thresholds; the pipeline is built to be retrained, not to transfer as-is.</li>
-    <li>The lure and pressure stages of a scam (calls, chats) are not in either dataset. The cascade covers the money side: mule accounts at opening, then payment and drain.</li>
+    <li>The lure and pressure stages of a scam (calls, chats) are not in either dataset. The message model and context layer are built and tested on synthetic message templates; real reported messages are needed before trusting their rates.</li>
     <li>Ring recall varied between 82% and 89% across two retrains with different category encodings. Treat the range, not a point, as the result.</li>
-    <li>The engine keeps account state in memory. A deployment needs a persistent feature store (e.g. Redis) and a replay of history at start-up; without history, recall collapses.</li>
+    <li>The prototype engine keeps account state in memory. <code>service/scale/</code> moves it to Redis with stateless workers; a deployment still needs a replay of history at start-up, because without history recall collapses.</li>
   </ul>
   <p class="foot">Code: <code>ml/aml_features.py</code>, <code>ml/bench_tabular.py</code>, <code>ml/bench_deep.py</code>, <code>ml/bench_gnn.py</code>, <code>ml/bench_baf.py</code>, <code>ml/cascade.py</code>, <code>ml/l0_onboarding.py</code>, <code>service/rusetect_engine.py</code>, <code>ml/compare_models.py</code>. Hardware: 2 CPUs, 7 GB RAM.</p>
 </section>
