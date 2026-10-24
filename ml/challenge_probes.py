@@ -25,7 +25,7 @@ for p in P["probes"]:
     print(f"{p['id']} {p['label']:10s} {p['kind']:28s} ctx {r.context:2d} total {r.total:3d} {r.band:8s} {'ok ' if rows[-1]['correct'] else 'FAIL'} "
           f"kw={'Y' if r.keyword_baseline['flag'] else 'n'} model={rows[-1]['message_model']}")
 sc = [r for r in rows if r["label"] == "scam"]; lg = [r for r in rows if r["label"] == "legitimate"]
-summary = {"ruleset": RULESET_VERSION, "frozen_before_probes": True,
+summary = {"ruleset": RULESET_VERSION, "frozen_before_probes": RULESET_VERSION == "ctx-1.0", "note": "ctx-1.1 was designed after seeing these probes, so for ctx-1.1 they are development data",
            "scams_escalated": f"{sum(r['band'] in ('HIGH','CRITICAL') for r in sc)}/{len(sc)}",
            "legitimate_wrongly_escalated": f"{sum(r['band'] in ('HIGH','CRITICAL') for r in lg)}/{len(lg)}",
            "keyword_baseline_scams": f"{sum(r['keyword_baseline'] for r in sc)}/{len(sc)}",

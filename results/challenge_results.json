@@ -1,7 +1,8 @@
 {
  "summary": {
   "ruleset": "ctx-1.1",
-  "frozen_before_probes": true,
+  "frozen_before_probes": false,
+  "note": "ctx-1.1 was designed after seeing these probes, so for ctx-1.1 they are development data",
   "scams_escalated": "2/5",
   "legitimate_wrongly_escalated": "1/4",
   "keyword_baseline_scams": "0/5",
