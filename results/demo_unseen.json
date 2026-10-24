@@ -1,0 +1,186 @@
+{
+ "summary": {
+  "scams_needing_a_human_or_customer_check": "9/9",
+  "legit_needing_a_check": "0/5",
+  "note": "One fill per workflow from the synthetic corpus (seed 21). The served message model was trained on these templates, so this is a demo of the flow, not a measurement; see results/fusion_oof.json for out-of-fold numbers."
+ },
+ "rows": [
+  {
+   "workflow": "task_job",
+   "label": "scam",
+   "message": "Hi, I am Arjun from a recruitment team. Part time job: like YouTube videos and earn Rs 3,000 to Rs 8,000 daily from home. Reply YES on WhatsApp.",
+   "payment_decision": "Approve",
+   "context_band": "MEDIUM",
+   "context_points": 45,
+   "final": "Step-up verification",
+   "reasons": [
+    "message cue: intent model (high)",
+    "payment check: new_beneficiary"
+   ]
+  },
+  {
+   "workflow": "sextortion",
+   "label": "scam",
+   "message": "I have recorded your video call. Pay Rs 474,600 in 2 hours or I will upload the video and send it to your family and friends.",
+   "payment_decision": "Approve",
+   "context_band": "MEDIUM",
+   "context_points": 45,
+   "final": "Step-up verification",
+   "reasons": [
+    "message cue: intent model (high)",
+    "payment check: new_beneficiary"
+   ]
+  },
+  {
+   "workflow": "utility_disconnect",
+   "label": "scam",
+   "message": "Dear consumer your electricity power will be disconnected tonight at 9.30 pm because your previous month bill was not updated. Please contact electricity officer [PHONE].",
+   "payment_decision": "Approve",
+   "context_band": "MEDIUM",
+   "context_points": 45,
+   "final": "Step-up verification",
+   "reasons": [
+    "message cue: intent model (high)",
+    "payment check: new_beneficiary"
+   ]
+  },
+  {
+   "workflow": "parcel_customs",
+   "label": "scam",
+   "message": "Your FedEx parcel to Taiwan has been seized by customs. It contains 5 passports and 200g MDMA. Press 1 to connect to the Bengaluru narcotics officer.",
+   "payment_decision": "Approve",
+   "context_band": "MEDIUM",
+   "context_points": 45,
+   "final": "Step-up verification",
+   "reasons": [
+    "message cue: intent model (high)",
+    "payment check: new_beneficiary"
+   ]
+  },
+  {
+   "workflow": "fake_loan",
+   "label": "scam",
+   "message": "Congratulations! Pre-approved personal loan of Rs 295,700 sanctioned without CIBIL or documents. Pay processing fee Rs 149 to [UPI] to release.",
+   "payment_decision": "Approve",
+   "context_band": "MEDIUM",
+   "context_points": 45,
+   "final": "Step-up verification",
+   "reasons": [
+    "message cue: intent model (high)",
+    "payment check: new_beneficiary"
+   ]
+  },
+  {
+   "workflow": "lottery_prize",
+   "label": "scam",
+   "message": "Congratulations! Your number has won Rs 25 lakh in KBC lucky draw. To claim call Rana Pratap Singh on WhatsApp [PHONE] and pay GST.",
+   "payment_decision": "Approve",
+   "context_band": "MEDIUM",
+   "context_points": 45,
+   "final": "Step-up verification",
+   "reasons": [
+    "message cue: intent model (high)",
+    "payment check: new_beneficiary"
+   ]
+  },
+  {
+   "workflow": "govt_scheme",
+   "label": "scam",
+   "message": "PM Kisan: your installment of Rs 6,000 is pending. Update Aadhaar and bank details at [LINK] to receive.",
+   "payment_decision": "Approve",
+   "context_band": "MEDIUM",
+   "context_points": 45,
+   "final": "Step-up verification",
+   "reasons": [
+    "message cue: intent model (high)",
+    "payment check: new_beneficiary"
+   ]
+  },
+  {
+   "workflow": "reward_points",
+   "label": "scam",
+   "message": "Dear Axis Bank cardholder, your reward points worth Rs 11,710 expire today. Redeem now: [LINK]",
+   "payment_decision": "Approve",
+   "context_band": "MEDIUM",
+   "context_points": 45,
+   "final": "Step-up verification",
+   "reasons": [
+    "message cue: intent model (high)",
+    "payment check: new_beneficiary"
+   ]
+  },
+  {
+   "workflow": "family_emergency",
+   "label": "scam",
+   "message": "Papa I am in trouble, police caught me with a friend. Please send Rs 373,500 to this number urgently, don't tell mummy.",
+   "payment_decision": "Approve",
+   "context_band": "MEDIUM",
+   "context_points": 45,
+   "final": "Step-up verification",
+   "reasons": [
+    "message cue: intent model (high)",
+    "payment check: new_beneficiary"
+   ]
+  },
+  {
+   "workflow": "bank_notice",
+   "label": "legitimate",
+   "message": "Dear customer, a new device was used to log in to PNB mobile banking on 2-Oct at 6:45. If this was not you, call the number on the back of your card.",
+   "payment_decision": "Approve",
+   "context_band": "LOW",
+   "context_points": 15,
+   "final": "Approve",
+   "reasons": [
+    "payment check: new_beneficiary"
+   ]
+  },
+  {
+   "workflow": "otp",
+   "label": "legitimate",
+   "message": "Dear customer, OTP for your Kotak debit card PIN generation is [CODE]. It is valid for 10 minutes. Bank never asks for OTP.",
+   "payment_decision": "Approve",
+   "context_band": "LOW",
+   "context_points": 15,
+   "final": "Approve",
+   "reasons": [
+    "payment check: new_beneficiary"
+   ]
+  },
+  {
+   "workflow": "personal",
+   "label": "legitimate",
+   "message": "Yaar kal ki party ka hisaab: tera share Rs 602 hai, Paytm kar dena jab time mile.",
+   "payment_decision": "Approve",
+   "context_band": "LOW",
+   "context_points": 15,
+   "final": "Approve",
+   "reasons": [
+    "payment check: new_beneficiary"
+   ]
+  },
+  {
+   "workflow": "utility_bill",
+   "label": "legitimate",
+   "message": "Electricity bill payment of Rs 14,580 received for consumer no [ACCOUNT]. Thank you for paying on time.",
+   "payment_decision": "Approve",
+   "context_band": "LOW",
+   "context_points": 15,
+   "final": "Approve",
+   "reasons": [
+    "payment check: new_beneficiary"
+   ]
+  },
+  {
+   "workflow": "delivery",
+   "label": "legitimate",
+   "message": "Your Myntra order #402-[ACCOUNT] is out for delivery today. Track: [LINK]",
+   "payment_decision": "Approve",
+   "context_band": "LOW",
+   "context_points": 15,
+   "final": "Approve",
+   "reasons": [
+    "payment check: new_beneficiary"
+   ]
+  }
+ ]
+}
