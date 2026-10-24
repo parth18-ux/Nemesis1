@@ -1,0 +1,591 @@
+{
+ "summary": {
+  "ruleset": "ctx-1.0",
+  "payments": 24,
+  "engine_decisions": {
+   "Approve": 23,
+   "Step-up verification": 1
+  },
+  "engine_l1_score_range": [
+   0.00942,
+   0.20032
+  ],
+  "context_bands": {
+   "MEDIUM": 1,
+   "LOW": 23
+  },
+  "final_decisions": {
+   "Step-up verification": 2,
+   "Approve": 22
+  },
+  "raised_by_context": 1,
+  "caveat": "One fictional fixture with no prior account history; it shows a gap and the veto mechanics, not a recall measurement."
+ },
+ "rows": [
+  {
+   "who": "victim deposit",
+   "time": "2022-09-09 10:00",
+   "from": "V01",
+   "to": "MULE01",
+   "amount_inr": 9500,
+   "l1_score": 0.02158,
+   "layer_exit": "L1",
+   "engine_risk": 0.02158,
+   "engine_decision": "Approve",
+   "context_points": {
+    "context": 40,
+    "transaction": 15,
+    "graph": 0,
+    "total": 55
+   },
+   "context_band": "MEDIUM",
+   "context_reasons": [
+    "message cue: authority",
+    "message cue: pressure",
+    "message cue: redirection",
+    "payment check: new_beneficiary"
+   ],
+   "final_decision": "Step-up verification",
+   "raised_by_context": true
+  },
+  {
+   "who": "mule onward transfer",
+   "time": "2022-09-09 10:01",
+   "from": "MULE01",
+   "to": "COLL01",
+   "amount_inr": 9310.0,
+   "l1_score": 0.06656,
+   "layer_exit": "L2",
+   "engine_risk": 0.00651,
+   "engine_decision": "Approve",
+   "context_points": {
+    "context": 0,
+    "transaction": 15,
+    "graph": 15,
+    "total": 30
+   },
+   "context_band": "LOW",
+   "context_reasons": [
+    "payment check: new_beneficiary",
+    "account graph: rapid_pass_through"
+   ],
+   "final_decision": "Approve",
+   "raised_by_context": false
+  },
+  {
+   "who": "victim deposit",
+   "time": "2022-09-09 10:07",
+   "from": "V02",
+   "to": "MULE01",
+   "amount_inr": 12000,
+   "l1_score": 0.05236,
+   "layer_exit": "L1",
+   "engine_risk": 0.05236,
+   "engine_decision": "Approve",
+   "context_points": {
+    "context": 0,
+    "transaction": 15,
+    "graph": 0,
+    "total": 15
+   },
+   "context_band": "LOW",
+   "context_reasons": [
+    "payment check: new_beneficiary"
+   ],
+   "final_decision": "Approve",
+   "raised_by_context": false
+  },
+  {
+   "who": "mule onward transfer",
+   "time": "2022-09-09 10:08",
+   "from": "MULE01",
+   "to": "COLL01",
+   "amount_inr": 11760.0,
+   "l1_score": 0.01421,
+   "layer_exit": "L1",
+   "engine_risk": 0.01421,
+   "engine_decision": "Approve",
+   "context_points": {
+    "context": 0,
+    "transaction": 0,
+    "graph": 15,
+    "total": 15
+   },
+   "context_band": "LOW",
+   "context_reasons": [
+    "account graph: rapid_pass_through"
+   ],
+   "final_decision": "Approve",
+   "raised_by_context": false
+  },
+  {
+   "who": "victim deposit",
+   "time": "2022-09-09 10:14",
+   "from": "V03",
+   "to": "MULE01",
+   "amount_inr": 18000,
+   "l1_score": 0.07012,
+   "layer_exit": "L2",
+   "engine_risk": 0.01496,
+   "engine_decision": "Approve",
+   "context_points": {
+    "context": 0,
+    "transaction": 15,
+    "graph": 0,
+    "total": 15
+   },
+   "context_band": "LOW",
+   "context_reasons": [
+    "payment check: new_beneficiary"
+   ],
+   "final_decision": "Approve",
+   "raised_by_context": false
+  },
+  {
+   "who": "mule onward transfer",
+   "time": "2022-09-09 10:15",
+   "from": "MULE01",
+   "to": "COLL01",
+   "amount_inr": 17640.0,
+   "l1_score": 0.01935,
+   "layer_exit": "L1",
+   "engine_risk": 0.01935,
+   "engine_decision": "Approve",
+   "context_points": {
+    "context": 0,
+    "transaction": 0,
+    "graph": 15,
+    "total": 15
+   },
+   "context_band": "LOW",
+   "context_reasons": [
+    "account graph: rapid_pass_through"
+   ],
+   "final_decision": "Approve",
+   "raised_by_context": false
+  },
+  {
+   "who": "victim deposit",
+   "time": "2022-09-09 10:21",
+   "from": "V04",
+   "to": "MULE01",
+   "amount_inr": 14500,
+   "l1_score": 0.10857,
+   "layer_exit": "L2",
+   "engine_risk": 0.04395,
+   "engine_decision": "Approve",
+   "context_points": {
+    "context": 0,
+    "transaction": 15,
+    "graph": 15,
+    "total": 30
+   },
+   "context_band": "LOW",
+   "context_reasons": [
+    "payment check: new_beneficiary",
+    "account graph: fan_in_4plus"
+   ],
+   "final_decision": "Approve",
+   "raised_by_context": false
+  },
+  {
+   "who": "mule onward transfer",
+   "time": "2022-09-09 10:22",
+   "from": "MULE01",
+   "to": "COLL01",
+   "amount_inr": 14210.0,
+   "l1_score": 0.0131,
+   "layer_exit": "L1",
+   "engine_risk": 0.0131,
+   "engine_decision": "Approve",
+   "context_points": {
+    "context": 0,
+    "transaction": 0,
+    "graph": 15,
+    "total": 15
+   },
+   "context_band": "LOW",
+   "context_reasons": [
+    "account graph: rapid_pass_through"
+   ],
+   "final_decision": "Approve",
+   "raised_by_context": false
+  },
+  {
+   "who": "victim deposit",
+   "time": "2022-09-09 10:28",
+   "from": "V05",
+   "to": "MULE01",
+   "amount_inr": 9900,
+   "l1_score": 0.07924,
+   "layer_exit": "L2",
+   "engine_risk": 0.01819,
+   "engine_decision": "Approve",
+   "context_points": {
+    "context": 0,
+    "transaction": 15,
+    "graph": 15,
+    "total": 30
+   },
+   "context_band": "LOW",
+   "context_reasons": [
+    "payment check: new_beneficiary",
+    "account graph: fan_in_4plus"
+   ],
+   "final_decision": "Approve",
+   "raised_by_context": false
+  },
+  {
+   "who": "mule onward transfer",
+   "time": "2022-09-09 10:29",
+   "from": "MULE01",
+   "to": "COLL01",
+   "amount_inr": 9702.0,
+   "l1_score": 0.0105,
+   "layer_exit": "L1",
+   "engine_risk": 0.0105,
+   "engine_decision": "Approve",
+   "context_points": {
+    "context": 0,
+    "transaction": 0,
+    "graph": 15,
+    "total": 15
+   },
+   "context_band": "LOW",
+   "context_reasons": [
+    "account graph: rapid_pass_through"
+   ],
+   "final_decision": "Approve",
+   "raised_by_context": false
+  },
+  {
+   "who": "victim deposit",
+   "time": "2022-09-09 10:35",
+   "from": "V06",
+   "to": "MULE01",
+   "amount_inr": 16500,
+   "l1_score": 0.20032,
+   "layer_exit": "L2",
+   "engine_risk": 0.04049,
+   "engine_decision": "Approve",
+   "context_points": {
+    "context": 0,
+    "transaction": 15,
+    "graph": 15,
+    "total": 30
+   },
+   "context_band": "LOW",
+   "context_reasons": [
+    "payment check: new_beneficiary",
+    "account graph: fan_in_4plus"
+   ],
+   "final_decision": "Approve",
+   "raised_by_context": false
+  },
+  {
+   "who": "mule onward transfer",
+   "time": "2022-09-09 10:36",
+   "from": "MULE01",
+   "to": "COLL01",
+   "amount_inr": 16170.0,
+   "l1_score": 0.01281,
+   "layer_exit": "L1",
+   "engine_risk": 0.01281,
+   "engine_decision": "Approve",
+   "context_points": {
+    "context": 0,
+    "transaction": 0,
+    "graph": 15,
+    "total": 15
+   },
+   "context_band": "LOW",
+   "context_reasons": [
+    "account graph: rapid_pass_through"
+   ],
+   "final_decision": "Approve",
+   "raised_by_context": false
+  },
+  {
+   "who": "victim deposit",
+   "time": "2022-09-09 10:42",
+   "from": "V07",
+   "to": "MULE01",
+   "amount_inr": 11200,
+   "l1_score": 0.12774,
+   "layer_exit": "L2",
+   "engine_risk": 0.01036,
+   "engine_decision": "Approve",
+   "context_points": {
+    "context": 0,
+    "transaction": 15,
+    "graph": 15,
+    "total": 30
+   },
+   "context_band": "LOW",
+   "context_reasons": [
+    "payment check: new_beneficiary",
+    "account graph: fan_in_4plus"
+   ],
+   "final_decision": "Approve",
+   "raised_by_context": false
+  },
+  {
+   "who": "mule onward transfer",
+   "time": "2022-09-09 10:43",
+   "from": "MULE01",
+   "to": "COLL01",
+   "amount_inr": 10976.0,
+   "l1_score": 0.00942,
+   "layer_exit": "L1",
+   "engine_risk": 0.00942,
+   "engine_decision": "Approve",
+   "context_points": {
+    "context": 0,
+    "transaction": 0,
+    "graph": 15,
+    "total": 15
+   },
+   "context_band": "LOW",
+   "context_reasons": [
+    "account graph: rapid_pass_through"
+   ],
+   "final_decision": "Approve",
+   "raised_by_context": false
+  },
+  {
+   "who": "victim deposit",
+   "time": "2022-09-09 10:49",
+   "from": "V08",
+   "to": "MULE01",
+   "amount_inr": 17800,
+   "l1_score": 0.16656,
+   "layer_exit": "L2",
+   "engine_risk": 0.02394,
+   "engine_decision": "Approve",
+   "context_points": {
+    "context": 0,
+    "transaction": 15,
+    "graph": 15,
+    "total": 30
+   },
+   "context_band": "LOW",
+   "context_reasons": [
+    "payment check: new_beneficiary",
+    "account graph: fan_in_4plus"
+   ],
+   "final_decision": "Approve",
+   "raised_by_context": false
+  },
+  {
+   "who": "mule onward transfer",
+   "time": "2022-09-09 10:50",
+   "from": "MULE01",
+   "to": "COLL01",
+   "amount_inr": 17444.0,
+   "l1_score": 0.01281,
+   "layer_exit": "L1",
+   "engine_risk": 0.01281,
+   "engine_decision": "Approve",
+   "context_points": {
+    "context": 0,
+    "transaction": 0,
+    "graph": 15,
+    "total": 15
+   },
+   "context_band": "LOW",
+   "context_reasons": [
+    "account graph: rapid_pass_through"
+   ],
+   "final_decision": "Approve",
+   "raised_by_context": false
+  },
+  {
+   "who": "victim deposit",
+   "time": "2022-09-09 10:56",
+   "from": "V09",
+   "to": "MULE01",
+   "amount_inr": 10400,
+   "l1_score": 0.12774,
+   "layer_exit": "L2",
+   "engine_risk": 0.0213,
+   "engine_decision": "Approve",
+   "context_points": {
+    "context": 0,
+    "transaction": 15,
+    "graph": 15,
+    "total": 30
+   },
+   "context_band": "LOW",
+   "context_reasons": [
+    "payment check: new_beneficiary",
+    "account graph: fan_in_4plus"
+   ],
+   "final_decision": "Approve",
+   "raised_by_context": false
+  },
+  {
+   "who": "mule onward transfer",
+   "time": "2022-09-09 10:57",
+   "from": "MULE01",
+   "to": "COLL01",
+   "amount_inr": 10192.0,
+   "l1_score": 0.00942,
+   "layer_exit": "L1",
+   "engine_risk": 0.00942,
+   "engine_decision": "Approve",
+   "context_points": {
+    "context": 0,
+    "transaction": 0,
+    "graph": 15,
+    "total": 15
+   },
+   "context_band": "LOW",
+   "context_reasons": [
+    "account graph: rapid_pass_through"
+   ],
+   "final_decision": "Approve",
+   "raised_by_context": false
+  },
+  {
+   "who": "victim deposit",
+   "time": "2022-09-09 11:03",
+   "from": "V10",
+   "to": "MULE01",
+   "amount_inr": 15000,
+   "l1_score": 0.12774,
+   "layer_exit": "L2",
+   "engine_risk": 0.01672,
+   "engine_decision": "Approve",
+   "context_points": {
+    "context": 0,
+    "transaction": 15,
+    "graph": 15,
+    "total": 30
+   },
+   "context_band": "LOW",
+   "context_reasons": [
+    "payment check: new_beneficiary",
+    "account graph: fan_in_4plus"
+   ],
+   "final_decision": "Approve",
+   "raised_by_context": false
+  },
+  {
+   "who": "mule onward transfer",
+   "time": "2022-09-09 11:04",
+   "from": "MULE01",
+   "to": "COLL01",
+   "amount_inr": 14700.0,
+   "l1_score": 0.00942,
+   "layer_exit": "L1",
+   "engine_risk": 0.00942,
+   "engine_decision": "Approve",
+   "context_points": {
+    "context": 0,
+    "transaction": 0,
+    "graph": 15,
+    "total": 15
+   },
+   "context_band": "LOW",
+   "context_reasons": [
+    "account graph: rapid_pass_through"
+   ],
+   "final_decision": "Approve",
+   "raised_by_context": false
+  },
+  {
+   "who": "victim deposit",
+   "time": "2022-09-09 11:10",
+   "from": "V11",
+   "to": "MULE01",
+   "amount_inr": 13300,
+   "l1_score": 0.12774,
+   "layer_exit": "L2",
+   "engine_risk": 0.15375,
+   "engine_decision": "Step-up verification",
+   "context_points": {
+    "context": 0,
+    "transaction": 15,
+    "graph": 15,
+    "total": 30
+   },
+   "context_band": "LOW",
+   "context_reasons": [
+    "payment check: new_beneficiary",
+    "account graph: fan_in_4plus"
+   ],
+   "final_decision": "Step-up verification",
+   "raised_by_context": false
+  },
+  {
+   "who": "mule onward transfer",
+   "time": "2022-09-09 11:11",
+   "from": "MULE01",
+   "to": "COLL01",
+   "amount_inr": 13034.0,
+   "l1_score": 0.00942,
+   "layer_exit": "L1",
+   "engine_risk": 0.00942,
+   "engine_decision": "Approve",
+   "context_points": {
+    "context": 0,
+    "transaction": 0,
+    "graph": 15,
+    "total": 15
+   },
+   "context_band": "LOW",
+   "context_reasons": [
+    "account graph: rapid_pass_through"
+   ],
+   "final_decision": "Approve",
+   "raised_by_context": false
+  },
+  {
+   "who": "victim deposit",
+   "time": "2022-09-09 11:17",
+   "from": "V12",
+   "to": "MULE01",
+   "amount_inr": 19500,
+   "l1_score": 0.16656,
+   "layer_exit": "L2",
+   "engine_risk": 0.01699,
+   "engine_decision": "Approve",
+   "context_points": {
+    "context": 0,
+    "transaction": 15,
+    "graph": 15,
+    "total": 30
+   },
+   "context_band": "LOW",
+   "context_reasons": [
+    "payment check: new_beneficiary",
+    "account graph: fan_in_4plus"
+   ],
+   "final_decision": "Approve",
+   "raised_by_context": false
+  },
+  {
+   "who": "mule onward transfer",
+   "time": "2022-09-09 11:18",
+   "from": "MULE01",
+   "to": "COLL01",
+   "amount_inr": 19110.0,
+   "l1_score": 0.01281,
+   "layer_exit": "L1",
+   "engine_risk": 0.01281,
+   "engine_decision": "Approve",
+   "context_points": {
+    "context": 0,
+    "transaction": 0,
+    "graph": 15,
+    "total": 15
+   },
+   "context_band": "LOW",
+   "context_reasons": [
+    "account graph: rapid_pass_through"
+   ],
+   "final_decision": "Approve",
+   "raised_by_context": false
+  }
+ ]
+}
