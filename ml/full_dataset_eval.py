@@ -159,7 +159,8 @@ for acc_path in [os.path.join(DATA, "archive (6) 8 gb", f"{SET}-Small_accounts.c
     if os.path.exists(acc_path):
         a = pd.read_csv(acc_path, dtype=str)
         ent.update({(str(int(b)) if b.isdigit() else b, n): e for b, n, e in zip(a["Bank ID"], a["Account Number"], a["Entity ID"])})
-        break
+        if "archive" in acc_path:
+            break                                    # the archive file is complete; otherwise read every part
 norm = lambda acct: (str(int(acct[0])) if acct[0].isdigit() else acct[0], acct[1])
 
 def cases(mask, by_entity=False):
