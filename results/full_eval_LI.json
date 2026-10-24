@@ -1,0 +1,160 @@
+{
+ "dataset": "IBM AMLworld LI-Small sample: first 500,000 payments, never used for training",
+ "payments_total": 500000,
+ "laundering_total": 30,
+ "scored_from_row": 200000,
+ "scored_payments": 300000,
+ "scored_laundering": 22,
+ "protocol": "time ordered; first 40% builds account state; metrics on the last 60%; models trained on HI-Small only",
+ "ruleset": "ctx-1.2",
+ "live_model_pr_auc": 0.0015,
+ "live_model_roc_auc": 0.9687,
+ "l2_average_pr_auc_all_rows": 0.0014,
+ "l1_pass_rate": 0.0654,
+ "l1_laundering_kept": 1.0,
+ "levels": {
+  "payment_model": {
+   "verify_or_more": {
+    "flagged": 2072,
+    "flag_rate": 0.00691,
+    "laundering_caught": 3,
+    "laundering": 22,
+    "recall": 0.1364,
+    "precision": 0.0014
+   },
+   "hold_or_more": {
+    "flagged": 443,
+    "flag_rate": 0.00148,
+    "laundering_caught": 1,
+    "laundering": 22,
+    "recall": 0.0455,
+    "precision": 0.0023
+   },
+   "block": {
+    "flagged": 28,
+    "flag_rate": 9e-05,
+    "laundering_caught": 0,
+    "laundering": 22,
+    "recall": 0.0,
+    "precision": 0.0
+   }
+  },
+  "context_layer_alone": {
+   "verify_or_more": {
+    "flagged": 2774,
+    "flag_rate": 0.00925,
+    "laundering_caught": 7,
+    "laundering": 22,
+    "recall": 0.3182,
+    "precision": 0.0025
+   },
+   "hold_or_more": {
+    "flagged": 16,
+    "flag_rate": 5e-05,
+    "laundering_caught": 0,
+    "laundering": 22,
+    "recall": 0.0,
+    "precision": 0.0
+   }
+  },
+  "combined_final": {
+   "verify_or_more": {
+    "flagged": 4647,
+    "flag_rate": 0.01549,
+    "laundering_caught": 9,
+    "laundering": 22,
+    "recall": 0.4091,
+    "precision": 0.0019
+   },
+   "hold_or_more": {
+    "flagged": 459,
+    "flag_rate": 0.00153,
+    "laundering_caught": 1,
+    "laundering": 22,
+    "recall": 0.0455,
+    "precision": 0.0022
+   }
+  }
+ },
+ "raised_by_context": {
+  "flagged": 2575,
+  "flag_rate": 0.00858,
+  "laundering_caught": 6,
+  "laundering": 22,
+  "recall": 0.2727,
+  "precision": 0.0023
+ },
+ "mule_signature": {
+  "flagged": 2112,
+  "flag_rate": 0.00704,
+  "laundering_caught": 6,
+  "laundering": 22,
+  "recall": 0.2727,
+  "precision": 0.0028
+ },
+ "context_band_counts": {
+  "LOW": 297226,
+  "MEDIUM": 2758,
+  "HIGH": 16
+ },
+ "rings": {
+  "payment_model": {
+   "verify_or_more": {
+    "rings_in_scored_period": 0,
+    "rings_caught": 0,
+    "rate": null,
+    "by_typology": {}
+   },
+   "hold_or_more": {
+    "rings_in_scored_period": 0,
+    "rings_caught": 0,
+    "rate": null,
+    "by_typology": {}
+   },
+   "block": {
+    "rings_in_scored_period": 0,
+    "rings_caught": 0,
+    "rate": null,
+    "by_typology": {}
+   }
+  },
+  "context_layer_alone": {
+   "verify_or_more": {
+    "rings_in_scored_period": 0,
+    "rings_caught": 0,
+    "rate": null,
+    "by_typology": {}
+   },
+   "hold_or_more": {
+    "rings_in_scored_period": 0,
+    "rings_caught": 0,
+    "rate": null,
+    "by_typology": {}
+   }
+  },
+  "combined_final": {
+   "verify_or_more": {
+    "rings_in_scored_period": 0,
+    "rings_caught": 0,
+    "rate": null,
+    "by_typology": {}
+   },
+   "hold_or_more": {
+    "rings_in_scored_period": 0,
+    "rings_caught": 0,
+    "rate": null,
+    "by_typology": {}
+   }
+  }
+ },
+ "ring_payments_matched": 0,
+ "l4_cases_from_blocks": 28,
+ "l4_cases_from_holds": 343,
+ "runtime_seconds": 236.1,
+ "caveats": [
+  "IBM AMLworld is synthetic.",
+  "No messages exist in IBM data, so the context layer runs on payment and graph checks only and single domain results cap at MEDIUM by design.",
+  "Context and graph checks were designed after looking at the bundled sample, not at this full file.",
+  "LI-Small: only the first 500,000 payments were uploaded, so account history is short and only rings fully inside that window can be matched."
+ ]
+}
