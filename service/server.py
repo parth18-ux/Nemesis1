@@ -174,7 +174,7 @@ class EventIn(BaseModel):
 
 
 class SessionIn(BaseModel):
-    """Signals from the bank app at payment time (the session and person levels). All optional."""
+    """Signals from the bank app at payment time (session and person levels). All optional."""
     session_id: Optional[str] = None
     on_call: bool = False
     call_minutes: float = 0
