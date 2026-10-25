@@ -132,8 +132,45 @@ def full_eval_html():
                    f"{t[-1]['payments_per_second']:,} with {t[-1]['workers']} on this {so['cores']} core machine (Redis and workers share the cores); "
                    f"publish to decision latency p50 {lat.get('p50_ms')} ms, p99 {lat.get('p99_ms')} ms at {lat.get('target_rate_per_second'):,} per second. "
                    f"Redis holds about {t[-1]['redis_bytes_per_account']:,} bytes per account.</p>")
+    rx, rl, bb, ss = _load("retrain_extended.json"), _load("retrain_l0_variants.json"), _load("balabit_eval.json"), _load("scenario_suite.json")
+    if rx:
+        C = rx["candidates"]
+        def cell(n, s_, k):
+            t = C[n][s_]["test"]
+            return t["pr_auc"] if k == "pr" else t[f"caught_at_{k}_volume"]["caught"]
+        body = "".join(f"<tr><td>{lab}</td><td>{C[n]['HI']['validation']['pr_auc']:.3f} / {C[n]['LI']['validation']['pr_auc']:.3f}</td>"
+                       f"<td>{cell(n, 'HI', 'pr'):.3f}</td><td>{cell(n, 'LI', 'pr'):.3f}</td><td>{cell(n, 'HI', 'verify')} / {cell(n, 'LI', 'verify')}</td>"
+                       f"<td>{cell(n, 'HI', 'hold')} / {cell(n, 'LI', 'hold')}</td></tr>"
+                       for n, lab in (("current", "Previous live models (HI-Small only)"), ("retrain_HI", "Retrained on HI-Small (control)"),
+                                      ("retrain_HI_LI", "Retrained on HI-Small + LI-Small" + (" (now live)" if rx.get("adopt") else ""))))
+        out += ["<h2>Training on the data that was left unused</h2>",
+                "<p>LI-Small (6.9 million payments) was added to the payment models' training weeks. Features come from the serving code itself, "
+                "so training and the live API see identical numbers. The swap rule was fixed before reading test numbers: validation PR-AUC on HI-Small "
+                "no more than 0.005 lower, and at least 0.01 higher on LI-Small. Caught counts compare models at the same alert volume as the previous live models.</p>",
+                '<div class="tbl"><table><thead><tr><th>Model</th><th>Validation PR-AUC HI / LI</th><th>Test PR-AUC HI</th><th>Test PR-AUC LI</th>'
+                f"<th>Caught at verify volume HI / LI</th><th>Caught at hold volume HI / LI</th></tr></thead><tbody>{body}</tbody></table></div>",
+                '<p class="foot">Adding LI-Small beats the fair control (a retrain on HI-Small alone) on test PR-AUC for both datasets, and catches more at the verify level on both. '
+                'Against the previous live models it trades a small loss on HI-Small at the hold level for gains on LI-Small.</p>']
+    if rl:
+        M, T = rl["mean_validation_auc"], rl["mean_test_auc"]
+        out.append(f'<p>Account opening gate with the five BAF variants added to training: mean ROC-AUC over the six populations '
+                   f'{T.get("current", 0):.3f} (previous) vs {T.get("retrain_variants", 0):.3f} (with variants) on months 6 to 7; '
+                   f'{"adopted" if rl.get("adopt") else "not adopted, the previous model stays live"} under a rule fixed in advance on month 5 '
+                   f'(validation {M.get("current", 0):.3f} vs {M.get("retrain_variants", 0):.3f}).</p>')
+    if bb or ss:
+        out.append("<h2>Person and session signals</h2>")
+    if bb:
+        k = bb["summary"]
+        out.append(f'<p>Mouse dynamics on the real Balabit data (10 users, labelled impostor sessions): median user ROC-AUC '
+                   f'{k["first_10_actions"]["median_user_auc"]:.2f} after 10 mouse actions and {k["first_50_actions"]["median_user_auc"]:.2f} after 50.</p>')
+    if ss:
+        su = ss["summary"]
+        out.append(f'<p>Authored scenario suite through the live API: {su["scam_payments_stopped"]} scam payments stopped before money moved, '
+                   f'{su["genuine_false_alarms"]} genuine payments with a false alarm, {su["genuine_wrongly_held"]} wrongly held. These scenarios test mechanics, not real world rates.</p>')
     out.append('<p class="foot">Code: <code>ml/full_dataset_eval.py</code>, <code>ml/tune_context.py</code>, <code>ml/baf_variant_eval.py</code>, '
-               '<code>ml/scale_bench.py</code>, <code>ml/scale_out_bench.py</code>, <code>service/compact_state.py</code>, <code>service/scale/</code>. All data synthetic.</p></section>')
+               '<code>ml/scale_bench.py</code>, <code>ml/scale_out_bench.py</code>, <code>ml/retrain_extended.py</code>, <code>ml/retrain_l0_variants.py</code>, '
+               '<code>ml/balabit_eval.py</code>, <code>ml/scenario_suite.py</code>, <code>service/compact_state.py</code>, <code>service/scale/</code>. '
+               'IBM and BAF data are synthetic; Balabit is real mouse data.</p></section>')
     return "\n".join(out)
 
 

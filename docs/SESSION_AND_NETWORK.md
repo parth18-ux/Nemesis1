@@ -39,7 +39,48 @@ two different demo analysts and the payee is published to the cross bank ledger.
 
 ## 3. Measured
 
-__SESSION_RESULTS__
+### Mouse dynamics on real data (Balabit, 10 users, labelled impostor sessions)
+
+| Mouse actions seen | Median user ROC-AUC | Mean user ROC-AUC | Median equal error rate |
+|---|---|---|---|
+| 1 | 0.742 | 0.793 | 0.346 |
+| 5 | 0.875 | 0.886 | 0.224 |
+| 10 | 0.893 | 0.909 | 0.180 |
+| 20 | 0.915 | 0.923 | 0.133 |
+| 50 | 0.941 | 0.946 | 0.096 |
+
+A bank app sees dozens of mouse or touch actions before a payment is confirmed, so the useful range is 10 to 50
+actions. One user is perfectly separable from a single action (probably a different screen setup), which is why the
+median is the headline. `results/balabit_eval.json`.
+
+### Scenario replay suite (authored, through the real API, 40 randomised runs each)
+
+* Scam payments stopped before money moved (pause screen, analyst hold, withheld OTP or duress hold): **280 of 280**
+  (digital arrest, KYC lure with remote access, investment scam, account takeover chain, typing impostor on a new
+  device, SIM swap takeover, duress PIN).
+* Genuine payments with a false alarm: **1 of 200**; wrongly held for an analyst: **0 of 200**
+  (known payee, older and slower customer, new payee for rent, a small payment during a family call, a first time user).
+* Fairness: false alarm rate for the older, slower customer 0% vs 0% for others
+  (hesitation alone adds only 5 points by design).
+* Time to decision (API timer, median): 10.2 ms for a digital arrest payment with message and session, 3.5 ms for an ordinary payment.
+* Mule ring fixture (victims with short history): 9 of 24 payments do not go straight through.
+
+These scenarios were written to exercise each signal; the takeover and impostor rules were set as explicit policy
+after the first run showed a full takeover chain only reached verification. They are not real world rates.
+`results/scenario_suite.json`.
+
+### Flagged sender network rule (the "paid by 5+ flagged senders"), on the full IBM files
+
+Inside the real fusion on the test weeks, the least noisy setting (7 days, senders held for an analyst, 3 of them)
+adds 693 flags to catch 1 more laundering payment on HI-Small and
+726 flags for 1 on LI-Small. Looser settings add thousands of flags for a dozen catches. So the local
+count is off by default; the cross bank version stays on, because it only fires for payees that two analysts already
+approved as mules. `results/coordination_eval.json`.
+
+### Retraining with the unused data
+
+See `docs/RETRAINING.md`: the payment models now also learn from LI-Small, and the account opening gate was retrained with the BAF variants.
+
 
 ## 4. Datasets
 

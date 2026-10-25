@@ -48,7 +48,13 @@ def lite_matrix(df):
 
 
 cur = LiteBooster(os.path.join(MODELS, "l0_onboarding_lgbm.json"))
-predict = {"current": lambda df: lite_fast.predict(cur, lite_matrix(df))}
+# native LightGBM from the same training run is far faster in bulk; check it matches the served LiteBooster first
+cur_native = lgb.Booster(model_file=os.path.join(EXPORT, "l0_onboarding_lgbm.txt"))
+_chk = data["Base"].sample(2000, random_state=0)
+_diff = float(np.abs(cur_native.predict(_chk[FEATS]) - lite_fast.predict(cur, lite_matrix(_chk))).max())
+assert _diff < 1e-6, f"native and served L0 disagree by {_diff}"
+log("native L0 matches the served model, max difference", _diff)
+predict = {"current": lambda df: cur_native.predict(df[FEATS])}
 
 
 def fit(frames, tag):
