@@ -24,7 +24,7 @@ from paths import WORK, MODELS, EXPORT  # noqa: E402
 from lgbm_lite import LiteBooster  # noqa: E402
 import lite_fast  # noqa: E402
 
-DATA = os.environ.get("RUSETECT_DATA") or os.path.dirname(next(iter(sorted(glob.glob("/mnt/user-data/uploads/*/for_claude"))), "data/for_claude"))
+DATA = os.environ.get("RUSETECT_DATA") or "data"   # folder with the dataset files (see README)
 T0 = time.time()
 log = lambda *a: print(f"[{time.time() - T0:6.0f}s]", *a, flush=True)
 cfg = json.load(open(os.path.join(MODELS, "l0_config.json")))
@@ -33,7 +33,7 @@ POPS = ["Base", "Variant_I", "Variant_II", "Variant_III", "Variant_IV", "Variant
 
 
 def load(name):
-    df = pd.concat([pd.read_csv(p) for p in sorted(glob.glob(os.path.join(DATA, "for_claude", f"baf_{name}_part*.csv.gz")))], ignore_index=True)
+    df = pd.concat([pd.read_csv(p) for p in sorted(glob.glob(os.path.join(DATA, f"baf_{name}_part*.csv.gz")))], ignore_index=True)
     for c in CAT:
         df[c] = pd.Categorical(df[c], categories=CATS[c])          # the serving model's category order
     return df[FEATS + ["fraud_bool", "month"]]

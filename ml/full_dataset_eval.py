@@ -19,13 +19,13 @@ sys.path.insert(0, os.path.join(ROOT, "service"))
 from rusetect_engine import Engine                                   # noqa: E402
 from context_rules import assess, combine, from_engine_features, sender_fan_in_24h, PAYMENT_RANK, CONTEXT_TO_RANK, RULESET_VERSION  # noqa: E402
 
-DATA = os.environ.get("RUSETECT_DATA") or os.path.dirname(next(iter(sorted(glob.glob("/mnt/user-data/uploads/*/for_claude"))), "data/for_claude"))   # folder holding for_claude/ and the archive
+DATA = os.environ.get("RUSETECT_DATA") or "data"   # folder with the dataset files (see README)
 SET = (sys.argv[1] if len(sys.argv) > 1 else "HI").upper()
 T0 = time.time()
 log = lambda *a: print(f"[{time.time() - T0:7.1f}s]", *a, flush=True)
 
 # ------------------------------------------------------------------ load and sort by time (the files are not time ordered)
-parts = sorted(glob.glob(os.path.join(DATA, "for_claude", f"aml_{SET}-Small_part*.csv.gz")))
+parts = sorted(glob.glob(os.path.join(DATA, f"aml_{SET}-Small_part*.csv.gz")))
 cols = ["ts", "fb", "fa", "tb", "ta", "amt_recv", "cur_recv", "amt_paid", "cur_paid", "fmt", "y"]
 dt = {"ts": "string", "fb": "category", "fa": "category", "tb": "category", "ta": "category", "amt_recv": "string", "cur_recv": "category",
       "amt_paid": "string", "cur_paid": "category", "fmt": "category", "y": "int8"}
@@ -41,7 +41,7 @@ log(f"{SET}: {N:,} payments from {len(parts)} files, {int(df.y.sum()):,} launder
 
 # ------------------------------------------------------------------ ground truth rings
 rings, key2ring = [], {}
-with open(os.path.join(DATA, "archive (6) 8 gb", f"{SET}-Small_Patterns.txt")) as fh:
+with open(os.path.join(DATA, f"{SET}-Small_Patterns.txt")) as fh:
     cur = None
     for line in fh:
         line = line.strip()
@@ -155,7 +155,7 @@ def ring_cov(mask):
 
 # account -> owning entity (accounts file), used to merge cases that share an owner
 ent = {}
-for acc_path in [os.path.join(DATA, "archive (6) 8 gb", f"{SET}-Small_accounts.csv")] + sorted(glob.glob(os.path.join(DATA, "for_claude", f"aml_{SET}-Small_accounts_part*.csv.gz"))):
+for acc_path in [os.path.join(DATA, f"{SET}-Small_accounts.csv")] + sorted(glob.glob(os.path.join(DATA, f"aml_{SET}-Small_accounts_part*.csv.gz"))):
     if os.path.exists(acc_path):
         a = pd.read_csv(acc_path, dtype=str)
         ent.update({(str(int(b)) if b.isdigit() else b, n): e for b, n, e in zip(a["Bank ID"], a["Account Number"], a["Entity ID"])})

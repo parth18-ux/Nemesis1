@@ -17,13 +17,13 @@ sys.path.insert(0, os.path.join(ROOT, "service"))
 from lgbm_lite import LiteBooster  # noqa: E402
 sys.path.insert(0, os.path.join(ROOT, "ml")); import lite_fast  # noqa: E402
 
-DATA = os.environ.get("RUSETECT_DATA") or os.path.dirname(next(iter(sorted(glob.glob("/mnt/user-data/uploads/*/for_claude"))), "data/for_claude"))   # folder holding for_claude/ and the archive
+DATA = os.environ.get("RUSETECT_DATA") or "data"   # folder with the dataset files (see README)
 cfg = json.load(open(os.path.join(ROOT, "service", "models", "l0_config.json")))
 L0 = LiteBooster(os.path.join(ROOT, "service", "models", "l0_onboarding_lgbm.json"))
 T0 = time.time()
 
 def load(name):
-    return pd.concat([pd.read_csv(p) for p in sorted(glob.glob(os.path.join(DATA, "for_claude", f"baf_{name}_part*.csv.gz")))], ignore_index=True)
+    return pd.concat([pd.read_csv(p) for p in sorted(glob.glob(os.path.join(DATA, f"baf_{name}_part*.csv.gz")))], ignore_index=True)
 
 def matrix(df):
     cols = []
@@ -56,7 +56,7 @@ del base
 # Feedzai's variants shift the population's bias (group prevalence, group size, separability); III and V also add leaked
 # features x1 and x2. None was used for training. Months 6 to 7 match the Base test protocol.
 for name in ("Variant_I", "Variant_II", "Variant_III", "Variant_IV", "Variant_V"):
-    if not glob.glob(os.path.join(DATA, "for_claude", f"baf_{name}_part*.csv.gz")):
+    if not glob.glob(os.path.join(DATA, f"baf_{name}_part*.csv.gz")):
         continue
     v = load(name); key = name.replace("_", " ")
     out["variants"][key] = {"months_6_7": evaluate(v[v.month >= 6], f"{key}, months 6 to 7"), "all_months": evaluate(v, f"{key}, all months")}

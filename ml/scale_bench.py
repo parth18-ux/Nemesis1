@@ -11,7 +11,7 @@ import glob, json, os, subprocess, sys, time
 import numpy as np
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATA = os.environ.get("RUSETECT_DATA") or os.path.dirname(next(iter(sorted(glob.glob("/mnt/user-data/uploads/*/for_claude"))), "data/for_claude"))   # folder holding for_claude/ and the archive
+DATA = os.environ.get("RUSETECT_DATA") or "data"   # folder with the dataset files (see README)
 TMP = os.environ.get("RUSETECT_DUMP", "/tmp")
 
 
@@ -26,7 +26,7 @@ def one(kind):
     sys.path.insert(0, os.path.join(ROOT, "service"))
     from rusetect_engine import Engine
     from compact_state import CompactState
-    parts = sorted(glob.glob(os.path.join(DATA, "for_claude", "aml_HI-Small_part*.csv.gz")))
+    parts = sorted(glob.glob(os.path.join(DATA, "aml_HI-Small_part*.csv.gz")))
     cols = ["ts", "fb", "fa", "tb", "ta", "amt_recv", "cur_recv", "amt_paid", "cur_paid", "fmt", "y"]
     df = pd.concat([pd.read_csv(p, header=0, names=cols, dtype=str, usecols=[0, 1, 2, 3, 4, 6, 7, 8, 9]) for p in parts], ignore_index=True)
     df["tmin"] = pd.to_datetime(df["ts"], format="%Y/%m/%d %H:%M").astype("datetime64[s]").astype("int64") // 60   # minutes; explicit unit (pandas 3 parses to microseconds)

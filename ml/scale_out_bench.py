@@ -13,10 +13,10 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "service"))
 import redis  # noqa: E402
 from scale.producer import publish, partition_of  # noqa: E402
-DATA = os.environ.get("RUSETECT_DATA") or os.path.dirname(next(iter(sorted(glob.glob("/mnt/user-data/uploads/*/for_claude"))), "data/for_claude"))   # folder holding for_claude/ and the archive
+DATA = os.environ.get("RUSETECT_DATA") or "data"   # folder with the dataset files (see README)
 N = int(sys.argv[1]) if len(sys.argv) > 1 else 200_000
 
-parts = sorted(glob.glob(os.path.join(DATA, "for_claude", "aml_HI-Small_part*.csv.gz")))
+parts = sorted(glob.glob(os.path.join(DATA, "aml_HI-Small_part*.csv.gz")))
 cols = ["ts", "fb", "fa", "tb", "ta", "amt_recv", "cur_recv", "amt_paid", "cur_paid", "fmt", "y"]
 df = pd.concat([pd.read_csv(p, header=0, names=cols, dtype=str) for p in parts], ignore_index=True)
 df["tmin"] = pd.to_datetime(df["ts"], format="%Y/%m/%d %H:%M").astype("datetime64[s]").astype("int64") // 60   # minutes; explicit unit (pandas 3 parses to microseconds)

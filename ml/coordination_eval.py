@@ -13,11 +13,11 @@ import numpy as np, pandas as pd
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DUMP = os.environ.get("RUSETECT_DUMP", "/tmp")
-DATA = os.environ.get("RUSETECT_DATA") or os.path.dirname(next(iter(sorted(glob.glob("/mnt/user-data/uploads/*/for_claude"))), "data/for_claude"))
+DATA = os.environ.get("RUSETECT_DATA") or "data"   # folder with the dataset files (see README)
 
 
 def minutes(SET, collect_from):
-    parts = sorted(glob.glob(os.path.join(DATA, "for_claude", f"aml_{SET}-Small_part*.csv.gz")))
+    parts = sorted(glob.glob(os.path.join(DATA, f"aml_{SET}-Small_part*.csv.gz")))
     ts = pd.concat([pd.read_csv(p, header=0, usecols=[0], names=["ts"], dtype=str) for p in parts], ignore_index=True)["ts"]
     t = pd.to_datetime(ts, format="%Y/%m/%d %H:%M").astype("datetime64[s]").astype("int64").to_numpy() // 60
     return np.sort(t, kind="stable")[collect_from:]          # same stable order as full_dataset_eval

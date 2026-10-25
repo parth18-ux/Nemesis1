@@ -19,10 +19,10 @@ from paths import WORK  # noqa: E402
 from rusetect_engine import Engine  # noqa: E402
 from compact_state import CompactState  # noqa: E402
 
-DATA = os.environ.get("RUSETECT_DATA") or os.path.dirname(next(iter(sorted(glob.glob("/mnt/user-data/uploads/*/for_claude"))), "data/for_claude"))
+DATA = os.environ.get("RUSETECT_DATA") or "data"   # folder with the dataset files (see README)
 SET = (sys.argv[1] if len(sys.argv) > 1 else "HI").upper()
 T0 = time.time()
-parts = sorted(glob.glob(os.path.join(DATA, "for_claude", f"aml_{SET}-Small_part*.csv.gz")))
+parts = sorted(glob.glob(os.path.join(DATA, f"aml_{SET}-Small_part*.csv.gz")))
 cols = ["ts", "fb", "fa", "tb", "ta", "amt_recv", "cur_recv", "amt_paid", "cur_paid", "fmt", "y"]
 df = pd.concat([pd.read_csv(p, header=0, names=cols, dtype=str, usecols=[0, 1, 2, 3, 4, 6, 7, 8, 9, 10]) for p in parts], ignore_index=True)
 df["tmin"] = pd.to_datetime(df["ts"], format="%Y/%m/%d %H:%M").astype("datetime64[s]").astype("int64") // 60   # explicit unit
