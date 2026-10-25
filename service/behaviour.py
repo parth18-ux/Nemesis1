@@ -45,7 +45,8 @@ def _load_verifier():
     path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "models", "typing_verifier.json")
     if not os.path.exists(path):
         return None
-    m = json.load(open(path))
+    with open(path) as f:
+        m = json.load(f)
     if m.get("features") != VERIFIER_FEATURES:
         return None
     if m["kind"] == "lightgbm":

@@ -85,6 +85,17 @@ curl -X POST localhost:8001/api/v2/message -H 'Content-Type: application/json' -
 The full assessment with session signals is `POST /api/v2/assess`. Other routes include `POST /api/v2/onboard`,
 `GET /api/v2/cases`, `GET /api/v2/campaigns`, `GET /api/v2/model-card` and `GET /api/health`.
 
+To run the tests:
+
+```bash
+pip install -r requirements-dev.txt
+pytest tests/
+```
+
+The Redis scale test starts its own Redis, so it needs the `redis-server` program on your PATH (Linux:
+`apt install redis-server`, macOS: `brew install redis`, Windows: run the tests in WSL). Without it, that test file is
+skipped.
+
 For the console to use full account history, point `RUSETECT_HISTORY_GLOB` at the IBM HI-Small CSV files (about 85
 seconds to load 4.06M payments); otherwise it uses a bundled sample of 100,000 payments.
 
@@ -127,6 +138,7 @@ The benchmark report has a single source, `report/report_template.html`; the tes
 ## Deployment
 
 `index.py` exposes the FastAPI app and `requirements.txt` lists runtime dependencies only, which is all Vercel needs.
+Deploy from a Git integration or from the project folder with the Vercel CLI: `npx vercel deploy --prod`.
 Serverless instances do not share memory, so demo state such as the console replay can reset between requests. For a
 bank deployment, `service/scale` keeps account state in Redis and spreads payments over workers by payer, and
 `deploy/` has a Dockerfile and a compose file; see [scaling](docs/SCALING.md).

@@ -1,0 +1,7 @@
+# Everything the test suite needs: pip install -r requirements-dev.txt && pytest tests/
+# tests/test_scale.py also needs the redis-server program on PATH (it starts its own Redis); without it that file is skipped.
+-r requirements.txt
+pytest>=8.0
+httpx>=0.27
+lightgbm>=4.0
+redis>=5.0
