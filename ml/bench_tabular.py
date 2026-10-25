@@ -1,5 +1,5 @@
 """
-RuseTect — benchmark of boosting + classical ML models on IBM AMLworld HI-Small.
+RuseTect: benchmark of boosting + classical ML models on IBM AMLworld HI-Small.
 Same training rows for every model, threshold chosen on validation, metrics on held-out test.
 """
 import os, sys

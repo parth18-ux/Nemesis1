@@ -3,17 +3,17 @@
 Why each RuseTect layer uses the model it does, what it was compared against, and what is still unmeasured.
 All payment numbers are on the IBM AMLworld HI-Small **test period** (1,015,669 payments, 1,797 laundering, 0.18%),
 with features computed only from earlier payments and thresholds picked on the validation period. All message
-numbers are out-of-fold scores on templates the model never saw. Every dataset involved is synthetic or
+numbers are out of fold scores on templates the model never saw. Every dataset involved is synthetic or
 non-Indian (see [datasets.md](datasets.md)), so treat the thresholds as starting points.
 
 ## What runs live
 
 | Layer | Live model | Why this one |
 |---|---|---|
-| L-1 Lure detector | Logistic regression on hashed TF-IDF (word 1–2 grams + char 3–5 grams), Indian rows weighted ×4, plus a 6-rule "never legitimate" floor | Best average precision on Indian messages among the models tried; weights are a flat vector, so it serves in pure Python/NumPy and every score can be traced to phrases |
-| L0 Onboarding gate | LightGBM, separate thresholds for age 50+ and under 50 | Highest recall at 5% FPR of 8 models on Feedzai BAF; per-group thresholds bring the age FPR ratio from 0.31 to 0.88 |
+| L-1 Lure detector | Logistic regression on hashed TF-IDF (word 1 and 2 grams plus character 3 to 5 grams), Indian rows weighted ×4, plus a 6-rule "never legitimate" floor | Best average precision on Indian messages among the models tried; weights are a flat vector, so it serves in pure Python/NumPy and every score can be traced to phrases |
+| L0 Onboarding gate | LightGBM, separate thresholds for age 50+ and under 50 | Highest recall at 5% FPR of 8 models on Feedzai BAF; per group thresholds bring the age FPR ratio from 0.31 to 0.88 |
 | L1 Gatekeeper | 30-tree XGBoost | Cheap (0.3 ms); approves ~80% of payments while passing on 99.2% of laundering |
-| L2 Graph-boost | Mean of XGBoost and LightGBM | Top two of the benchmark, near-identical accuracy; averaging steadies scores; XGBoost gives SHAP reasons |
+| L2 Graph boost | Mean of XGBoost and LightGBM | Top two of the benchmark, near identical accuracy; averaging steadies scores; XGBoost gives SHAP reasons |
 | L4 Ring linker | Union-find over blocked payments | Deterministic, explainable; turns 1,105 alerts into 318 cases offline |
 
 Random Forest, the LSTM/Transformer blend (L3) and the GNN exist only in the offline benchmark.
@@ -49,11 +49,11 @@ Partial file: `results/model_comparison_tabular.partial.json`.
 |---|---|---|---|---|---|
 | Random Forest | 0.706 | 0.904 | 0.548 | 104 | 813 |
 | Decision tree | 0.580 | 0.844 | 0.471 | 157 | 950 |
-| KNN (40K-row fit, re-weighted test) | 0.438 | 0.669 | 0.393 | ~350 | ~1,090 |
+| KNN (40K-row fit, reweighted test) | 0.438 | 0.669 | 0.393 | ~350 | ~1,090 |
 | Logistic regression | 0.169 | 0.312 | 0.489 | 1,939 | 918 |
 | Linear SVM | 0.162 | 0.300 | 0.496 | 2,077 | 905 |
 | Gaussian Naive Bayes | 0.013 | 0.015 | 0.698 | 84,165 | 542 |
-| Dummy (class prior) | 0.002 | — | 0 | 0 | 1,797 |
+| Dummy (class prior) | 0.002 | n/a | 0 | 0 | 1,797 |
 
 **Still to run** (needs the IBM data, which is not in this repo):
 Extra Trees, AdaBoost, HistGradientBoosting, XGBoost, LightGBM, CatBoost, MLP; then the sequence models
@@ -63,10 +63,10 @@ Extra Trees, AdaBoost, HistGradientBoosting, XGBoost, LightGBM, CatBoost, MLP; t
 
 ### "Why not TCN, Gaussian, or …?"
 
-- **TCN**: added to `ml/bench_deep.py`; not yet run. Expect it near the LSTM/1D-CNN (0.64–0.66), since all three
+- **TCN**: added to `ml/bench_deep.py`; not yet run. Expect it near the LSTM/1D-CNN (0.64 to 0.66), since all three
   read the same 12-event sequences; it only goes live if it lifts the blend on validation.
 - **Gaussian Naive Bayes**: measured, 0.013. Its independence assumption fails badly on correlated
-  account-history counts.
+  account history counts.
 - **Gaussian Process classifier**: not run. Training is O(n³) time and O(n²) memory: infeasible on 307K training
   rows. A sparse/variational GP would be the only option, and kernel methods (RBF-SVM 0.12) give no reason to expect a win.
 - **GNN**: 0.516 under a strict time split. Published GNN numbers on this data build the test graph with future
@@ -76,7 +76,7 @@ Extra Trees, AdaBoost, HistGradientBoosting, XGBoost, LightGBM, CatBoost, MLP; t
 
 `python ml/train_message_model.py` → `results/message_model_eval.json`. 7,365 messages: 5,574 real UCI SMS (747 spam)
 and 1,791 synthetic Indian messages (1,025 scam) from 144 templates (15 scam workflows, 8 legitimate kinds, including hard cases
-such as "do not share your OTP", genuine bill reminders and relatives asking for money). Five-fold cross-validation
+such as "do not share your OTP", genuine bill reminders and relatives asking for money). Five-fold cross validation
 holds out whole templates.
 
 | Model | Avg. precision, Indian | Avg. precision, UCI | Indian @ high threshold: precision / recall |
@@ -85,21 +85,21 @@ holds out whole templates.
 | Logistic regression, unweighted | 0.931 | 0.984 | 0.942 / 0.588 |
 | Blend: LR + Naive Bayes | 0.941 | 0.984 | 0.856 / 0.800 |
 | Multinomial Naive Bayes | 0.955 | 0.949 | 0.827 / 0.878 (below the 0.95 precision bar) |
-| Rules only | 0.983\* | 0.363 | — |
+| Rules only | 0.983\* | 0.363 | n/a |
 
 \* The rules and the Indian templates were written by the same people, so this number is circular. On real UK SMS
 the same rules score 0.363, which shows how they generalise.
 
-**Served decision** (model bands + hard-signal floor), Indian messages, out-of-fold:
+**Served decision** (model bands + hard signal floor), Indian messages, out of fold:
 
 | Band | Precision | Recall | Legitimate messages flagged |
 |---|---|---|---|
 | High (push warning) | 0.951 | 0.677 | 4.7% (all 36 are genuine IT/PF refund or similar service notices) |
 | Caution or high | 0.917 | 0.821 | 9.9% |
 
-The hard-signal list (remote-access app, `.apk`, PIN to *receive*, "digital arrest", "safe/RBI account",
+The hard signal list (remote access app, `.apk`, PIN to *receive*, "digital arrest", "safe/RBI account",
 "share the OTP") fired on 0 of 5,593 legitimate messages (Indian and UCI). Marketing SMS land in caution 75% of the time; they are
-never pushed. Fixing the refund-notice false alarms needs the sender ID (TRAI DLT header such as `VM-ITDEPT`), which
+never pushed. Fixing the refund notice false alarms needs the sender ID (TRAI DLT header such as `VM-ITDEPT`), which
 the text alone does not carry.
 
 Why not a transformer (e.g. IndicBERT, MuRIL)? With 144 templates it would memorise the phrasing, and it would
@@ -107,13 +107,13 @@ need a GPU-backed host instead of a 3 MB JSON file. Revisit once a real labelled
 
 ## Alert fatigue: the decision rules
 
-The problem statement asks for "timely, useful alerts without alert fatigue". RuseTect alerts at three points, each
+The goal is timely, useful alerts without alert fatigue. RuseTect alerts at three points, each
 with a budget:
 
 1. **Push warning to the user**: only the high message band (precision 0.95). At most one per (account, workflow) per
    24 h and three per account per day. Caution messages are never pushed.
 2. **Interruption at payment time**: a payment to a **new** payee within 72 h of a risky message gets step-up
-   verification plus a one-line prompt. Payments to known payees are not touched.
+   verification plus a one line prompt. Payments to known payees are not touched.
 3. **Analyst queue**: only Block + STR alerts and payments to a UPI ID or account named in a scam message; L4
    groups them into ring cases (3.5× fewer items).
 

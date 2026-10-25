@@ -1,0 +1,328 @@
+{
+ "dataset": "Aalto 136M Keystrokes (real; desktop, laptop and phone keyboards)",
+ "source": "https://userinterfaces.aalto.fi/136Mkeystrokes/",
+ "citation": "Dhakal, Feit, Kristensson, Oulasvirta. Observations on Typing from 136 Million Keystrokes. CHI 2018.",
+ "people": {
+  "train": 2867,
+  "validation": 1434,
+  "test": 2868,
+  "boost": 5254
+ },
+ "enrol_sentences": 8,
+ "validation": {
+  "current": {
+   "1_sentence": {
+    "attempts": 15872,
+    "unscored": 1336,
+    "roc_auc": 0.8228,
+    "equal_error_rate": 0.2499
+   },
+   "3_sentence": {
+    "attempts": 5736,
+    "unscored": 0,
+    "roc_auc": 0.8987,
+    "equal_error_rate": 0.1799
+   }
+  },
+  "log_dist": {
+   "1_sentence": {
+    "attempts": 15872,
+    "unscored": 1336,
+    "roc_auc": 0.8232,
+    "equal_error_rate": 0.2571
+   },
+   "3_sentence": {
+    "attempts": 5736,
+    "unscored": 0,
+    "roc_auc": 0.8898,
+    "equal_error_rate": 0.1912
+   }
+  },
+  "verifier_lr": {
+   "1_sentence": {
+    "attempts": 15872,
+    "unscored": 1336,
+    "roc_auc": 0.8669,
+    "equal_error_rate": 0.2142
+   },
+   "3_sentence": {
+    "attempts": 5736,
+    "unscored": 0,
+    "roc_auc": 0.9287,
+    "equal_error_rate": 0.1473
+   }
+  },
+  "verifier_gbm": {
+   "1_sentence": {
+    "attempts": 15872,
+    "unscored": 1336,
+    "roc_auc": 0.891,
+    "equal_error_rate": 0.1973
+   },
+   "3_sentence": {
+    "attempts": 5736,
+    "unscored": 0,
+    "roc_auc": 0.942,
+    "equal_error_rate": 0.1377
+   }
+  }
+ },
+ "validation_mean_auc": {
+  "current": 0.8608,
+  "log_dist": 0.8565,
+  "verifier_lr": 0.8978,
+  "verifier_gbm": 0.9165
+ },
+ "thresholds_5pct_false_alarms_on_validation": {
+  "current": 1.55,
+  "log_dist": 0.5582,
+  "verifier_lr": 0.7296,
+  "verifier_gbm": 0.6884,
+  "current_live": 2.5
+ },
+ "rule": "best validation ROC-AUC (mean of 1 and 3 sentence attempts); replaces the live check only if >= current + 0.02",
+ "chosen": "verifier_gbm",
+ "adopt": true,
+ "test": {
+  "current": {
+   "1_sentence": {
+    "attempts": 31627,
+    "unscored": 2789,
+    "roc_auc": 0.8209,
+    "equal_error_rate": 0.2543,
+    "false_alarm_rate": 0.0477,
+    "impostors_caught": 0.4651
+   },
+   "3_sentence": {
+    "attempts": 11470,
+    "unscored": 2,
+    "roc_auc": 0.8889,
+    "equal_error_rate": 0.1891,
+    "false_alarm_rate": 0.0092,
+    "impostors_caught": 0.4339
+   }
+  },
+  "log_dist": {
+   "1_sentence": {
+    "attempts": 31627,
+    "unscored": 2789,
+    "roc_auc": 0.8249,
+    "equal_error_rate": 0.2554,
+    "false_alarm_rate": 0.0503,
+    "impostors_caught": 0.4634
+   },
+   "3_sentence": {
+    "attempts": 11470,
+    "unscored": 2,
+    "roc_auc": 0.8791,
+    "equal_error_rate": 0.2061,
+    "false_alarm_rate": 0.0126,
+    "impostors_caught": 0.4233
+   }
+  },
+  "verifier_lr": {
+   "1_sentence": {
+    "attempts": 31627,
+    "unscored": 2789,
+    "roc_auc": 0.8667,
+    "equal_error_rate": 0.2155,
+    "false_alarm_rate": 0.0506,
+    "impostors_caught": 0.5909
+   },
+   "3_sentence": {
+    "attempts": 11470,
+    "unscored": 2,
+    "roc_auc": 0.9249,
+    "equal_error_rate": 0.1512,
+    "false_alarm_rate": 0.0098,
+    "impostors_caught": 0.5977
+   }
+  },
+  "verifier_gbm": {
+   "1_sentence": {
+    "attempts": 31627,
+    "unscored": 2789,
+    "roc_auc": 0.8899,
+    "equal_error_rate": 0.1978,
+    "false_alarm_rate": 0.0517,
+    "impostors_caught": 0.6406
+   },
+   "3_sentence": {
+    "attempts": 11470,
+    "unscored": 2,
+    "roc_auc": 0.9361,
+    "equal_error_rate": 0.1423,
+    "false_alarm_rate": 0.0296,
+    "impostors_caught": 0.74
+   }
+  },
+  "current_at_live_threshold_2.5": {
+   "1_sentence": {
+    "attempts": 31627,
+    "unscored": 2789,
+    "roc_auc": 0.8209,
+    "equal_error_rate": 0.2543,
+    "false_alarm_rate": 0.0039,
+    "impostors_caught": 0.1962
+   },
+   "3_sentence": {
+    "attempts": 11470,
+    "unscored": 2,
+    "roc_auc": 0.8889,
+    "equal_error_rate": 0.1891,
+    "false_alarm_rate": 0.0005,
+    "impostors_caught": 0.18
+   }
+  }
+ },
+ "test_fairness": {
+  "current": {
+   "age_under_50": {
+    "genuine_attempts": 15159,
+    "false_alarm_rate": 0.0478
+   },
+   "age_50_plus": {
+    "genuine_attempts": 618,
+    "false_alarm_rate": 0.0437
+   },
+   "keyboard_full": {
+    "genuine_attempts": 6917,
+    "false_alarm_rate": 0.0489
+   },
+   "keyboard_laptop": {
+    "genuine_attempts": 8518,
+    "false_alarm_rate": 0.0467
+   },
+   "keyboard_small": {
+    "genuine_attempts": 211,
+    "false_alarm_rate": 0.0521
+   },
+   "keyboard_on-screen": {
+    "genuine_attempts": 164,
+    "false_alarm_rate": 0.0427
+   },
+   "gender_female": {
+    "genuine_attempts": 7252,
+    "false_alarm_rate": 0.0476
+   },
+   "gender_male": {
+    "genuine_attempts": 6513,
+    "false_alarm_rate": 0.0474
+   }
+  },
+  "verifier_gbm": {
+   "age_under_50": {
+    "genuine_attempts": 15159,
+    "false_alarm_rate": 0.0517
+   },
+   "age_50_plus": {
+    "genuine_attempts": 618,
+    "false_alarm_rate": 0.0485
+   },
+   "keyboard_full": {
+    "genuine_attempts": 6917,
+    "false_alarm_rate": 0.0557
+   },
+   "keyboard_laptop": {
+    "genuine_attempts": 8518,
+    "false_alarm_rate": 0.0483
+   },
+   "keyboard_small": {
+    "genuine_attempts": 211,
+    "false_alarm_rate": 0.0569
+   },
+   "keyboard_on-screen": {
+    "genuine_attempts": 164,
+    "false_alarm_rate": 0.0549
+   },
+   "gender_female": {
+    "genuine_attempts": 7252,
+    "false_alarm_rate": 0.0542
+   },
+   "gender_male": {
+    "genuine_attempts": 6513,
+    "false_alarm_rate": 0.0499
+   }
+  }
+ },
+ "boost_fairness": {
+  "current": {
+   "age_under_50": {
+    "genuine_attempts": 14407,
+    "false_alarm_rate": 0.0483
+   },
+   "age_50_plus": {
+    "genuine_attempts": 14500,
+    "false_alarm_rate": 0.0475
+   },
+   "keyboard_full": {
+    "genuine_attempts": 7163,
+    "false_alarm_rate": 0.0463
+   },
+   "keyboard_laptop": {
+    "genuine_attempts": 6823,
+    "false_alarm_rate": 0.0485
+   },
+   "keyboard_small": {
+    "genuine_attempts": 8037,
+    "false_alarm_rate": 0.0516
+   },
+   "keyboard_on-screen": {
+    "genuine_attempts": 6908,
+    "false_alarm_rate": 0.0447
+   },
+   "gender_female": {
+    "genuine_attempts": 15661,
+    "false_alarm_rate": 0.0457
+   },
+   "gender_male": {
+    "genuine_attempts": 8429,
+    "false_alarm_rate": 0.0495
+   }
+  },
+  "verifier_gbm": {
+   "age_under_50": {
+    "genuine_attempts": 14407,
+    "false_alarm_rate": 0.0519
+   },
+   "age_50_plus": {
+    "genuine_attempts": 14500,
+    "false_alarm_rate": 0.0483
+   },
+   "keyboard_full": {
+    "genuine_attempts": 7163,
+    "false_alarm_rate": 0.0512
+   },
+   "keyboard_laptop": {
+    "genuine_attempts": 6823,
+    "false_alarm_rate": 0.0462
+   },
+   "keyboard_small": {
+    "genuine_attempts": 8037,
+    "false_alarm_rate": 0.0586
+   },
+   "keyboard_on-screen": {
+    "genuine_attempts": 6908,
+    "false_alarm_rate": 0.0434
+   },
+   "gender_female": {
+    "genuine_attempts": 15661,
+    "false_alarm_rate": 0.0488
+   },
+   "gender_male": {
+    "genuine_attempts": 8429,
+    "false_alarm_rate": 0.0507
+   }
+  }
+ },
+ "boost_catch_rate": {
+  "current": 0.4674,
+  "verifier_gbm": 0.6517
+ },
+ "notes": [
+  "One sentence is a short sample (about 40 characters); a banking session usually gives more typing.",
+  "Aalto was collected on a typing test website; phone banking typing needs its own pilot data.",
+  "Sentences differ between attempts, so the check compares shared key pairs, as the live API does."
+ ],
+ "runtime_seconds": 103.2
+}

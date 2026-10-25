@@ -100,7 +100,7 @@ compose file itself is untested here (the same processes are tested natively abo
 2. **State size.** Keep running totals and 24 h windows only. Replace exact payee sets with a Bloom or cuckoo filter
    per partition once the exact index outgrows memory (section 2 measures the trade off).
 3. **Placement.** Inside the bank (RBI data localisation, DPDP Act), on the payment switch before the debit, within
-   the switch's timeout budget. Decisions feed the existing case tool; the four-eyes block rule and the hash chained
+   the switch's timeout budget. Decisions feed the existing case tool; the four eyes block rule and the hash chained
    audit log carry over; STRs go to FIU-IND as today.
 4. **Cold start.** Replay recent history into the state store before going live; without history, recall collapses.
 5. **Rollout.** Retrain on the bank's labelled fraud, run in shadow mode (score, act on nothing) for weeks, set

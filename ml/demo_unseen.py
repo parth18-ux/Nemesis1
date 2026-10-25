@@ -1,4 +1,4 @@
-"""Finale Part 5: unseen scam replay demo. One message from each scam workflow the 12 fixtures never covered, plus
+"""Unseen scam replay demo. One message from each scam workflow the 12 fixtures never covered, plus
 legitimate controls, each followed by a payment from the recipient to a new payee, sent through POST /api/v2/assess
 (payment cascade + context layer, intent model on). Prints a demo table; writes results/demo_unseen.json."""
 import json, os, sys

@@ -1,5 +1,5 @@
-"""Run the 12 Round 1 context fixtures through service/context_rules.py and the 5-term keyword baseline.
-Writes results/context_results.json and prints a table. Exit code 1 if any fixture differs from the PDF table."""
+"""Run the 12 reference context fixtures through service/context_rules.py and the 5-term keyword baseline.
+Writes results/context_results.json and prints a table. Exit code 1 if any fixture differs from the expected table."""
 import json, os, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "service"))
 from context_rules import assess, PaymentContext, RULESET_VERSION

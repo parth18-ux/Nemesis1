@@ -11,8 +11,8 @@ each feature, the design choice behind it, where the code lives and what was mea
 |---|---|---|---|
 | Session level: live call, screen share, remote access app, paste, hesitation, app hidden | A fourth evidence domain (up to 40 session points) next to message, payment and account graph | The two domain rule still holds: coaching cues alone can only ask the customer (pause screen), never hold the money; with payment or message evidence they escalate | `service/session_signals.py` |
 | Coercion score with weights (screen share 0.30, paste 0.20, hesitation 0.20, SIM swap 0.15, app hidden 0.10, network 0.05), step up at 0.65 | Kept as the coercion index; at 0.65 or more the customer is always asked | Reported next to readable cue points, so an analyst sees which cue fired | same |
-| Person level: device hash vs enrolled, SIM swap check before the OTP | Identity gate: unenrolled device within 72 h of a SIM swap means no OTP, re-verify by video KYC or branch | It is an authentication step with a recovery path, not a payment block | `identity_check`, `POST /api/v2/identity/check` |
-| Person level: typing rhythm | Typing profile (3 session enrolment) scored by a person-independent verifier | Tested on real keystrokes of people never seen in training (section 3); kept as a weak signal (5 points) | `service/behaviour.py`, `ml/aalto_eval.py` |
+| Person level: device hash vs enrolled, SIM swap check before the OTP | Identity gate: unenrolled device within 72 h of a SIM swap means no OTP, reverify by video KYC or branch | It is an authentication step with a recovery path, not a payment block | `identity_check`, `POST /api/v2/identity/check` |
+| Person level: typing rhythm | Typing profile (3 session enrolment) scored by a person independent verifier | Tested on real keystrokes of people never seen in training (section 3); kept as a weak signal (5 points) | `service/behaviour.py`, `ml/aalto_eval.py` |
 | Person level: mouse drift (CNN-LSTM on Balabit) | Mouse dynamics: actions (move, click, drag), 24 shape and speed features, per customer model | **Validated on the real Balabit data** (section 3) | `service/mouse_dynamics.py`, `ml/balabit_eval.py` |
 | Attack chain order: password reset, new device, new payee, maximum transfer | Ordered event chains: full (24 h) and short (new device, new payee, transfer within 1 h) | A full chain plus a large new payee transfer reaches an analyst by policy | `attack_chain` |
 | One 0 to 1000 score | Display score derived from RuseTect's own decision (0 to 299 approve, 300 to 599 verify, 600+ analyst hold) | It can never disagree with the decision, and it is labelled as a ranking aid, not a probability | `service/risk_score.py` |
@@ -24,7 +24,7 @@ each feature, the design choice behind it, where the code lives and what was mea
 | AI investigator (LLaMA 3.3 via Groq) drafts an STR | STR draft from a template, sections following an FIU-IND report | Nothing leaves the bank (RBI data localisation); every sentence traces to a field in the evidence pack; an analyst must sign | `service/str_report.py`, `GET /api/v2/alerts/{id}/str` |
 | Signed JWTs, rate limits, anti replay nonces, honeypots | Analyst API keys with roles, four eyes enforced on authenticated identities, nonces, per client rate limit | Fixes a real gap: the two analyst block rule used to trust a typed name | `service/security.py` |
 | ML-DSA signs every verdict | Ed25519 signs every verdict and evidence pack; public key at `/api/v2/keys/public` | ML-DSA is not in the Python cryptography library yet; swapping it in later changes two functions | same |
-| Customer recovery via re-verification | `POST /api/v2/alerts/{id}/reverify` sends the case back to an analyst for release | | `service/server.py` |
+| Customer recovery via reverification | `POST /api/v2/alerts/{id}/reverify` sends the case back to an analyst for release | | `service/server.py` |
 | Hindi and English | Pause screens in both; Hindi and Hinglish scam cues (police, CBI, digital arrest, OTP batao, safe khate, kisi ko mat batana) | | `service/context_rules.py` |
 
 Left out on purpose: Isolation Forest in the model blend (0.004 PR-AUC on IBM data in RuseTect's own benchmark), zero
@@ -52,6 +52,24 @@ two different demo analysts and the payee is published to the cross bank ledger.
 A bank app sees dozens of mouse or touch actions before a payment is confirmed, so the useful range is 10 to 50
 actions. One user is perfectly separable from a single action (probably a different screen setup), which is why the
 median is the headline. `results/balabit_eval.json`.
+
+### Typing rhythm on real data (Aalto 136M Keystrokes)
+
+`ml/aalto_eval.py` on 7,169 randomly drawn participants with at least 14 usable sentences, split by person into train
+(2,867), validation (1,434) and test (2,868). Each person enrols on 8 sentences; genuine attempts are their next 6
+sentences, one at a time and as two 3 sentence sessions; impostor attempts are the same amounts typed by other people.
+The input is what the API receives: mean key to key time per pair of letters.
+
+| Check (test people, never seen in training) | ROC-AUC, 1 sentence | ROC-AUC, 3 sentences | Impostors caught at 5% false alarms, 1 sentence |
+|---|---|---|---|
+| Previous statistic (median z score) | 0.821 | 0.889 | 47% |
+| Learned verifier, now live (LightGBM on 13 attempt vs profile features) | **0.890** | **0.936** | **64%** |
+
+The verifier was chosen on validation people (mean ROC-AUC 0.917 against 0.861; the rule needed +0.02) and its threshold
+was set there to 5% false alarms on single sentences. False alarms stay level across groups on test people: 4.9% for
+ages 50+ and 5.2% under 50; on an extra 5,254 participants aged 50+ or typing on phones (never used for training), 4.8%
+for 50+, 5.9% on small physical keyboards and 4.3% on touch screens. The typing check still adds only 5 session points
+and never holds a payment on its own. `results/aalto_eval.json`.
 
 ### Scenario replay suite (authored, through the real API, 40 randomised runs each)
 
@@ -89,12 +107,12 @@ See `docs/RETRAINING.md`: the payment models now also learn from LI-Small, and t
 | IBM AMLworld HI-Small, LI-Small (synthetic payments, labelled rings) | payment models, rings, context rules | https://www.kaggle.com/datasets/ealtman2019/ibm-transactions-for-anti-money-laundering-aml | used in full |
 | Feedzai Bank Account Fraud, Base and Variants I to V | account opening gate, bias tests | https://www.kaggle.com/datasets/sgpjesus/bank-account-fraud-dataset-neurips-2022 | used in full |
 | **Balabit Mouse Dynamics Challenge** (real mouse data, 10 users) | mouse dynamics | https://github.com/balabit/Mouse-Dynamics-Challenge | used (section 3) |
-| **Aalto 136M Keystrokes** (Dhakal et al., CHI 2018; 1.4 GB zip, research and non commercial use) | typing rhythm | https://userinterfaces.aalto.fi/136Mkeystrokes/ (data: `data/Keystrokes.zip`) | not reachable from this workspace; download it and run the typing evaluation locally |
+| **Aalto 136M Keystrokes** (Dhakal, Feit, Kristensson, Oulasvirta, CHI 2018; non commercial use with attribution) | typing rhythm | https://userinterfaces.aalto.fi/136Mkeystrokes/ | used (section 3) |
 | **PaySim** (synthetic mobile money, Lopez-Rojas et al.) | mobile money transaction benchmark | https://www.kaggle.com/datasets/ealaxi/paysim1 | needs a Kaggle login; RuseTect's IBM data covers the same role with labelled rings |
 
 ## 5. Honest limits
 
-* Session, typing and coercion signals have no public benchmark. The scenario suite is authored, so it checks
+* Session and coercion signals have no public benchmark; typing was tested on desktop and phone keyboards from a typing test website, not inside a banking app. The scenario suite is authored, so it checks
   mechanics, not real world rates. A pilot needs consented session data from a bank app.
 * Mouse dynamics was validated on desktop mouse data; a phone app needs touch data and its own enrolment.
 * Demo analyst keys are published in demo mode (`/api/health` says so); set `RUSETECT_ANALYST_KEYS` and

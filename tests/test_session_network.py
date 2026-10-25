@@ -149,6 +149,27 @@ def test_typing_profile_flags_a_different_typist():
     assert prof.score({k: v * 2.2 for k, v in base.items()})["anomaly"]
 
 
+def test_typing_verifier_is_installed_and_separates_typists():
+    import random, behaviour
+    assert behaviour.VERIFIER is not None and behaviour.VERIFIER["kind"] == "lightgbm"
+    rnd = random.Random(1); keys = ["th", "he", "in", "er", "an", "re", "on", "at", "en", "nd"]
+    base = {k: 110 + 12 * i for i, k in enumerate(keys)}
+    prof = TypingProfile()
+    for _ in range(5):
+        prof.enrol({k: v * rnd.uniform(0.9, 1.1) for k, v in base.items()})
+    same, other = prof.check({k: v * 1.03 for k, v in base.items()}), prof.check({k: v * 2.0 for k, v in base.items()})
+    assert same["method"] == "verifier" and not same["anomaly"]
+    assert other["anomaly"] and other["score"] > same["score"]
+
+
+def test_typing_check_endpoint_uses_the_verifier():
+    keys = ["th", "he", "in", "er", "an", "re", "on", "at"]
+    for i in range(3):
+        c.post("/api/v2/behaviour/enrol", json={"account": "TYPE1", "digraphs": {k: 100 + 10 * j + i for j, k in enumerate(keys)}})
+    r = c.post("/api/v2/behaviour/check", json={"account": "TYPE1", "digraphs": {k: 2.1 * (100 + 10 * j) for j, k in enumerate(keys)}}).json()
+    assert r["method"] == "verifier" and r["anomaly"] is True
+
+
 def test_coordination_rule_is_off_by_default_but_counts():
     t = CoordinationTracker(window_min=1000, flag_rank=1, k=2)
     t.record("s1", "P", 0, 2); t.record("s2", "P", 5, 2)

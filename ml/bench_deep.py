@@ -1,5 +1,5 @@
 """
-RuseTect — deep learning benchmark on IBM AMLworld HI-Small.
+RuseTect: deep learning benchmark on IBM AMLworld HI-Small.
 
 Sequence models (1D-CNN, LSTM, Transformer) read the last K events (money in / money out)
 of BOTH the sender and the receiver strictly before the current payment, plus the current

@@ -119,7 +119,7 @@ button.primary{background:var(--olive);border-color:var(--olive);color:var(--oli
   <div class="eyebrow">RuseTect · model benchmark · synthetic data</div>
   <h1>How the layered filter performed on a million synthetic test payments</h1>
   <p class="lede">These are committed results from this repository's benchmark scripts on synthetic data; they do not show performance on real banking traffic. 21 model variants across boosting, classical ML, deep learning (MLP, CNN, LSTM, Transformer, GAN) and a graph neural network, tested on 5.08 million IBM AMLworld payments and 1 million Feedzai BAF account applications. The best models are stacked into a cascade: each layer approves what it is sure is clean and passes the rest to a heavier model.</p>
-  <div class="meta"><span>AML test period: 1,015,669 payments · 1,797 laundering</span><span>BAF test: 205,011 applications · 2,878 fraud</span><span>All metrics on held-out, later-in-time data</span></div>
+  <div class="meta"><span>AML test period: 1,015,669 payments · 1,797 laundering</span><span>BAF test: 205,011 applications · 2,878 fraud</span><span>All metrics on held out, later in time data</span></div>
 </header>
 
 <section>
@@ -133,9 +133,9 @@ button.primary{background:var(--olive);border-color:var(--olive);color:var(--oli
 <section>
   <div class="kpis">
     <div class="kpi"><span class="v">79.5%</span><span class="k">of payments approved by L1 (0.3 ms each), keeping 99.2% of laundering</span></div>
-    <div class="kpi"><span class="v">0.921</span><span class="k">precision of offline-blend blocks (1,018 of 1,105 are labelled laundering)</span></div>
+    <div class="kpi"><span class="v">0.921</span><span class="k">precision of offline blend blocks (1,018 of 1,105 are labelled laundering)</span></div>
     <div class="kpi"><span class="v">3.5×</span><span class="k">fewer items to review once alerts are grouped into ring cases</span></div>
-    <div class="kpi"><span class="v">82–89%</span><span class="k">of the 192 ground-truth rings in the test period get at least one block alert</span></div>
+    <div class="kpi"><span class="v">82 to 89%</span><span class="k">of the 192 ground truth rings in the test period get at least one block alert</span></div>
   </div>
 </section>
 
@@ -148,14 +148,14 @@ button.primary{background:var(--olive);border-color:var(--olive);color:var(--oli
     <svg id="bars" role="img" aria-label="PR-AUC by model"></svg>
   </div>
   <div class="tbl"><table id="amlTable"></table></div>
-  <p class="foot">"+graph" means the 22 causal account features (fan-in/fan-out in 24h, pass-through ratio, minutes since money came in, reciprocity, new counterparties…), each computed only from payments before the one being scored. "Core" PR-AUC drops the Sep 11–18 tail, where the generator emits almost nothing but laundering. KNN and RBF-SVM were trained on a 40K subsample and scored on a re-weighted test sample because they cannot score a million rows on this hardware; F1 is not reported for them.</p>
+  <p class="foot">"+graph" means the 22 causal account features (fan-in/fan-out in 24h, pass-through ratio, minutes since money came in, reciprocity, new counterparties…), each computed only from payments before the one being scored. "Core" PR-AUC drops the Sep 11 to 18 tail, where the generator emits almost nothing but laundering. KNN and RBF-SVM were trained on a 40K subsample and scored on a reweighted test sample because they cannot score a million rows on this hardware; F1 is not reported for them.</p>
 </section>
 
 <section>
   <div class="eyebrow">What the benchmark shows</div>
   <div class="find">
     <div class="card"><h3>Account history does the work, not the algorithm</h3><p>XGBoost on raw payment fields scores 0.172 PR-AUC. The same model with causal graph features scores 0.715. Every strong model uses those features; the algorithm choice moves results by a few points.</p></div>
-    <div class="card"><h3>Gradient boosting wins on this data</h3><p>XGBoost, LightGBM, CatBoost and Random Forest are within 0.02 PR-AUC of each other. They are also the fastest to train (6–70 s on 2 CPUs) and the easiest to explain with SHAP.</p></div>
+    <div class="card"><h3>Gradient boosting wins on this data</h3><p>XGBoost, LightGBM, CatBoost and Random Forest are within 0.02 PR-AUC of each other. They are also the fastest to train (6 to 70 s on 2 CPUs) and the easiest to explain with SHAP.</p></div>
     <div class="card"><h3>Sequence models add a small, real gain</h3><p>LSTM and Transformer over each sender's and receiver's last 12 events reach 0.66 alone. Blended at 10% weight into the tree ensemble they lift PR-AUC from 0.720 to 0.725 and F1 from 0.691 to 0.702.</p></div>
     <div class="card"><h3>The GNN loses under a strict time split</h3><p>With embeddings built only from the past graph, the GNN reaches 0.516. It cannot represent accounts that first appear during the test period. Published GNN results on this dataset use a test graph that includes future edges.</p></div>
     <div class="card"><h3>GAN augmentation does not help</h3><p>Adding 3× GAN-generated positives to XGBoost gives 0.711, versus 0.715 without. Real positives are rare, but the synthetic ones add no new signal.</p></div>
@@ -166,18 +166,18 @@ button.primary{background:var(--olive);border-color:var(--olive);color:var(--oli
 <section>
   <div class="eyebrow">L4 ring linker</div>
   <h2>Rings caught, by laundering typology</h2>
-  <p>Share of the 192 ground-truth rings from the IBM Patterns file (test period) that have at least one payment blocked. Bipartite rings are the weak spot: each payment in them looks like an ordinary one-to-one transfer.</p>
+  <p>Share of the 192 ground truth rings from the IBM Patterns file (test period) that have at least one payment blocked. Bipartite rings are the weak spot: each payment in them looks like an ordinary one to one transfer.</p>
   <div class="rings" id="rings"></div>
 </section>
 
 <section>
   <div class="eyebrow">L0 onboarding gate · Feedzai BAF Base</div>
   <h2>Stopping mule accounts at opening</h2>
-  <p>Protocol from the BAF paper: train on months 0–4, set the threshold on month 5 at a 5% false-positive rate, test on months 6–7. LightGBM has the highest recall at 5% FPR here, narrowly ahead of AdaBoost and XGBoost. These onboarding scores are a different task and dataset from the payment scores above and must not be compared with them.</p>
+  <p>Protocol from the BAF paper: train on months 0 to 4, set the threshold on month 5 at a 5% false positive rate, test on months 6 to 7. LightGBM has the highest recall at 5% FPR here, narrowly ahead of AdaBoost and XGBoost. These onboarding scores are a different task and dataset from the payment scores above and must not be compared with them.</p>
   <div class="tbl"><table id="bafTable"></table></div>
   <div class="find">
-    <div class="card"><h3>Fairness fix: one threshold per age group</h3><p>With a single threshold, applicants aged 50+ get a 12.8% false-positive rate versus 3.9% for younger applicants (ratio 0.31). Separate thresholds set on validation bring the ratio to 0.88 (6.0% vs 5.3%), costing 2.5 points of recall (0.559 → 0.534).</p></div>
-    <div class="card"><h3>What drives the score</h3><p>Housing status, device OS, credit-risk score, name–email similarity and time at current address are the five largest contributors to LightGBM's gain. Mule applicants tend to come from fresh addresses, recycled devices and emails that don't match the name.</p></div>
+    <div class="card"><h3>Fairness fix: one threshold per age group</h3><p>With a single threshold, applicants aged 50+ get a 12.8% false positive rate versus 3.9% for younger applicants (ratio 0.31). Separate thresholds set on validation bring the ratio to 0.88 (6.0% vs 5.3%), costing 2.5 points of recall (0.559 → 0.534).</p></div>
+    <div class="card"><h3>What drives the score</h3><p>Housing status, device OS, credit risk score, name and email similarity and time at current address are the five largest contributors to LightGBM's gain. Mule applicants tend to come from fresh addresses, recycled devices and emails that don't match the name.</p></div>
   </div>
 </section>
 
@@ -195,16 +195,16 @@ button.primary{background:var(--olive);border-color:var(--olive);color:var(--oli
     <ul class="plain">
       <li>The live payment path loads three models: the 30-tree XGBoost gatekeeper (L1), then an XGBoost and a LightGBM model whose scores are averaged (L2). Random Forest and LSTM/Transformer appear only in the offline L3 blend above.</li>
       <li>The offline L3 blend reaches about 0.725 PR-AUC. The live path does not reproduce that blend, so its scores are not the same as the blend's.</li>
-      <li>The live block and hold thresholds were tuned on the offline blend score, not on the live L2 average. <code>docs/project-audit.md</code> measures the effect and how to re-tune.</li>
-      <li>Reasons shown by the API are XGBoost TreeSHAP contributions (<code>pred_contribs</code>) from the L2 XGBoost model only; LightGBM's half of the score has no per-feature explanation.</li>
+      <li>The live block and hold thresholds were tuned on the offline blend score, not on the live L2 average. <code>docs/project-audit.md</code> measures the effect and how to retune.</li>
+      <li>Reasons shown by the API are XGBoost TreeSHAP contributions (<code>pred_contribs</code>) from the L2 XGBoost model only; LightGBM's half of the score has no per feature explanation.</li>
     </ul>
   </div>
 </section>
 
 <section id="why">
   <div class="eyebrow">Model selection</div>
-  <h2>Why gradient-boosted trees</h2>
-  <p>The payment features are 31 numeric and low-cardinality columns about each account's past behaviour, with missing values wherever an account has no history yet, and laundering is under 0.2% of payments. Boosted trees learn the interactions that matter here (money in, then straight out to many new payees) without hand-built crosses, handle missing values natively, train in seconds on two CPUs, score a payment in well under a millisecond, and give per-feature reasons. The committed benchmark shows the feature engineering matters far more than the choice among the leading tree models: XGBoost goes from 0.172 PR-AUC on raw payment fields to 0.715 with account-history features, while XGBoost, Random Forest, CatBoost and LightGBM all land between 0.699 and 0.715.</p>
+  <h2>Why gradient boosted trees</h2>
+  <p>The payment features are 31 numeric and low cardinality columns about each account's past behaviour, with missing values wherever an account has no history yet, and laundering is under 0.2% of payments. Boosted trees learn the interactions that matter here (money in, then straight out to many new payees) without hand built crosses, handle missing values natively, train in seconds on two CPUs, score a payment in well under a millisecond, and give per feature reasons. The committed benchmark shows the feature engineering matters far more than the choice among the leading tree models: XGBoost goes from 0.172 PR-AUC on raw payment fields to 0.715 with account history features, while XGBoost, Random Forest, CatBoost and LightGBM all land between 0.699 and 0.715.</p>
   <p><b>PR-AUC</b> (average precision) summarises precision across all recall levels. With 0.18% positives, a model that flags nothing is 99.8% "accurate", so accuracy says nothing; ROC-AUC is also flattering because it rewards ranking millions of easy negatives. PR-AUC drops fast when alerts fill with false alarms, which is the cost analysts feel.</p>
   <div class="tbl"><table id="fresh"></table></div>
   <p class="foot" id="freshNote"></p>
@@ -213,10 +213,10 @@ button.primary{background:var(--olive);border-color:var(--olive);color:var(--oli
 <section>
   <div class="eyebrow">Limits</div>
   <ul class="plain">
-    <li>Both datasets are synthetic (IBM's agent-based simulator, Feedzai's privacy-preserving generator). Real UPI/IMPS data will shift thresholds; the pipeline is built to be retrained, not to transfer as-is.</li>
+    <li>Both datasets are synthetic (IBM's agent based simulator, Feedzai's privacy preserving generator). Real UPI/IMPS data will shift thresholds; the pipeline is built to be retrained, not to transfer as is.</li>
     <li>The lure and pressure stages of a scam (calls, chats) are not in either dataset. The message model and context layer are built and tested on synthetic message templates; real reported messages are needed before trusting their rates.</li>
     <li>Ring recall varied between 82% and 89% across two retrains with different category encodings. Treat the range, not a point, as the result.</li>
-    <li>The prototype engine keeps account state in memory. <code>service/scale/</code> moves it to Redis with stateless workers; a deployment still needs a replay of history at start-up, because without history recall collapses.</li>
+    <li>The prototype engine keeps account state in memory. <code>service/scale/</code> moves it to Redis with stateless workers; a deployment still needs a replay of history at startup, because without history recall collapses.</li>
   </ul>
   <p class="foot">Code: <code>ml/aml_features.py</code>, <code>ml/bench_tabular.py</code>, <code>ml/bench_deep.py</code>, <code>ml/bench_gnn.py</code>, <code>ml/bench_baf.py</code>, <code>ml/cascade.py</code>, <code>ml/l0_onboarding.py</code>, <code>service/rusetect_engine.py</code>, <code>ml/compare_models.py</code>. Hardware: 2 CPUs, 7 GB RAM.</p>
 </section>
@@ -228,7 +228,7 @@ const FRESH = __FRESH_DATA__;
 const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 const famVar = f => f.startsWith("boosting") ? "--f-boost" : f.startsWith("classical") ? "--f-classic" : f.startsWith("deep") ? "--f-deep" : f.startsWith("graph") ? "--f-graph" : "--f-unsup";
 const famName = {"--f-boost":"Boosting","--f-classic":"Classical ML","--f-deep":"Deep learning","--f-graph":"Graph neural network","--f-unsup":"Unsupervised"};
-const fmt = (v, d = 3) => v == null || Number.isNaN(v) ? "—" : v.toFixed(d);
+const fmt = (v, d = 3) => v == null || Number.isNaN(v) ? "n/a" : v.toFixed(d);
 const nf = n => n.toLocaleString("en-US");
 
 // funnel
@@ -256,7 +256,7 @@ const rows = Object.entries(DATA.aml).sort((a, b) => b[1].pr_auc - a[1].pr_auc);
 const best = rows[0][0];
 const T = document.getElementById("amlTable");
 T.innerHTML = `<thead><tr><th>Model</th><th>PR-AUC</th><th>Core PR-AUC</th><th>ROC-AUC</th><th>F1</th><th>Precision</th><th>Recall</th><th>Recall @ top 0.2%</th><th>Train s</th></tr></thead><tbody>` +
-  rows.map(([k, v]) => `<tr${k === best ? ' class="win"' : ""}><td><span class="fam" style="background:var(${famVar(v.family)})"></span>${k}</td><td>${fmt(v.pr_auc)}</td><td>${fmt(v.pr_auc_core)}</td><td>${fmt(v.roc_auc)}</td><td>${fmt(v.f1)}</td><td>${fmt(v.precision)}</td><td>${fmt(v.recall)}</td><td>${fmt(v.recall_at_budget)}</td><td>${v.train_secs ?? "—"}</td></tr>`).join("") + "</tbody>";
+  rows.map(([k, v]) => `<tr${k === best ? ' class="win"' : ""}><td><span class="fam" style="background:var(${famVar(v.family)})"></span>${k}</td><td>${fmt(v.pr_auc)}</td><td>${fmt(v.pr_auc_core)}</td><td>${fmt(v.roc_auc)}</td><td>${fmt(v.f1)}</td><td>${fmt(v.precision)}</td><td>${fmt(v.recall)}</td><td>${fmt(v.recall_at_budget)}</td><td>${v.train_secs ?? "n/a"}</td></tr>`).join("") + "</tbody>";
 const used = [...new Set(rows.map(([, v]) => famVar(v.family)))];
 document.getElementById("legend").innerHTML = used.map(f => `<span><i style="background:var(${f})"></i>${famName[f]}</span>`).join("");
 
@@ -288,16 +288,16 @@ document.getElementById("rings").innerHTML = Object.entries(R).sort((a, b) => b[
 const B = Object.entries(DATA.baf).sort((a, b) => b[1].recall_at_5fpr - a[1].recall_at_5fpr);
 document.getElementById("bafTable").innerHTML = `<thead><tr><th>Model</th><th>Recall @ 5% FPR</th><th>ROC-AUC</th><th>PR-AUC</th><th>FPR ratio (age)</th><th>Train s</th></tr></thead><tbody>` +
   B.map(([k, v], i) => `<tr${i === 0 ? ' class="win"' : ""}><td><span class="fam" style="background:var(${famVar(v.family)})"></span>${k}</td><td>${fmt(v.recall_at_5fpr)}</td><td>${fmt(v.roc_auc)}</td><td>${fmt(v.pr_auc)}</td><td>${fmt(v.fpr_ratio_age, 2)}</td><td>${v.train_secs}</td></tr>`).join("") +
-  `<tr><td><span class="fam" style="background:var(--f-boost)"></span>LightGBM + age-group thresholds (L0 final)</td><td>${fmt(DATA.l0.group_thresholds.recall)}</td><td>${fmt(DATA.l0.roc_auc)}</td><td>—</td><td>${fmt(DATA.l0.group_thresholds.fpr_ratio, 2)}</td><td>—</td></tr></tbody>`;
+  `<tr><td><span class="fam" style="background:var(--f-boost)"></span>LightGBM + age-group thresholds (L0 final)</td><td>${fmt(DATA.l0.group_thresholds.recall)}</td><td>${fmt(DATA.l0.roc_auc)}</td><td>n/a</td><td>${fmt(DATA.l0.group_thresholds.fpr_ratio, 2)}</td><td>n/a</td></tr></tbody>`;
 
 // fresh comparison (results/*.json, if present at build time)
 (function () {
   const T = document.getElementById("fresh"), N = document.getElementById("freshNote");
   if (!FRESH || !FRESH.models) { T.outerHTML = ""; N.textContent = "Fresh comparison: not evaluated in this build."; return; }
   const rows = Object.entries(FRESH.models).sort((a, b) => b[1].test.average_precision - a[1].test.average_precision);
-  const f = (v, d = 3) => v == null ? "—" : Number(v).toFixed(d);
+  const f = (v, d = 3) => v == null ? "n/a" : Number(v).toFixed(d);
   T.innerHTML = `<thead><tr><th>Model (fresh run)</th><th>PR-AUC</th><th>ROC-AUC</th><th>Precision</th><th>Recall</th><th>F1</th><th>False alarms</th><th>Missed</th><th>Train s</th><th>ms / payment</th><th>Size MB</th></tr></thead><tbody>` +
-    rows.map(([k, v]) => `<tr${k === rows[0][0] ? ' class="win"' : ""}><td>${k}${v.evaluation && v.evaluation.startsWith("subsampled") ? " *" : ""}${v.served ? " · live" : ""}</td><td>${f(v.test.average_precision)}</td><td>${f(v.test.roc_auc)}</td><td>${f(v.test.precision)}</td><td>${f(v.test.recall)}</td><td>${f(v.test.f1)}</td><td>${v.test.fp != null ? v.test.fp.toLocaleString("en-US") : "—"}</td><td>${v.test.fn != null ? v.test.fn.toLocaleString("en-US") : "—"}</td><td>${f(v.train_seconds, 1)}</td><td>${f(v.latency_ms_p50, 2)}</td><td>${v.model_size_bytes != null ? f(v.model_size_bytes / 1e6, 2) : "—"}</td></tr>`).join("") + "</tbody>";
+    rows.map(([k, v]) => `<tr${k === rows[0][0] ? ' class="win"' : ""}><td>${k}${v.evaluation && v.evaluation.startsWith("subsampled") ? " *" : ""}${v.served ? " · live" : ""}</td><td>${f(v.test.average_precision)}</td><td>${f(v.test.roc_auc)}</td><td>${f(v.test.precision)}</td><td>${f(v.test.recall)}</td><td>${f(v.test.f1)}</td><td>${v.test.fp != null ? v.test.fp.toLocaleString("en-US") : "n/a"}</td><td>${v.test.fn != null ? v.test.fn.toLocaleString("en-US") : "n/a"}</td><td>${f(v.train_seconds, 1)}</td><td>${f(v.latency_ms_p50, 2)}</td><td>${v.model_size_bytes != null ? f(v.model_size_bytes / 1e6, 2) : "n/a"}</td></tr>`).join("") + "</tbody>";
   N.textContent = FRESH.note || "";
 })();
 

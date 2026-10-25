@@ -130,7 +130,7 @@ button.primary{background:var(--olive);border-color:var(--olive);color:var(--oli
   </header>
 
   <div class="panel" style="display:flex;flex-direction:column;gap:8px">
-    <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap"><span class="label">Replay of recorded IBM AMLworld test period payments (synthetic dataset)</span><span class="status" id="simtime">sim time —</span></div>
+    <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap"><span class="label">Replay of recorded IBM AMLworld test period payments (synthetic dataset)</span><span class="status" id="simtime">sim time: waiting</span></div>
     <div class="progress"><div id="prog"></div></div>
   </div>
 
@@ -144,11 +144,11 @@ button.primary{background:var(--olive);border-color:var(--olive);color:var(--oli
   </div>
 
   <div class="panel truth">
-    <div class="t"><b id="tPrec">—</b><span>precision of blocks vs. ground truth</span></div>
-    <div class="t"><b id="tRec">—</b><span>laundering payments blocked</span></div>
+    <div class="t"><b id="tPrec">n/a</b><span>precision of blocks vs. ground truth</span></div>
+    <div class="t"><b id="tRec">n/a</b><span>laundering payments blocked</span></div>
     <div class="t"><b id="tTP">0 / 0</b><span>caught / laundering seen</span></div>
     <div class="t"><b id="tFP">0</b><span>false blocks</span></div>
-    <div class="t"><b id="tLat">—</b><span>median latency per payment</span></div>
+    <div class="t"><b id="tLat">n/a</b><span>median latency per payment</span></div>
   </div>
 
   <div class="panel lure">
@@ -185,7 +185,7 @@ button.primary{background:var(--olive);border-color:var(--olive);color:var(--oli
 const SAMPLES = {"mule": {"income": 0.9, "name_email_similarity": 0.0452381698427012, "prev_address_months_count": -1, "current_address_months_count": 84, "customer_age": 40, "days_since_request": 0.0076979065840055, "intended_balcon_amount": -0.5697656791958139, "payment_type": "AC", "zip_count_4w": 2539, "velocity_6h": 3655.14740343208, "velocity_24h": 3798.573074800848, "velocity_4w": 3107.0505436563453, "bank_branch_count_8w": 0, "date_of_birth_distinct_emails_4w": 1, "employment_status": "CA", "credit_risk_score": 249, "email_is_free": 1, "housing_status": "BA", "phone_home_valid": 0, "phone_mobile_valid": 1, "bank_months_count": -1, "has_other_cards": 0, "proposed_credit_limit": 2000.0, "foreign_request": 0, "source": "INTERNET", "session_length_in_minutes": 3.102063265364043, "device_os": "windows", "keep_alive_session": 0, "device_distinct_emails_8w": 1, "device_fraud_count": 0}, "genuine": {"income": 0.4, "name_email_similarity": 0.8707952377237682, "prev_address_months_count": 46, "current_address_months_count": 11, "customer_age": 40, "days_since_request": 0.007769235283125, "intended_balcon_amount": -1.1096952670520477, "payment_type": "AB", "zip_count_4w": 717, "velocity_6h": 2969.442803950711, "velocity_24h": 3663.957943681082, "velocity_4w": 3039.0498465342584, "bank_branch_count_8w": 1, "date_of_birth_distinct_emails_4w": 9, "employment_status": "CD", "credit_risk_score": 77, "email_is_free": 0, "housing_status": "BC", "phone_home_valid": 1, "phone_mobile_valid": 0, "bank_months_count": 2, "has_other_cards": 1, "proposed_credit_limit": 200.0, "foreign_request": 0, "source": "INTERNET", "session_length_in_minutes": 4.513869524714286, "device_os": "linux", "keep_alive_session": 1, "device_distinct_emails_8w": 1, "device_fraud_count": 0}};
 const $ = id => document.getElementById(id);
 const nf = n => Number(n).toLocaleString("en-US");
-const pct = (a, b) => b ? (100 * a / b).toFixed(1) + "%" : "—";
+const pct = (a, b) => b ? (100 * a / b).toFixed(1) + "%" : "n/a";
 let running = false, totals = {scored: 0, L1: 0, L2: 0, med: 0, high: 0};
 
 async function api(path, opts = {}) {
@@ -226,7 +226,7 @@ function render(r) {
   $("fCases").textContent = nf(r.open_cases || 0);
   const T = r.truth; $("tPrec").textContent = pct(T.tp, T.tp + T.fp); $("tRec").textContent = pct(T.tp, T.pos);
   $("tTP").textContent = `${nf(T.tp)} / ${nf(T.pos)}`; $("tFP").textContent = nf(T.fp);
-  $("tLat").textContent = r.latency_p50_ms != null ? r.latency_p50_ms.toFixed(2) + " ms" : "—";
+  $("tLat").textContent = r.latency_p50_ms != null ? r.latency_p50_ms.toFixed(2) + " ms" : "n/a";
   $("prog").style.width = r.total ? (100 * r.position / r.total) + "%" : 0;
   if (r.sim_time) $("simtime").textContent = `sim time ${r.sim_time} UTC · ${nf(r.position)} of ${nf(r.total)}`;
   renderFeed(r.feed || []); renderCases(r.cases || []);

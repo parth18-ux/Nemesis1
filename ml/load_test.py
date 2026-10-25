@@ -1,4 +1,4 @@
-"""Finale Part 5: load test of POST /api/v2/assess on a running server (default http://localhost:8003).
+"""Load test of POST /api/v2/assess on a running server (default http://localhost:8003).
 Sends N payments (half with a consented message) from W threads; reports throughput and latency percentiles
 measured at the client. Single uvicorn worker on this machine's CPU; not a bank benchmark.
 Usage: python ml/load_test.py [base_url] [n] [workers]. Writes results/load_test.json."""
@@ -25,6 +25,6 @@ with ThreadPoolExecutor(W) as ex: list(ex.map(one, range(N)))
 wall = time.perf_counter() - t0; lat.sort(); q = lambda p: round(lat[min(len(lat) - 1, int(p * len(lat)))], 2)
 out = {"requests": N, "workers": W, "errors": errors[0], "wall_s": round(wall, 2), "throughput_rps": round(len(lat) / wall, 1),
        "latency_ms": {"p50": q(.5), "p95": q(.95), "p99": q(.99), "max": round(lat[-1], 2), "mean": round(statistics.mean(lat), 2)},
-       "target_from_round1_pdf": "p95 below 100 ms", "met": q(.95) < 100, "machine": f"{os.cpu_count()} CPU, one uvicorn worker, client on the same machine"}
+       "target": "p95 below 100 ms", "met": q(.95) < 100, "machine": f"{os.cpu_count()} CPU, one uvicorn worker, client on the same machine"}
 json.dump(out, open(os.path.join(ROOT, "results", "load_test.json"), "w"), indent=1)
 print(json.dumps(out, indent=1))

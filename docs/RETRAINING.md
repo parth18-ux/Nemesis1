@@ -8,7 +8,7 @@ bias). This page records how they were added to training, how the result was che
 
 **Preprocessing.** `ml/build_live_features.py` streams every payment of each file, in time order, through
 `service/compact_state.py`, the serving code's own feature state (tested equal to the live engine). So training uses
-exactly the numbers the API computes: same currency rates, same format and currency codes, same past-only windows.
+exactly the numbers the API computes: same currency rates, same format and currency codes, same past only windows.
 Each file is split by time into 60% train, 20% validation, 20% test.
 
 **Training.** `ml/retrain_extended.py`, same recipe as the original cascade: all laundering payments in the train

@@ -1,5 +1,5 @@
 """
-RuseTect API — layered filtration cascade for mule accounts and scam money flows.
+RuseTect API: layered filtration cascade for mule accounts and scam money flows.
 
   /                    landing page (links to the console, report and API docs)
   /console             Live Console: replays recorded IBM AMLworld (synthetic) test-period payments through the live path
@@ -388,9 +388,10 @@ async def v2_behaviour_enrol(b: DigraphIn):
 
 @api.post("/v2/behaviour/check")
 async def v2_behaviour_check(b: DigraphIn):
-    """Experimental typing rhythm check; use the result as SessionIn.typing_anomaly."""
+    """Typing rhythm check (verifier trained and tested on real keystrokes, see results/aalto_eval.json);
+    use the result as SessionIn.typing_anomaly."""
     prof = PROFILES.get(b.account)
-    return prof.score(b.digraphs) if prof else {"ready": False, "score": None, "anomaly": False}
+    return prof.check(b.digraphs) if prof else {"ready": False, "score": None, "anomaly": False}
 
 
 @api.get("/v2/consortium")

@@ -1,138 +1,156 @@
 # RuseTect
 
-**Layered AI filtration for mule accounts and scam money flows.**
+RuseTect detects scam payments and money mule activity in digital banking. It follows a scam from the first message a
+victim receives to the accounts that launder the money, and it answers with the lightest intervention that fits the
+evidence: a question to the customer, a short pause, an analyst review, or a block approved by two analysts.
 
-RuseTect follows a scam from the first message to the mule ring. It scores the lure (SMS, WhatsApp, call
-transcript) and warns the user once. It escalates a payment to a new payee that follows a risky message. It also
-scores bank payments and new account applications for money-mule activity. A small model clears
-most payments quickly; the rest are scored by gradient-boosted trees, explained per feature, and linked into ring
-cases for an analyst. It is a research prototype trained and evaluated on **synthetic** datasets
-(IBM AMLworld, Feedzai BAF); nothing here shows performance on real banking traffic.
+Live demo: [rusetect.vercel.app](https://rusetect.vercel.app) · Author: Parth Sharma
 
-## What runs live
+> RuseTect is a research project. Its models are trained and evaluated on public datasets that are synthetic or
+> collected outside banking (IBM AMLworld, Feedzai BAF, Aalto keystrokes, Balabit mouse data). The results below show
+> how the methods behave on that data, not performance on real bank traffic.
 
-| Layer | Model (file) | What it does |
+## How it works
+
+A payment passes through a cascade. A small gatekeeper model approves most payments quickly; the rest are
+scored by two gradient boosted models built on 31 account history features, each computed only from earlier payments.
+Around that core, independent evidence domains raise or lower the response, and no single domain can hold money on its
+own.
+
+| Layer | What it does | Code |
 |---|---|---|
-| **L-1 lure detector** | Logistic regression on hashed TF-IDF + 6 "never legitimate" rules (`message_model.json`, `service/scam_text.py`) | Scores a message; names the scam workflow (digital arrest, KYC block, task job, voice-clone emergency…) and tactics; extracts UPI IDs, phones, links |
-| **Lure → payment fusion** | Rules (`service/lure_fusion.py`) | Step-up + cool-off prompt for a payment to a new payee within 72 h of a risky message; hold for payments to a UPI ID/account named in one; push budget against alert fatigue |
-| **L0 onboarding** | LightGBM (`service/models/l0_onboarding_lgbm.json`) | Scores an account application; separate thresholds for applicants 50+ and under 50 |
-| **L1 gatekeeper** | XGBoost, 30 trees, depth 3 (`l1_gatekeeper.json`) | Approves most payments; passes the rest on |
-| **L2 graph-boost** | XGBoost (`l2_xgb.json`) + LightGBM (`l2_lgbm.json`), averaged | Risk score → Approve / Step-up / Hold / Block + STR draft, with XGBoost TreeSHAP reasons |
-| **L4 ring linker** | Union-find over blocked payments | Merges blocks that share accounts into one case |
-| **Context layer (ctx-1.4)** | Rules (`service/context_rules.py`) | Consented message cues (English, Hindi, Hinglish), payment and account graph checks, and the session domain fused into a band; two domains needed to escalate; context alone never blocks |
-| **Session and identity** | Rules (`service/session_signals.py`) | Live or video call, screen share, remote access app, pasted payee, hesitation, app hidden; device and SIM swap gate before the OTP; account takeover chains |
-| **Person** | Mouse dynamics (`service/mouse_dynamics.py`, validated on real Balabit data), typing profile (`service/behaviour.py`, experimental) | Is it really the customer? A weak, supporting signal |
-| **Intervention** | `service/intervention.py` | Pause screen in English and Hindi with a question chosen from the evidence, 30 minute cool off, duress PIN |
-| **Network** | `service/campaigns.py`, `service/consortium.py` | Scam campaigns across victims; signed, hash chained cross bank mule ledger of HMAC tokens |
-| **Review desk** | `service/review.py`, `service/security.py`, `service/str_report.py` | Analyst keys and roles, two analysts per block, nonces, signed verdicts and evidence packs, STR drafts |
+| Message (L-1) | Scores an SMS, WhatsApp message or call transcript, names the scam workflow (digital arrest, KYC block, task job, voice clone emergency) and extracts UPI IDs, phone numbers and links | `service/scam_text.py` |
+| Message to payment | Asks for confirmation on a payment to a new payee within 72 hours of a risky message, and holds payments to an identifier named in one | `service/lure_fusion.py` |
+| Account opening (L0) | Scores new account applications for mule risk, with separate thresholds for applicants under and over 50 | `service/models/l0_onboarding_lgbm.json` |
+| Payment cascade (L1, L2) | XGBoost gatekeeper, then XGBoost and LightGBM averaged into a risk score with per feature reasons | `service/rusetect_engine.py` |
+| Ring linking (L4) | Merges blocked payments that share accounts into a single case | `service/rusetect_engine.py` |
+| Context rules | Combines message, payment, account graph and session evidence; escalation needs two domains | `service/context_rules.py` |
+| Session and identity | Live call, screen sharing, remote access apps, pasted payee details, hesitation, SIM swap and device checks before the OTP, account takeover sequences | `service/session_signals.py` |
+| Person | Typing rhythm and mouse dynamics compared with the customer's own profile | `service/behaviour.py`, `service/mouse_dynamics.py` |
+| Intervention | Pause screen in English and Hindi with a question chosen from the evidence, cool off period, duress PIN | `service/intervention.py` |
+| Network | Links victims of the same scam campaign; a signed, hash chained ledger lets banks share mule flags without sharing personal data | `service/campaigns.py`, `service/consortium.py` |
+| Review desk | Analyst keys and roles, two analyst approval for blocks, signed verdicts and evidence packs, STR drafts | `service/review.py`, `service/security.py`, `service/str_report.py` |
 
-See `docs/SESSION_AND_NETWORK.md` for the person, session and network layer and how it was measured, `docs/RETRAINING.md` for the models
-retrained with the unused LI-Small and BAF variant data, and `docs/SCALING.md` for state and scale out.
-
-Random Forest and LSTM/Transformer models appear only in the **offline** benchmark blend ("L3"). The live engine
-(`service/rusetect_engine.py`) never loads them. LightGBM models are served from JSON by `service/lgbm_lite.py`,
-a pure-NumPy evaluator tested against the lightgbm package, because the lightgbm wheel needs a system library that
-serverless runtimes lack.
-
-Payment features: 31 per payment, each computed only from earlier payments: amounts, format, sender fan-out and
-receiver fan-in over 24 h, pass-through ratio, minutes since money came in, new counterparties, money flowing back.
-See `ml/aml_features.py` (offline) and `Engine.features` (live; parity checked by `ml/parity_check.py`).
+LightGBM models are served from JSON by a pure NumPy evaluator (`service/lgbm_lite.py`), tested against the lightgbm
+package, so the API runs on serverless platforms without native libraries.
 
 ## Results
 
-- **Committed benchmark results** (`service/models/benchmark_results.json`, produced earlier by `ml/bench_*.py`,
-  `ml/cascade.py`, `ml/l0_onboarding.py`): XGBoost + account-history features 0.715 PR-AUC on payments, against
-  0.172 for XGBoost on raw fields. Random Forest 0.706, CatBoost 0.700, LightGBM 0.699. Offline L3 blend 0.725.
-- **Fresh comparison** (`results/model_comparison_tabular.json`, `results/model_comparison_sequence.json`): 14 tabular
-  models plus 4 sequence models (TCN, LSTM, Transformer, 1D-CNN), re-run with one protocol.
-  See `docs/model-selection.md`.
-- **Live path audit** (`results/live_path_audit.json`): what the served configuration actually does on the test period.
-  See `docs/project-audit.md`.
+Every number comes from a script in `ml/` and a file in `results/`.
 
-- **Message layer** (`results/message_model_eval.json`, `python ml/train_message_model.py`): on synthetic Indian
-  messages from templates held out of training, push warnings are 0.95 precise and catch 68% of scams; with the
-  caution band, 82% at 0.92 precision. Genuine OTP, bank, bill and delivery SMS: 0 false alarms. Real UCI SMS: 0.98
-  average precision.
+| Area | Data | Result |
+|---|---|---|
+| Payment models | IBM AMLworld HI-Small, every payment streamed through the live engine, last 20% of time as test | PR-AUC 0.711, ROC-AUC 0.985 |
+| Payment models, lower laundering rate | IBM AMLworld LI-Small, same protocol | PR-AUC 0.345, ROC-AUC 0.967 |
+| Account opening | Feedzai BAF Base and Variants I to V, months 6 to 7 | mean ROC-AUC 0.888 over six populations; false alarm parity between age groups 0.93 on Base |
+| Messages | Synthetic Indian scam messages from templates held out of training | 0.95 precision at 68% recall for push warnings; no false alarms on genuine OTP, bank, bill and delivery messages |
+| Typing rhythm | Aalto 136M Keystrokes, 2,868 people never seen in training | ROC-AUC 0.890 from one sentence, 0.936 from three; 64% of impostors caught at 5% false alarms, equal across age groups |
+| Mouse dynamics | Balabit Mouse Dynamics Challenge, labelled impostor sessions | median per user ROC-AUC 0.915 from 20 mouse actions |
+| End to end scenarios | 480 authored, randomised runs through the API | 280 of 280 scam payments stopped before money moved; 1 of 200 genuine payments interrupted |
+| Throughput | Full HI-Small file, 5.08M payments, one CPU core | 41,459 payments per second with compact account state |
 
-Why gradient-boosted trees and logistic regression, and what the alternatives showed: `docs/model-selection.md`.
-Data to collect next: `docs/datasets.md`. Project status and open findings: `docs/project-audit.md`.
+Details: [model selection](docs/model-selection.md), [retraining with the extra data](docs/RETRAINING.md),
+[person, session and network layer](docs/SESSION_AND_NETWORK.md), [context layer](docs/CONTEXT_LAYER.md),
+[scaling](docs/SCALING.md), [datasets](docs/datasets.md), [project audit](docs/project-audit.md).
 
-## Run it
+## Quick start
 
 ```bash
 pip install -r requirements.txt polars
-uvicorn index:app --port 8001          # open http://localhost:8001
+uvicorn index:app --port 8001
 ```
-On Windows: `.\run_local.ps1`, or `.\run_local.ps1 -HistoryGlob "D:\data\aml_HI-Small_part0*.csv.gz"`.
 
-Pages:
-- `/` is the landing page.
-- `/console` replays recorded test-period payments from the synthetic IBM dataset through the live path.
-- `/report` is the benchmark report.
-- `/docs` is the interactive API.
+Open `http://localhost:8001`. The site has four pages: the overview (`/`), the investigator (`/investigate`) where you
+can replay scam scenarios and review alerts, a live console (`/console`) that replays test period payments through the
+engine, and the benchmark report (`/report`). The interactive API reference is at `/docs`. On Windows you can also run
+`.\run_local.ps1`.
 
-`RUSETECT_HISTORY_GLOB` points the console at the full IBM HI-Small transaction CSVs, so every account has history
-(about 85 s to load 4.06M payments). Without it, the console uses a bundled 100K-payment sample and recall is lower.
-
-### API
+Score a payment:
 
 ```bash
 curl -X POST localhost:8001/api/v2/payment -H 'Content-Type: application/json' -d '{
   "timestamp": "2022-09-09 10:00", "from_bank": "070", "from_account": "A1",
   "to_bank": "011", "to_account": "B2", "amount_paid": 9300, "payment_format": "ACH"}'
 ```
-Score a message (link it to a payer by passing their `bank`/`account`):
+
+Score a message and link it to the payer, so that their next payment to a new payee is escalated:
+
 ```bash
 curl -X POST localhost:8001/api/v2/message -H 'Content-Type: application/json' -d '{
   "text": "Your SBI account will be blocked today. Update PAN at http://sbi-kyc-update.in/verify",
   "timestamp": "2022-09-09 09:00", "bank": "070", "account": "A1"}'
 ```
-A later `/api/v2/payment` from `070`/`A1` to a new payee is then escalated. `GET /api/v2/alerts/summary` shows pushed vs
-suppressed warnings.
 
-Other routes: `POST /api/v2/payments/batch`, `POST /api/v2/onboard`, `GET /api/v2/cases`,
-`GET /api/v2/model-card`, `GET /api/health`.
+The full assessment with session signals is `POST /api/v2/assess`. Other routes include `POST /api/v2/onboard`,
+`GET /api/v2/cases`, `GET /api/v2/campaigns`, `GET /api/v2/model-card` and `GET /api/health`.
 
-## Reproduce the models and results
+For the console to use full account history, point `RUSETECT_HISTORY_GLOB` at the IBM HI-Small CSV files (about 85
+seconds to load 4.06M payments); otherwise it uses a bundled sample of 100,000 payments.
 
-The raw datasets are **not in this repository**. Download them and point `RUSETECT_DATA` at a folder containing:
-- `aml_HI-Small_part0*.csv.gz`: IBM AMLworld HI-Small transactions (Kaggle `ealtman2019/ibm-transactions-for-anti-money-laundering-aml`, file `HI-Small_Trans.csv`, split into gzip chunks)
-- `HI-Small_Patterns.txt`: from the same dataset
-- `baf_Base_part*.csv.gz`: Feedzai Bank Account Fraud `Base.csv` (Kaggle `sgpjesus/bank-account-fraud-dataset-neurips-2022`)
+## Reproducing the results
+
+The datasets are not stored in this repository. Download them, then point `RUSETECT_DATA` at the folder that holds them.
+
+| Dataset | Source |
+|---|---|
+| IBM AMLworld HI-Small and LI-Small | [Kaggle: ealtman2019/ibm-transactions-for-anti-money-laundering-aml](https://www.kaggle.com/datasets/ealtman2019/ibm-transactions-for-anti-money-laundering-aml) |
+| Feedzai Bank Account Fraud (Base, Variants I to V) | [Kaggle: sgpjesus/bank-account-fraud-dataset-neurips-2022](https://www.kaggle.com/datasets/sgpjesus/bank-account-fraud-dataset-neurips-2022) |
+| Aalto 136M Keystrokes | [userinterfaces.aalto.fi/136Mkeystrokes](https://userinterfaces.aalto.fi/136Mkeystrokes/) |
+| Balabit Mouse Dynamics Challenge | [github.com/balabit/Mouse-Dynamics-Challenge](https://github.com/balabit/Mouse-Dynamics-Challenge) |
 
 ```bash
 pip install -r requirements-ml.txt
 export RUSETECT_DATA=/path/to/data RUSETECT_WORK=/path/to/work
-python ml/aml_features.py              # causal payment features -> $RUSETECT_WORK/aml_feat.parquet
-python ml/extract_patterns.py          # ground-truth rings
-python ml/bench_tabular.py             # committed AML tabular benchmark
-python ml/bench_deep.py                # MLP, 1D-CNN, TCN, LSTM, Transformer, GAN augmentation
-python ml/bench_gnn.py                 # GNN (strictly causal)
-python ml/bench_baf.py                 # onboarding models
-python ml/cascade.py                   # build the cascade, export service/models/*
-python ml/l0_onboarding.py             # L0 with age-group thresholds
-python ml/compare_models.py            # fresh tabular comparison -> results/model_comparison_tabular.json
-python ml/export_sequence_results.py   # sequence models -> results/model_comparison_sequence.json
-python ml/audit_live_path.py           # live path audit -> results/live_path_audit.json
-python ml/parity_check.py              # streaming features == offline features
-python ml/build_report.py              # regenerate service/static/report.html from report/report_template.html
-python ml/train_message_model.py      # L-1 lure detector (needs data/sms.tsv, see the script header) -> service/models/message_model.json
+
+python ml/aml_features.py              # payment features
+python ml/cascade.py                   # build the payment cascade and export service/models
+python ml/l0_onboarding.py             # account opening model with age group thresholds
+python ml/train_message_model.py       # message model
+python ml/full_dataset_eval.py HI      # stream a full dataset through the live engine (also LI)
+python ml/retrain_extended.py          # retraining with LI-Small (see docs/RETRAINING.md)
+python ml/retrain_l0_variants.py       # retraining with the BAF variants
+python ml/aalto_eval.py SAMPLE.zip     # typing rhythm on Aalto keystrokes
+python ml/balabit_eval.py              # mouse dynamics on Balabit
+python ml/scenario_suite.py            # end to end scenarios through the API
+python ml/build_report.py              # rebuild the benchmark report page
 pytest tests/
 ```
-The report has one source: edit `report/report_template.html` and run `python ml/build_report.py`.
-`tests/test_branding.py` fails if the built page is stale.
 
-## Deploy
+The benchmark report has a single source, `report/report_template.html`; the tests fail if the built page is stale.
 
-Vercel: `index.py` exposes the FastAPI `app` and `requirements.txt` holds runtime dependencies only. Serverless
-instances do not share memory, so the console replay can reset between requests there; run locally or on an
-always-on host for demos.
+## Deployment
 
-## Limits
+`index.py` exposes the FastAPI app and `requirements.txt` lists runtime dependencies only, which is all Vercel needs.
+Serverless instances do not share memory, so demo state such as the console replay can reset between requests. For a
+bank deployment, `service/scale` keeps account state in Redis and spreads payments over workers by payer, and
+`deploy/` has a Dockerfile and a compose file; see [scaling](docs/SCALING.md).
 
-- Both datasets are synthetic, so thresholds and models must be re-validated on a bank's own data.
-- The Indian message corpus is synthetic (templates written from public advisories). Real reported scam messages
-  are needed before the L-1 thresholds can be trusted; see `docs/datasets.md`. Call audio and deepfake voice are not
-  modelled: L-1 needs a transcript.
-- Lure events, the payee watchlist and alert budgets are in memory too, and are not shared across serverless instances.
-- The engine keeps account state in memory; production needs a persistent feature store and a history replay at start-up.
+Demo mode publishes its analyst keys so the review desk can be tried. Set `RUSETECT_ANALYST_KEYS` and
+`RUSETECT_SIGNING_KEY` before using it with anything real.
+
+## Project layout
+
+```
+service/          API, live engine, risk layers, review desk, static pages
+service/models/   served models and thresholds
+service/scale/    Redis state, stream workers and replay for scale out
+ml/               feature building, training, benchmarks and evaluations
+results/          measured results, one JSON file per evaluation
+report/           source of the benchmark report page
+docs/             design notes and results
+tests/            API, model, context, review, scale and branding tests
+```
+
+## Limitations
+
+The payment and account opening data are synthetic, and the message corpus was written from public advisories, so
+models and thresholds must be validated again on a bank's own data before use. Call audio is not modelled; the message
+layer needs a transcript. Session signals have no public benchmark, and the typing and mouse checks were validated on
+desktop and typing test data rather than inside a banking app. The demo keeps state in memory; production needs the
+Redis state layer or a feature store.
+
+## Acknowledgements
+
+Datasets by IBM Research (AMLworld, Altman et al., NeurIPS 2023), Feedzai (Bank Account Fraud, Jesus et al., NeurIPS
+2022), Aalto University (Dhakal, Feit, Kristensson and Oulasvirta, "Observations on Typing from 136 Million
+Keystrokes", CHI 2018) and Balabit (Mouse Dynamics Challenge).

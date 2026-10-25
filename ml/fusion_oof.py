@@ -1,4 +1,4 @@
-"""Finale Part 4b: does the trained message model make a better context signal than phrase rules, on messages it
+"""Does the trained message model make a better context signal than phrase rules, on messages it
 did NOT train on? Template-grouped 5-fold CV on the curated Indian corpus (seed 7 fills, the Part 4 holdout):
 each fold trains a fresh hashed TF-IDF + logistic regression (same featurizer as the served L-1 model) on 4/5 of
 the TEMPLATES and scores the held-out templates. The out-of-fold band then feeds the context layer (variant D).

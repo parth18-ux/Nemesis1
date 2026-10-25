@@ -1,5 +1,5 @@
 """
-RuseTect streaming engine — the online version of ml/aml_features.py + ml/cascade.py.
+RuseTect streaming engine: the online version of ml/aml_features.py + ml/cascade.py.
 
 Keeps per-account state in memory, computes the same causal features for each incoming
 payment (only past payments are used), then runs the cascade:

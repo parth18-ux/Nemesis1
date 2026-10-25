@@ -1,4 +1,4 @@
-"""Finale Part 1: context rules, consent, redaction and the context veto."""
+"""Context rules, consent, redaction and the context veto."""
 import json, subprocess, sys
 from pathlib import Path
 ROOT = Path(__file__).parents[1]
@@ -6,7 +6,7 @@ sys.path.insert(0, str(ROOT / "service"))
 from context_rules import assess, PaymentContext, redact, keyword_baseline, combine, band_for
 
 
-def test_fixtures_match_round1_table():
+def test_fixtures_match_reference_table():
     r = subprocess.run([sys.executable, str(ROOT / "ml" / "context_validation.py")], capture_output=True, text=True)
     assert r.returncode == 0, r.stdout[-2000:]
 

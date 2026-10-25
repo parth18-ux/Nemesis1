@@ -11,7 +11,7 @@
   "max": 147.85,
   "mean": 35.99
  },
- "target_from_round1_pdf": "p95 below 100 ms",
+ "target": "p95 below 100 ms",
  "met": true,
  "machine": "2 CPU, one uvicorn worker, client on the same machine"
 }

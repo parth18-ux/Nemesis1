@@ -1,5 +1,5 @@
 """
-RuseTect — causal graph feature engineering for IBM AMLworld HI-Small.
+RuseTect: causal graph feature engineering for IBM AMLworld HI-Small.
 
 Every feature for transaction t uses only transactions strictly before t
 (or at the same minute but earlier in file order), so a model trained on

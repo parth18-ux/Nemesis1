@@ -1,5 +1,5 @@
 """
-RuseTect — Layer 0 (account-opening / mule-account onboarding) benchmark on Feedzai BAF Base (1M applications).
+RuseTect: Layer 0 (account-opening / mule-account onboarding) benchmark on Feedzai BAF Base (1M applications).
 Protocol from the BAF paper (Jesus et al., NeurIPS 2022): train months 0-5, test months 6-7,
 metric = TPR (recall) at 5% FPR, fairness = FPR ratio (age >= 50 vs < 50) at that threshold.
 """

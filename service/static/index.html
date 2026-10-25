@@ -170,7 +170,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-bet
 <main id="top">
   <div class="hero wrap">
     <h1>Catch the ring.<br>Clear the rest.</h1>
-    <p class="sub">A layered AI filter for mule accounts and scam money flows. A small gatekeeper model clears most payments; the rest are scored by gradient-boosted trees and linked into ring cases, with reasons. Built and benchmarked on synthetic datasets.</p>
+    <p class="sub">A layered AI filter for mule accounts and scam money flows. A small gatekeeper model clears most payments; the rest are scored by gradient boosted trees and linked into ring cases, with reasons. Built and benchmarked on synthetic datasets.</p>
     <div class="ctas"><a class="pill" href="/console">Watch a replay ↗</a><a class="pill ghost" href="/report">Read the benchmark</a></div>
     <div class="stage">
       <div class="slab" aria-hidden="true"></div>
@@ -186,7 +186,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-bet
               <div class="col"><div class="lolly" style="height:37%;animation-delay:.35s"><em>318 cases</em></div></div>
               <div class="col"><div class="lolly red" style="height:31%;animation-delay:.4s"><em>158 rings</em></div></div>
             </div>
-            <div class="axis"><span>All payments</span><span>After L1</span><span>Blocked (L2–L3)</span><span>L4 cases</span><span>Rings caught</span></div>
+            <div class="axis"><span>All payments</span><span>After L1</span><span>Blocked (L2, L3)</span><span>L4 cases</span><span>Rings caught</span></div>
           </div>
         </div>
       </div>
@@ -213,20 +213,20 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-bet
           <span class="tag">L0 · Onboarding gate</span>
           <h3>Stop mule accounts at opening</h3>
           <p>LightGBM scores each new application, now trained on BAF Base and all five bias variants. Separate thresholds per age group keep false alarms even across customers.</p>
-          <div class="stat num">0.93<small>false-alarm parity, 50+ vs under 50, on Base test months (0.88 before the variants were added)</small></div>
+          <div class="stat num">0.93<small>false alarm parity, 50+ vs under 50, on Base test months (0.88 before the variants were added)</small></div>
         </article>
         <article>
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4-2v-4z"/></svg>
           <span class="tag">L1 · Gatekeeper</span>
           <h3>Clear clean traffic instantly</h3>
-          <p>A 30-tree XGBoost reads each account's history (fan-out, pass-through, first-time payees) and approves the obvious.</p>
+          <p>A 30-tree XGBoost reads each account's history (fan-out, pass-through, first time payees) and approves the obvious.</p>
           <div class="stat num">0.3 ms<small>per payment; kept 99.2% of laundering for the next layer · reported</small></div>
         </article>
         <article>
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M8 7.5l3 8.5M16 7.5l-3 8.5M8.5 6h7"/></svg>
-          <span class="tag">L2 · Graph-boost (live)</span>
+          <span class="tag">L2 · Graph boost (live)</span>
           <h3>Score what's left, with reasons</h3>
-          <p>The live API averages an XGBoost and a LightGBM model. Reasons come from XGBoost's per-feature contributions. Random Forest and LSTM/Transformer blends exist only in the offline benchmark.</p>
+          <p>The live API averages an XGBoost and a LightGBM model. Reasons come from XGBoost's per feature contributions. Random Forest and LSTM/Transformer blends exist only in the offline benchmark.</p>
           <div class="stat num">0.711<small>PR-AUC of the live path on all HI-Small test weeks, now trained on HI-Small + LI-Small (0.345 on LI-Small)</small></div>
         </article>
         <article>
@@ -266,7 +266,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-bet
           <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg>
           <span class="tag">Person · is it really them?</span>
           <h3>Stop SIM swap takeovers before the OTP</h3>
-          <p>An unenrolled device right after a SIM swap gets no OTP and re-verifies by video KYC. Typing and mouse rhythm check the person; account takeover chains (reset, new device, new payee, transfer) are caught in order.</p>
+          <p>An unenrolled device right after a SIM swap gets no OTP and reverifies by video KYC. Typing and mouse rhythm check the person; account takeover chains (reset, new device, new payee, transfer) are caught in order.</p>
           <div class="stat num">0.89<small>median ROC-AUC of mouse dynamics after 10 actions, on real Balabit data</small></div>
         </article>
         <article>
@@ -312,7 +312,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-bet
         <ol class="steps">
           <li><span class="n">01</span><h3>History, not just the payment</h3><p>22 features per payment, each computed only from earlier activity: money in then straight out, sudden fan-out, money flowing back.</p></li>
           <li><span class="n">02</span><h3>Reasons an analyst can use</h3><p>Every block lists its top drivers in plain words, such as "minutes since money came in: 0" or "new counterparty", ready for the STR draft.</p></li>
-          <li><span class="n">03</span><h3>Rings by typology</h3><p>Offline benchmark against IBM's labelled synthetic rings: fan-in 90%, cycles 88%, gather-scatter 87%, fan-out 86% caught. Bipartite rings are the hardest at 52%.</p></li>
+          <li><span class="n">03</span><h3>Rings by typology</h3><p>Offline benchmark against IBM's labelled synthetic rings: fan-in 90%, cycles 88%, gather scatter 87%, fan-out 86% caught. Bipartite rings are the hardest at 52%.</p></li>
         </ol>
       </div>
       <div class="card" aria-label="A fan-out ring: one source splits money across mule accounts that converge on a cash-out account">
@@ -339,10 +339,10 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-bet
       <div class="head">
         <span class="eyebrow">Why this model</span>
         <h2>Boosted trees, because of the data.</h2>
-        <p>Each payment becomes 31 numbers about the accounts' past behaviour: how fast money moves on, how many new payees, how much flows back. Many are missing for new accounts, and laundering is under 0.2% of payments. Gradient-boosted trees fit that shape well: they learn interactions without hand-built crosses, handle missing values natively, train in seconds and score in well under a millisecond, and XGBoost gives per-feature reasons for each alert.</p>
+        <p>Each payment becomes 31 numbers about the accounts' past behaviour: how fast money moves on, how many new payees, how much flows back. Many are missing for new accounts, and laundering is under 0.2% of payments. Gradient boosted trees fit that shape well: they learn interactions without hand built crosses, handle missing values natively, train in seconds and score in well under a millisecond, and XGBoost gives per feature reasons for each alert.</p>
       </div>
       <div class="why-grid">
-        <div><h3>Features matter more than the algorithm</h3><p>XGBoost scores 0.172 PR-AUC on raw payment fields and 0.715 with account-history features. The top four tree models sit between 0.699 and 0.715.</p></div>
+        <div><h3>Features matter more than the algorithm</h3><p>XGBoost scores 0.172 PR-AUC on raw payment fields and 0.715 with account history features. The top four tree models sit between 0.699 and 0.715.</p></div>
         <div><h3>L1 is small on purpose</h3><p>30 shallow trees approve about 80% of payments in about 0.3 ms while keeping about 99% of laundering for L2. The goal is speed with very few misses, not a final decision.</p></div>
         <div><h3>L2 averages XGBoost and LightGBM</h3><p>Two boosters grown differently give a steadier score. In the audit, the live average scored 0.716 PR-AUC on the test period against 0.722 for its XGBoost half alone, so the case for it is robustness, not accuracy.</p></div>
       </div>
@@ -374,10 +374,10 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-bet
       <dl class="specs">
         <div class="spec"><dt>Payment data</dt><dd><b class="num">5,078,345</b>IBM AMLworld HI-Small payments, 515,088 accounts, 5,177 laundering, 370 labelled rings</dd></div>
         <div class="spec"><dt>Onboarding data</dt><dd><b class="num">1,000,000</b>Feedzai BAF account applications, 1.1% fraud</dd></div>
-        <div class="spec"><dt>Test protocol</dt><dd>Time-ordered 60/20/20 split; thresholds set on validation; BAF trained on months 0–4, tested on 6–7</dd></div>
+        <div class="spec"><dt>Test protocol</dt><dd>Time-ordered 60/20/20 split; thresholds set on validation; BAF trained on months 0 to 4, tested on 6 to 7</dd></div>
         <div class="spec"><dt>Offline blend (not live)</dt><dd><b class="num">0.725</b>PR-AUC; block precision 0.921, F1 0.702, with Random Forest and LSTM/Transformer in the blend</dd></div>
-        <div class="spec"><dt>Rings caught (offline)</dt><dd><b class="num">82–89%</b>of the 192 test-period rings get at least one block (range across two retrains)</dd></div>
-        <div class="spec"><dt>Onboarding recall</dt><dd><b class="num">0.534</b>at a 5% false-positive rate, with age-fair thresholds</dd></div>
+        <div class="spec"><dt>Rings caught (offline)</dt><dd><b class="num">82 to 89%</b>of the 192 test period rings get at least one block (range across two retrains)</dd></div>
+        <div class="spec"><dt>Onboarding recall</dt><dd><b class="num">0.534</b>at a 5% false positive rate, with age fair thresholds</dd></div>
         <div class="spec"><dt>Latency (live path)</dt><dd><b class="num">0.33 ms</b>median per payment including feature computation, one CPU core, 60,000-payment replay</dd></div>
         <div class="spec"><dt>Streaming parity</dt><dd><b class="num">100%</b>same block decisions when the live engine and the offline pipeline score the same 60,000 payments with the same L1 + L2 models</dd></div>
       </dl>
@@ -389,10 +389,10 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-bet
       <div class="head">
         <span class="eyebrow">Benchmarks</span>
         <h2>21 models, one scoreboard.</h2>
-        <p>Same training rows, same threshold procedure, same held-out test period. PR-AUC on laundering payments (0.18% of test traffic). Reported results from <code>ml/bench_*.py</code>.</p>
+        <p>Same training rows, same threshold procedure, same held out test period. PR-AUC on laundering payments (0.18% of test traffic). Reported results from <code>ml/bench_*.py</code>.</p>
       </div>
       <div class="bars" id="bars"></div>
-      <p class="note">Account history features matter most: XGBoost goes from 0.172 on raw payment fields to 0.715 with them. The GNN is tested with strictly past-only graph data; published GNN results on this dataset let the test graph include future edges. <a href="/report">Full report →</a></p>
+      <p class="note">Account history features matter most: XGBoost goes from 0.172 on raw payment fields to 0.715 with them. The GNN is tested with strictly past only graph data; published GNN results on this dataset let the test graph include future edges. <a href="/report">Full report →</a></p>
     </div>
   </section>
 
@@ -404,7 +404,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-bet
       </div>
       <div class="how">
         <article><span class="n">01</span><h3>Load account history</h3><p>Open the live console and load earlier payments, so every account has context, as it would in a bank.</p><a class="pill ghost" href="/console" style="align-self:flex-start;margin-top:auto">Open console</a></article>
-        <article><span class="n">02</span><h3>Stream recorded payments</h3><p>60,000 recorded test-period payments from the synthetic IBM dataset flow through the live path. Watch clears, blocks, reasons and ring cases, checked against ground truth.</p></article>
+        <article><span class="n">02</span><h3>Stream recorded payments</h3><p>60,000 recorded test period payments from the synthetic IBM dataset flow through the live path. Watch clears, blocks, reasons and ring cases, checked against ground truth.</p></article>
         <article><span class="n">03</span><h3>Call the API</h3><p>Score your own payment or account application.</p>
 <pre>POST /api/v2/payment
 { "timestamp": "2022-09-09 10:00",
@@ -421,7 +421,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-bet
       <div class="cta">
         <span class="eyebrow" style="color:var(--olive-ink);opacity:.7">RuseTect</span>
         <h2>Stop the money,<br>not the customer.</h2>
-        <p>Built and benchmarked on 6 million synthetic records. Real deployment would need retraining and re-validation on a bank's own data.</p>
+        <p>Built and benchmarked on 6 million synthetic records. Real deployment would need retraining and revalidation on a bank's own data.</p>
         <div class="ctas" style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center"><a class="pill" href="/console">Open live console ↗</a><a class="pill ghost" href="/report">Benchmark report</a></div>
       </div>
     </div>

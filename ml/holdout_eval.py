@@ -1,4 +1,4 @@
-"""Finale Part 4: holdout and ablation for the frozen context ruleset (ctx-1.1, commit e8e00a0; no rule edited since).
+"""Holdout and ablation for the frozen context ruleset (ctx-1.1; no rule edited since).
 
 A. Message holdout: the curated Indian scam / legitimate corpus from ml/scam_corpus.py (written earlier for the L-1
    message model, never used to design the context rules), re-filled with a NEW seed (seed 7, 3 fills per template).

@@ -1,5 +1,5 @@
 """
-RuseTect — layered filtration cascade, evaluated end-to-end on the held-out test period (last 20%).
+RuseTect: layered filtration cascade, evaluated end-to-end on the held-out test period (last 20%).
 
   L1  Gatekeeper    tiny XGBoost (30 trees, depth 3) on causal graph features; drops the
                     obviously-clean traffic while keeping >= 99% of laundering (threshold set on val)

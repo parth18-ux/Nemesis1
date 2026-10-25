@@ -1,5 +1,5 @@
 """
-RuseTect — directed edge-level GNN (GraphSAGE-style, separate in/out aggregation) for mule-ring payments.
+RuseTect: directed edge-level GNN (GraphSAGE-style, separate in/out aggregation) for mule-ring payments.
 
 Strictly causal protocol: node embeddings come only from the graph of PAST payments.
   train: graph = first 40% of payments  -> classify payments in 40-60%

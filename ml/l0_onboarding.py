@@ -1,5 +1,5 @@
 """
-RuseTect — Layer 0 onboarding gate (mule-account opening), final model + fairness post-processing.
+RuseTect: Layer 0 onboarding gate (mule-account opening), final model + fairness post-processing.
 LightGBM on BAF Base, trained months 0-4, thresholds on month 5, tested on months 6-7.
 Fairness fix: group-specific thresholds so applicants >= 50 and < 50 each get 5% FPR on validation.
 """
