@@ -34,6 +34,10 @@ at the "verify" level it catches more laundering on both datasets for the same n
 hold" level it gains on LI-Small and loses a little on HI-Small. The previous models are in git history and in
 `work/previous_*` if that trade off should go the other way.
 
+After the swap, the full streaming runs with the new live models (`ml/full_dataset_eval.py`, every payment through the API's
+engine) give PR-AUC 0.711 on HI-Small and 0.345 on LI-Small test weeks, matching the table, and every one of the 60
+labelled LI-Small rings in its test weeks gets at least one flag (59 of 60 before).
+
 The training features were checked twice: the previous live models score the same PR-AUC on these features (0.716 on
 HI-Small, 0.336 on LI-Small test weeks) as in the full streaming runs (`results/full_eval_*.json`).
 
