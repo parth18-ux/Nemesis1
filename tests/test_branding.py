@@ -16,7 +16,7 @@ client = TestClient(app)
 STATIC = ROOT / "service" / "static"
 # old project names and old event branding, base64 encoded so this guard does not itself contain them
 LEGACY = re.compile(base64.b64decode("cmFrc2hhbXxjaXRhZGVsfGlpdFtcc18tXSpkZWxoaXx0cmFja1xzKjA/MlxifGFtYXpvbg==").decode(), re.I)
-REPO_URL = "github.com/Parth1681/RuseTect"
+REPO_URL = "github.com/parth2581/RuseTect"
 
 
 # ---------------------------------------------------------------- rename
