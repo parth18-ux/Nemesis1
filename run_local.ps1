@@ -13,8 +13,6 @@ if (-not (Test-Path ".venv")) { python -m venv .venv }
 & .\.venv\Scripts\python.exe -m pip install --quiet --upgrade pip
 & .\.venv\Scripts\python.exe -m pip install --quiet -r requirements.txt polars
 
-# Legacy variable name from earlier versions is still honoured.
-if (-not $HistoryGlob -and $env:RUSETECT_HISTORY_GLOB) { $HistoryGlob = $env:RUSETECT_HISTORY_GLOB }
 if ($HistoryGlob) {
     $env:RUSETECT_HISTORY_GLOB = $HistoryGlob
     Write-Host "Account history: $HistoryGlob"

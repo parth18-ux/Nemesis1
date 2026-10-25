@@ -2,13 +2,12 @@
 
 RUSETECT_DATA  folder with aml_HI-Small_part0*.csv.gz, HI-Small_Patterns.txt, baf_Base_part*.csv.gz
 RUSETECT_WORK  folder for intermediate parquet files and predictions
-(The legacy names RUSETECT_DATA / RUSETECT_WORK are still read as fallbacks.)
 """
 import os
 
 
 def _env(name, default):
-    return os.environ.get(f"RUSETECT_{name}") or os.environ.get(f"RUSETECT_{name}") or default
+    return os.environ.get(f"RUSETECT_{name}") or default
 
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

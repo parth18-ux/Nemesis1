@@ -548,9 +548,8 @@ def demo_payload(r):
 
 
 def full_history_rows():
-    """All payments before the demo window from the full IBM HI-Small CSV(s), if RUSETECT_HISTORY_GLOB is set.
-    The legacy name RUSETECT_HISTORY_GLOB is still read as a fallback."""
-    pattern = os.environ.get("RUSETECT_HISTORY_GLOB") or os.environ.get("RUSETECT_HISTORY_GLOB")
+    """All payments before the demo window from the full IBM HI-Small CSV(s), if RUSETECT_HISTORY_GLOB is set."""
+    pattern = os.environ.get("RUSETECT_HISTORY_GLOB")
     if not pattern:
         return None
     import glob

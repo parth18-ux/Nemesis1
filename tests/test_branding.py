@@ -1,5 +1,5 @@
 """Protect the RuseTect rename, model loading, threshold export and report consistency."""
-import ast, json, re, sys
+import ast, base64, json, re, sys
 from pathlib import Path
 
 import pytest
@@ -14,8 +14,9 @@ from index import app  # noqa: E402
 
 client = TestClient(app)
 STATIC = ROOT / "service" / "static"
-LEGACY = re.compile(r"rusetect|iit[\s_-]*delhi|track\s*0?2\b|amazon", re.I)
-REPO_URL = "github.com/Parth1681/RuseTect"     # the repository's slug predates the rename; links to it are allowed
+# old project names and old event branding, base64 encoded so this guard does not itself contain them
+LEGACY = re.compile(base64.b64decode("cmFrc2hhbXxjaXRhZGVsfGlpdFtcc18tXSpkZWxoaXx0cmFja1xzKjA/MlxifGFtYXpvbg==").decode(), re.I)
+REPO_URL = "github.com/Parth1681/RuseTect"
 
 
 # ---------------------------------------------------------------- rename
@@ -35,20 +36,17 @@ def test_api_identity():
     assert client.get("/favicon.svg").status_code == 200
 
 
-def test_no_legacy_branding_in_source_except_env_fallbacks():
-    """Old names may appear only as RUSETECT_* environment-variable fallbacks, or in migration notes."""
-    notes = {"README.md", "docs/project-audit.md", "docs/model-selection.md", "tests/test_branding.py"}
+def test_no_legacy_names_anywhere_in_source():
+    """No old project names in any source, doc, config or results file."""
     hits = []
     for p in ROOT.rglob("*"):
-        if p.is_dir() or any(part in {".git", "__pycache__", ".pytest_cache", ".venv", "work", "data", "results"} for part in p.parts):
+        if p.is_dir() or any(part in {".git", "__pycache__", ".pytest_cache", ".venv", "work", "data"} for part in p.parts):
             continue
-        if p.suffix not in {".py", ".html", ".md", ".json", ".ps1", ".txt", ".svg", ".toml"}:
+        if p.suffix not in {".py", ".html", ".md", ".json", ".ps1", ".txt", ".svg", ".toml", ".yml", ".yaml", ".cfg", ".ini", ".sh"} and p.name not in {"Dockerfile", ".gitignore", ".vercelignore", "vercel.json"}:
             continue
         rel = p.relative_to(ROOT).as_posix()
-        if rel in notes:
-            continue
         for n, line in enumerate(p.read_text(errors="ignore").splitlines(), 1):
-            if LEGACY.search(line.replace(REPO_URL, "")) and "RUSETECT_" not in line:
+            if LEGACY.search(line):
                 hits.append(f"{rel}:{n}: {line.strip()[:80]}")
     assert not hits, hits
 

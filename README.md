@@ -128,16 +128,6 @@ Vercel: `index.py` exposes the FastAPI `app` and `requirements.txt` holds runtim
 instances do not share memory, so the console replay can reset between requests there; run locally or on an
 always-on host for demos.
 
-## Migrating from the previous name
-
-This project was previously called RuseTect.
-- `RUSETECT_DATA`, `RUSETECT_WORK` and `RUSETECT_HISTORY_GLOB` are still read as fallbacks; prefer `RUSETECT_*`.
-- `service/rusetect_engine.py` is now `service/rusetect_engine.py`.
-- API routes, model files and the response format are unchanged.
-
-Renaming the source does not change the GitHub repository name or the Vercel project/domain; those are separate
-settings (see `docs/project-audit.md`).
-
 ## Limits
 
 - Both datasets are synthetic, so thresholds and models must be re-validated on a bank's own data.

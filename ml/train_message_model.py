@@ -29,7 +29,7 @@ from scam_text import N_BUCKETS, counts, hard_signals, normalize, tag
 
 SEED = 0
 DOMAIN_WEIGHT = 4.0      # Indian rows count 4x: the target is Indian UPI-era scams, UCI is older UK SMS
-UCI = os.path.join(os.environ.get("RUSETECT_DATA") or os.environ.get("RUSETECT_DATA") or os.path.join(REPO, "data"), "sms.tsv")
+UCI = os.path.join(os.environ.get("RUSETECT_DATA") or os.path.join(REPO, "data"), "sms.tsv")
 
 
 def load():
