@@ -212,8 +212,8 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-bet
           <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M7.5 18c1-2.3 2.6-3.4 4.5-3.4s3.5 1.1 4.5 3.4"/></svg>
           <span class="tag">L0 · Onboarding gate</span>
           <h3>Stop mule accounts at opening</h3>
-          <p>LightGBM scores each new application. Separate thresholds per age group keep false alarms even across customers.</p>
-          <div class="stat num">0.88<small>false-alarm parity, 50+ vs under 50 (was 0.31) · reported</small></div>
+          <p>LightGBM scores each new application, now trained on BAF Base and all five bias variants. Separate thresholds per age group keep false alarms even across customers.</p>
+          <div class="stat num">0.93<small>false-alarm parity, 50+ vs under 50, on Base test months (0.88 before the variants were added)</small></div>
         </article>
         <article>
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4-2v-4z"/></svg>
@@ -227,7 +227,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-bet
           <span class="tag">L2 · Graph-boost (live)</span>
           <h3>Score what's left, with reasons</h3>
           <p>The live API averages an XGBoost and a LightGBM model. Reasons come from XGBoost's per-feature contributions. Random Forest and LSTM/Transformer blends exist only in the offline benchmark.</p>
-          <div class="stat num">0.715<small>PR-AUC, XGBoost + graph features · reported</small></div>
+          <div class="stat num">0.711<small>PR-AUC of the live path on all HI-Small test weeks, now trained on HI-Small + LI-Small (0.345 on LI-Small)</small></div>
         </article>
         <article>
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h10M4 18h7"/><circle cx="18" cy="16" r="3"/></svg>

@@ -1,0 +1,327 @@
+{
+ "candidates": {
+  "current": {
+   "thresholds": {
+    "age_50_plus": 0.3859807127990406,
+    "age_under_50": 0.1710788276802956
+   },
+   "Base": {
+    "validation_month_5": {
+     "roc_auc": 0.8965,
+     "recall_at_5pct_fpr": 0.5358,
+     "recall": 0.5273,
+     "fpr": 0.05,
+     "fpr_parity": 1.0
+    },
+    "test_months_6_7": {
+     "roc_auc": 0.8917,
+     "recall_at_5pct_fpr": 0.5413,
+     "recall": 0.5344,
+     "fpr": 0.0541,
+     "fpr_parity": 0.883
+    }
+   },
+   "Variant_I": {
+    "validation_month_5": {
+     "roc_auc": 0.887,
+     "recall_at_5pct_fpr": 0.5188,
+     "recall": 0.5273,
+     "fpr": 0.0509,
+     "fpr_parity": 0.995
+    },
+    "test_months_6_7": {
+     "roc_auc": 0.8823,
+     "recall_at_5pct_fpr": 0.5104,
+     "recall": 0.5351,
+     "fpr": 0.0544,
+     "fpr_parity": 0.878
+    }
+   },
+   "Variant_II": {
+    "validation_month_5": {
+     "roc_auc": 0.9033,
+     "recall_at_5pct_fpr": 0.5507,
+     "recall": 0.4947,
+     "fpr": 0.051,
+     "fpr_parity": 0.992
+    },
+    "test_months_6_7": {
+     "roc_auc": 0.8968,
+     "recall_at_5pct_fpr": 0.5493,
+     "recall": 0.5229,
+     "fpr": 0.0568,
+     "fpr_parity": 0.891
+    }
+   },
+   "Variant_III": {
+    "validation_month_5": {
+     "roc_auc": 0.8794,
+     "recall_at_5pct_fpr": 0.4829,
+     "recall": 0.5201,
+     "fpr": 0.0511,
+     "fpr_parity": 0.987
+    },
+    "test_months_6_7": {
+     "roc_auc": 0.8701,
+     "recall_at_5pct_fpr": 0.4755,
+     "recall": 0.5294,
+     "fpr": 0.0573,
+     "fpr_parity": 0.891
+    }
+   },
+   "Variant_IV": {
+    "validation_month_5": {
+     "roc_auc": 0.9027,
+     "recall_at_5pct_fpr": 0.5484,
+     "recall": 0.497,
+     "fpr": 0.0511,
+     "fpr_parity": 0.987
+    },
+    "test_months_6_7": {
+     "roc_auc": 0.8701,
+     "recall_at_5pct_fpr": 0.4755,
+     "recall": 0.5294,
+     "fpr": 0.0573,
+     "fpr_parity": 0.891
+    }
+   },
+   "Variant_V": {
+    "validation_month_5": {
+     "roc_auc": 0.8742,
+     "recall_at_5pct_fpr": 0.4739,
+     "recall": 0.4978,
+     "fpr": 0.0507,
+     "fpr_parity": 0.974
+    },
+    "test_months_6_7": {
+     "roc_auc": 0.8723,
+     "recall_at_5pct_fpr": 0.4857,
+     "recall": 0.5411,
+     "fpr": 0.0567,
+     "fpr_parity": 0.893
+    }
+   }
+  },
+  "retrain_base": {
+   "thresholds": {
+    "age_50_plus": 0.3859807127990406,
+    "age_under_50": 0.1710788276802956
+   },
+   "Base": {
+    "validation_month_5": {
+     "roc_auc": 0.8965,
+     "recall_at_5pct_fpr": 0.5358,
+     "recall": 0.5273,
+     "fpr": 0.05,
+     "fpr_parity": 1.0
+    },
+    "test_months_6_7": {
+     "roc_auc": 0.8917,
+     "recall_at_5pct_fpr": 0.5413,
+     "recall": 0.5344,
+     "fpr": 0.0541,
+     "fpr_parity": 0.883
+    }
+   },
+   "Variant_I": {
+    "validation_month_5": {
+     "roc_auc": 0.887,
+     "recall_at_5pct_fpr": 0.5188,
+     "recall": 0.5273,
+     "fpr": 0.0509,
+     "fpr_parity": 0.995
+    },
+    "test_months_6_7": {
+     "roc_auc": 0.8823,
+     "recall_at_5pct_fpr": 0.5104,
+     "recall": 0.5351,
+     "fpr": 0.0544,
+     "fpr_parity": 0.878
+    }
+   },
+   "Variant_II": {
+    "validation_month_5": {
+     "roc_auc": 0.9033,
+     "recall_at_5pct_fpr": 0.5507,
+     "recall": 0.4947,
+     "fpr": 0.051,
+     "fpr_parity": 0.992
+    },
+    "test_months_6_7": {
+     "roc_auc": 0.8968,
+     "recall_at_5pct_fpr": 0.5493,
+     "recall": 0.5229,
+     "fpr": 0.0568,
+     "fpr_parity": 0.891
+    }
+   },
+   "Variant_III": {
+    "validation_month_5": {
+     "roc_auc": 0.8794,
+     "recall_at_5pct_fpr": 0.4829,
+     "recall": 0.5201,
+     "fpr": 0.0511,
+     "fpr_parity": 0.987
+    },
+    "test_months_6_7": {
+     "roc_auc": 0.8701,
+     "recall_at_5pct_fpr": 0.4755,
+     "recall": 0.5294,
+     "fpr": 0.0573,
+     "fpr_parity": 0.891
+    }
+   },
+   "Variant_IV": {
+    "validation_month_5": {
+     "roc_auc": 0.9027,
+     "recall_at_5pct_fpr": 0.5484,
+     "recall": 0.497,
+     "fpr": 0.0511,
+     "fpr_parity": 0.987
+    },
+    "test_months_6_7": {
+     "roc_auc": 0.8701,
+     "recall_at_5pct_fpr": 0.4755,
+     "recall": 0.5294,
+     "fpr": 0.0573,
+     "fpr_parity": 0.891
+    }
+   },
+   "Variant_V": {
+    "validation_month_5": {
+     "roc_auc": 0.8742,
+     "recall_at_5pct_fpr": 0.4739,
+     "recall": 0.4978,
+     "fpr": 0.0507,
+     "fpr_parity": 0.974
+    },
+    "test_months_6_7": {
+     "roc_auc": 0.8723,
+     "recall_at_5pct_fpr": 0.4857,
+     "recall": 0.5411,
+     "fpr": 0.0567,
+     "fpr_parity": 0.893
+    }
+   }
+  },
+  "retrain_variants": {
+   "thresholds": {
+    "age_50_plus": 0.4719780539692664,
+    "age_under_50": 0.2818472321190204
+   },
+   "Base": {
+    "validation_month_5": {
+     "roc_auc": 0.8998,
+     "recall_at_5pct_fpr": 0.5507,
+     "recall": 0.5443,
+     "fpr": 0.05,
+     "fpr_parity": 1.0
+    },
+    "test_months_6_7": {
+     "roc_auc": 0.8973,
+     "recall_at_5pct_fpr": 0.5549,
+     "recall": 0.5587,
+     "fpr": 0.0577,
+     "fpr_parity": 0.931
+    }
+   },
+   "Variant_I": {
+    "validation_month_5": {
+     "roc_auc": 0.8931,
+     "recall_at_5pct_fpr": 0.5273,
+     "recall": 0.5386,
+     "fpr": 0.0504,
+     "fpr_parity": 0.985
+    },
+    "test_months_6_7": {
+     "roc_auc": 0.891,
+     "recall_at_5pct_fpr": 0.5278,
+     "recall": 0.5608,
+     "fpr": 0.058,
+     "fpr_parity": 0.913
+    }
+   },
+   "Variant_II": {
+    "validation_month_5": {
+     "roc_auc": 0.9024,
+     "recall_at_5pct_fpr": 0.5585,
+     "recall": 0.494,
+     "fpr": 0.0503,
+     "fpr_parity": 0.981
+    },
+    "test_months_6_7": {
+     "roc_auc": 0.8987,
+     "recall_at_5pct_fpr": 0.5486,
+     "recall": 0.5413,
+     "fpr": 0.0595,
+     "fpr_parity": 0.922
+    }
+   },
+   "Variant_III": {
+    "validation_month_5": {
+     "roc_auc": 0.886,
+     "recall_at_5pct_fpr": 0.5089,
+     "recall": 0.5171,
+     "fpr": 0.0505,
+     "fpr_parity": 0.981
+    },
+    "test_months_6_7": {
+     "roc_auc": 0.8802,
+     "recall_at_5pct_fpr": 0.4894,
+     "recall": 0.5471,
+     "fpr": 0.06,
+     "fpr_parity": 0.915
+    }
+   },
+   "Variant_IV": {
+    "validation_month_5": {
+     "roc_auc": 0.9016,
+     "recall_at_5pct_fpr": 0.5559,
+     "recall": 0.4933,
+     "fpr": 0.0505,
+     "fpr_parity": 0.982
+    },
+    "test_months_6_7": {
+     "roc_auc": 0.8802,
+     "recall_at_5pct_fpr": 0.4894,
+     "recall": 0.5471,
+     "fpr": 0.06,
+     "fpr_parity": 0.915
+    }
+   },
+   "Variant_V": {
+    "validation_month_5": {
+     "roc_auc": 0.8841,
+     "recall_at_5pct_fpr": 0.4903,
+     "recall": 0.506,
+     "fpr": 0.0501,
+     "fpr_parity": 0.976
+    },
+    "test_months_6_7": {
+     "roc_auc": 0.882,
+     "recall_at_5pct_fpr": 0.5075,
+     "recall": 0.5573,
+     "fpr": 0.0594,
+     "fpr_parity": 0.938
+    }
+   }
+  }
+ },
+ "mean_validation_auc": {
+  "current": 0.8905,
+  "retrain_base": 0.8905,
+  "retrain_variants": 0.8945
+ },
+ "mean_test_auc": {
+  "current": 0.8805,
+  "retrain_base": 0.8805,
+  "retrain_variants": 0.8882
+ },
+ "adoption_rule": "month 5: mean AUC over six populations >= current + 0.003, Base AUC >= current - 0.003, worst parity >= 0.8",
+ "adopt": true,
+ "notes": [
+  "All data synthetic (Feedzai BAF).",
+  "Variant IV's months 6 to 7 repeat Variant III's applications, reordered."
+ ],
+ "runtime_seconds": 606.7
+}

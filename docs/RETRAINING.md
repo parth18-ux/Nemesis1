@@ -39,7 +39,31 @@ HI-Small, 0.336 on LI-Small test weeks) as in the full streaming runs (`results/
 
 ## Account opening gate (L0)
 
-__L0_SECTION__
+**Preprocessing.** Same columns and category order as the served model (`service/models/l0_config.json`); Variants
+III and V's leaked features x1 and x2 are dropped. Each population uses the same time split as the original gate:
+months 0 to 4 train, month 5 sets thresholds (5% false alarms separately for applicants 50+ and under 50), months 6
+to 7 test.
+
+**Training.** `ml/retrain_l0_variants.py`: Base months 0 to 4 plus every variant's months 0 to 4 (all fraud cases,
+30% of the other applications per variant), same LightGBM settings as before. A control retrained on Base alone
+reproduces the previous model exactly, so the recipe is deterministic.
+
+**Validation.** Rule fixed in advance on month 5: mean ROC-AUC over the six populations at least 0.003 higher, Base no
+more than 0.003 lower, worst age parity at least 0.8. Month 5 mean ROC-AUC went from 0.8905 to
+0.8945; the model passed and is live.
+
+| Population (months 6 to 7) | ROC-AUC before → after | Recall at 5% false alarms before → after | Recall at the gate's thresholds before → after | Age parity before → after |
+|---|---|---|---|---|
+| Base | 0.892 → 0.897 | 0.541 → 0.555 | 0.534 → 0.559 | 0.88 → 0.93 |
+| Variant I | 0.882 → 0.891 | 0.510 → 0.528 | 0.535 → 0.561 | 0.88 → 0.91 |
+| Variant II | 0.897 → 0.899 | 0.549 → 0.549 | 0.523 → 0.541 | 0.89 → 0.92 |
+| Variant III | 0.870 → 0.880 | 0.475 → 0.489 | 0.529 → 0.547 | 0.89 → 0.92 |
+| Variant V | 0.872 → 0.882 | 0.486 → 0.507 | 0.541 → 0.557 | 0.89 → 0.94 |
+
+Mean test ROC-AUC over the six populations: 0.8805 → 0.8882. Every population
+improves; age parity improves everywhere. The false alarm rate on Base test months moves from 5.4% to 5.8%
+(thresholds are set on month 5, and month 6 to 7 applications differ slightly). Variant IV is left out of the table
+because its test months repeat Variant III's applications.
 
 ## Reproduce
 
