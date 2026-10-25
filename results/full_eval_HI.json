@@ -7,47 +7,47 @@
  "scored_payments": 1015669,
  "scored_laundering": 1797,
  "protocol": "time ordered; 0 to 60% builds account state; 60 to 80% is validation (used only to tune context rules); metrics on the last 20%",
- "ruleset": "ctx-1.2",
- "live_model_pr_auc": 0.7162,
- "live_model_roc_auc": 0.9835,
- "l2_average_pr_auc_all_rows": 0.7159,
- "l1_pass_rate": 0.2048,
- "l1_laundering_kept": 0.9922,
+ "ruleset": "ctx-1.4",
+ "live_model_pr_auc": 0.7107,
+ "live_model_roc_auc": 0.9852,
+ "l2_average_pr_auc_all_rows": 0.7104,
+ "l1_pass_rate": 0.2032,
+ "l1_laundering_kept": 0.9917,
  "levels": {
   "payment_model": {
    "verify_or_more": {
-    "flagged": 15900,
-    "flag_rate": 0.01565,
-    "laundering_caught": 1585,
+    "flagged": 15319,
+    "flag_rate": 0.01508,
+    "laundering_caught": 1592,
     "laundering": 1797,
-    "recall": 0.882,
-    "precision": 0.0997
+    "recall": 0.8859,
+    "precision": 0.1039
    },
    "hold_or_more": {
-    "flagged": 5925,
-    "flag_rate": 0.00583,
-    "laundering_caught": 1461,
+    "flagged": 6773,
+    "flag_rate": 0.00667,
+    "laundering_caught": 1457,
     "laundering": 1797,
-    "recall": 0.813,
-    "precision": 0.2466
+    "recall": 0.8108,
+    "precision": 0.2151
    },
    "block": {
-    "flagged": 1996,
-    "flag_rate": 0.00197,
-    "laundering_caught": 1205,
+    "flagged": 1840,
+    "flag_rate": 0.00181,
+    "laundering_caught": 1173,
     "laundering": 1797,
-    "recall": 0.6706,
-    "precision": 0.6037
+    "recall": 0.6528,
+    "precision": 0.6375
    }
   },
   "context_layer_alone": {
    "verify_or_more": {
-    "flagged": 32294,
-    "flag_rate": 0.0318,
-    "laundering_caught": 292,
+    "flagged": 1266,
+    "flag_rate": 0.00125,
+    "laundering_caught": 245,
     "laundering": 1797,
-    "recall": 0.1625,
-    "precision": 0.009
+    "recall": 0.1363,
+    "precision": 0.1935
    },
    "hold_or_more": {
     "flagged": 26,
@@ -60,50 +60,50 @@
   },
   "combined_final": {
    "verify_or_more": {
-    "flagged": 47751,
-    "flag_rate": 0.04701,
-    "laundering_caught": 1633,
+    "flagged": 16282,
+    "flag_rate": 0.01603,
+    "laundering_caught": 1593,
     "laundering": 1797,
-    "recall": 0.9087,
-    "precision": 0.0342
+    "recall": 0.8865,
+    "precision": 0.0978
    },
    "hold_or_more": {
-    "flagged": 5925,
-    "flag_rate": 0.00583,
-    "laundering_caught": 1461,
+    "flagged": 6773,
+    "flag_rate": 0.00667,
+    "laundering_caught": 1457,
     "laundering": 1797,
-    "recall": 0.813,
-    "precision": 0.2466
+    "recall": 0.8108,
+    "precision": 0.2151
    }
   }
  },
  "raised_by_context": {
-  "flagged": 31851,
-  "flag_rate": 0.03136,
-  "laundering_caught": 48,
+  "flagged": 963,
+  "flag_rate": 0.00095,
+  "laundering_caught": 1,
   "laundering": 1797,
-  "recall": 0.0267,
-  "precision": 0.0015
+  "recall": 0.0006,
+  "precision": 0.001
  },
  "mule_signature": {
-  "flagged": 31518,
-  "flag_rate": 0.03103,
-  "laundering_caught": 81,
+  "flagged": 477,
+  "flag_rate": 0.00047,
+  "laundering_caught": 34,
   "laundering": 1797,
-  "recall": 0.0451,
-  "precision": 0.0026
+  "recall": 0.0189,
+  "precision": 0.0713
  },
  "context_band_counts": {
-  "LOW": 983375,
-  "MEDIUM": 32268,
+  "LOW": 1014403,
+  "MEDIUM": 1240,
   "HIGH": 26
  },
  "rings": {
   "payment_model": {
    "verify_or_more": {
     "rings_in_scored_period": 192,
-    "rings_caught": 192,
-    "rate": 1.0,
+    "rings_caught": 191,
+    "rate": 0.995,
     "by_typology": {
      "BIPARTITE": {
       "rings": 21,
@@ -132,8 +132,8 @@
      },
      "RANDOM": {
       "rings": 17,
-      "caught": 17,
-      "rate": 1.0
+      "caught": 16,
+      "rate": 0.941
      },
      "SCATTER-GATHER": {
       "rings": 23,
@@ -149,60 +149,13 @@
    },
    "hold_or_more": {
     "rings_in_scored_period": 192,
-    "rings_caught": 190,
-    "rate": 0.99,
+    "rings_caught": 186,
+    "rate": 0.969,
     "by_typology": {
      "BIPARTITE": {
       "rings": 21,
-      "caught": 20,
-      "rate": 0.952
-     },
-     "CYCLE": {
-      "rings": 25,
-      "caught": 25,
-      "rate": 1.0
-     },
-     "FAN-IN": {
-      "rings": 20,
-      "caught": 20,
-      "rate": 1.0
-     },
-     "FAN-OUT": {
-      "rings": 21,
-      "caught": 21,
-      "rate": 1.0
-     },
-     "GATHER-SCATTER": {
-      "rings": 39,
-      "caught": 39,
-      "rate": 1.0
-     },
-     "RANDOM": {
-      "rings": 17,
-      "caught": 17,
-      "rate": 1.0
-     },
-     "SCATTER-GATHER": {
-      "rings": 23,
-      "caught": 23,
-      "rate": 1.0
-     },
-     "STACK": {
-      "rings": 26,
-      "caught": 25,
-      "rate": 0.962
-     }
-    }
-   },
-   "block": {
-    "rings_in_scored_period": 192,
-    "rings_caught": 176,
-    "rate": 0.917,
-    "by_typology": {
-     "BIPARTITE": {
-      "rings": 21,
-      "caught": 14,
-      "rate": 0.667
+      "caught": 18,
+      "rate": 0.857
      },
      "CYCLE": {
       "rings": 25,
@@ -216,18 +169,65 @@
      },
      "FAN-OUT": {
       "rings": 21,
-      "caught": 21,
-      "rate": 1.0
+      "caught": 20,
+      "rate": 0.952
      },
      "GATHER-SCATTER": {
       "rings": 39,
-      "caught": 38,
-      "rate": 0.974
+      "caught": 39,
+      "rate": 1.0
      },
      "RANDOM": {
       "rings": 17,
-      "caught": 15,
-      "rate": 0.882
+      "caught": 16,
+      "rate": 0.941
+     },
+     "SCATTER-GATHER": {
+      "rings": 23,
+      "caught": 23,
+      "rate": 1.0
+     },
+     "STACK": {
+      "rings": 26,
+      "caught": 26,
+      "rate": 1.0
+     }
+    }
+   },
+   "block": {
+    "rings_in_scored_period": 192,
+    "rings_caught": 179,
+    "rate": 0.932,
+    "by_typology": {
+     "BIPARTITE": {
+      "rings": 21,
+      "caught": 16,
+      "rate": 0.762
+     },
+     "CYCLE": {
+      "rings": 25,
+      "caught": 24,
+      "rate": 0.96
+     },
+     "FAN-IN": {
+      "rings": 20,
+      "caught": 19,
+      "rate": 0.95
+     },
+     "FAN-OUT": {
+      "rings": 21,
+      "caught": 19,
+      "rate": 0.905
+     },
+     "GATHER-SCATTER": {
+      "rings": 39,
+      "caught": 39,
+      "rate": 1.0
+     },
+     "RANDOM": {
+      "rings": 17,
+      "caught": 16,
+      "rate": 0.941
      },
      "SCATTER-GATHER": {
       "rings": 23,
@@ -236,8 +236,8 @@
      },
      "STACK": {
       "rings": 26,
-      "caught": 23,
-      "rate": 0.885
+      "caught": 25,
+      "rate": 0.962
      }
     }
    }
@@ -341,8 +341,8 @@
   "combined_final": {
    "verify_or_more": {
     "rings_in_scored_period": 192,
-    "rings_caught": 192,
-    "rate": 1.0,
+    "rings_caught": 191,
+    "rate": 0.995,
     "by_typology": {
      "BIPARTITE": {
       "rings": 21,
@@ -371,8 +371,8 @@
      },
      "RANDOM": {
       "rings": 17,
-      "caught": 17,
-      "rate": 1.0
+      "caught": 16,
+      "rate": 0.941
      },
      "SCATTER-GATHER": {
       "rings": 23,
@@ -388,18 +388,18 @@
    },
    "hold_or_more": {
     "rings_in_scored_period": 192,
-    "rings_caught": 190,
-    "rate": 0.99,
+    "rings_caught": 186,
+    "rate": 0.969,
     "by_typology": {
      "BIPARTITE": {
       "rings": 21,
-      "caught": 20,
-      "rate": 0.952
+      "caught": 18,
+      "rate": 0.857
      },
      "CYCLE": {
       "rings": 25,
-      "caught": 25,
-      "rate": 1.0
+      "caught": 24,
+      "rate": 0.96
      },
      "FAN-IN": {
       "rings": 20,
@@ -408,8 +408,8 @@
      },
      "FAN-OUT": {
       "rings": 21,
-      "caught": 21,
-      "rate": 1.0
+      "caught": 20,
+      "rate": 0.952
      },
      "GATHER-SCATTER": {
       "rings": 39,
@@ -418,8 +418,8 @@
      },
      "RANDOM": {
       "rings": 17,
-      "caught": 17,
-      "rate": 1.0
+      "caught": 16,
+      "rate": 0.941
      },
      "SCATTER-GATHER": {
       "rings": 23,
@@ -428,23 +428,23 @@
      },
      "STACK": {
       "rings": 26,
-      "caught": 25,
-      "rate": 0.962
+      "caught": 26,
+      "rate": 1.0
      }
     }
    }
   }
  },
  "ring_payments_matched": 1339,
- "l4_cases_from_blocks": 1004,
- "l4_cases_from_holds": 3905,
- "l4_cases_from_holds_entity_merged": 2431,
+ "l4_cases_from_blocks": 904,
+ "l4_cases_from_holds": 4804,
+ "l4_cases_from_holds_entity_merged": 2790,
  "accounts_with_entity": 518581,
  "time_span": [
   "2022/09/01 00:00",
   "2022/09/18 16:18"
  ],
- "runtime_seconds": 758.4,
+ "runtime_seconds": 723.4,
  "caveats": [
   "IBM AMLworld is synthetic.",
   "No messages exist in IBM data, so the context layer runs on payment and graph checks only and single domain results cap at MEDIUM by design.",
