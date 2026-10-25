@@ -20,7 +20,17 @@ The models are cheap. **The account state is the scaling problem.**
 
 `ml/scale_bench.py` streams every payment, in time order, through three state layouts in separate processes.
 
-__SCALE_BENCH__
+| Layout | Account state | Payments per second (one core) | Features vs prototype |
+|---|---|---|---|
+| Prototype objects (`service/rusetect_engine.py`) | 2,136 MB | 42,679 | reference |
+| Compact, exact pair index | 1,372 MB | 41,459 | identical on all 5,078,345 payments |
+| Compact, Bloom pair index (20M capacity, 0.1% false positives) | 1,361 MB | 31,673 | 0.000% of test payments differ; decisions agree on 100.000% |
+
+Account state is resident memory after streaming minus resident memory right after loading the payments. Inside the
+compact layout the per account arrays take 39 MB and the exact pair index about
+58 MB (34 MB as a Bloom filter); most of the rest is the
+302,073 live 24 h windows and the account id map. So the compact layout cuts state by
+36%, and the next saving is in the windows (fixed size ring buffers or sketches), not the pair index.
 
 The compact layout (`service/compact_state.py`):
 * accounts get integer ids; their totals live in typed arrays (`array` module), not one Python object each;
@@ -52,7 +62,18 @@ payments ──► producer ──► Redis Streams  payments:0 … payments:N-1
 * One read round trip and one write round trip per payment, both pipelined; the models score in batches.
 * With a single writer the Redis features equal the in memory engine's (`tests/test_scale.py`, 6,000 payments).
 
-__SCALE_OUT__
+| Workers | Payments | Payments per second | Redis memory |
+|---|---|---|---|
+| 1 | 200,000 | 934 | 248.2 MB for 185,098 accounts |
+| 2 | 200,000 | 1,315 | about 1,406 bytes per account |
+
+Latency at 789 payments per second (two workers, publish to decision, including queueing):
+p50 289.4 ms, p95 794.6 ms, p99 970.3 ms.
+
+These are far below the 41,459 per second of the in process state: every payment costs two network
+round trips to Redis, and here Redis, the producer and the workers share 2 cores (so the two worker run is
+CPU bound, not partition bound). The next steps are known: move the read and update into one server side Lua script
+(one round trip), pipeline across a batch where payers do not repeat, and run workers on their own cores or machines.
 
 Run it yourself:
 

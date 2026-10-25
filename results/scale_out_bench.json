@@ -1,0 +1,34 @@
+{
+ "payments": 200000,
+ "cores": 2,
+ "throughput": [
+  {
+   "workers": 1,
+   "payments": 200000,
+   "seconds": 214.1,
+   "payments_per_second": 934,
+   "redis_used_mb": 248.2,
+   "accounts": 185098,
+   "redis_bytes_per_account": 1406,
+   "note": "includes model loading in each worker"
+  },
+  {
+   "workers": 2,
+   "payments": 200000,
+   "seconds": 152.1,
+   "payments_per_second": 1315,
+   "redis_used_mb": 248.2,
+   "accounts": 185098,
+   "redis_bytes_per_account": 1406,
+   "note": "includes model loading in each worker"
+  }
+ ],
+ "latency": {
+  "target_rate_per_second": 789,
+  "payments": 20000,
+  "p50_ms": 289.4,
+  "p95_ms": 794.6,
+  "p99_ms": 970.3
+ },
+ "note": "Redis, producer and workers share a 2 core container; production would run Redis Cluster (sharded by the {account} key tag) and many worker processes on separate machines. Latency is publish to decision, including queueing."
+}

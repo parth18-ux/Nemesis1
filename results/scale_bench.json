@@ -1,0 +1,56 @@
+{
+ "engine": {
+  "kind": "engine",
+  "payments": 5078345,
+  "seconds": 119.0,
+  "payments_per_second": 42679,
+  "peak_mb": 3424,
+  "rss_after_load_mb": 1288,
+  "rss_end_mb": 3424,
+  "state_mb": 2136
+ },
+ "exact": {
+  "kind": "exact",
+  "payments": 5078345,
+  "seconds": 122.5,
+  "payments_per_second": 41459,
+  "peak_mb": 2660,
+  "rss_after_load_mb": 1289,
+  "rss_end_mb": 2660,
+  "state_mb": 1372,
+  "state": {
+   "accounts": 515088,
+   "active_windows": 302073,
+   "pair_index": "exact",
+   "pair_index_bytes": 60944160,
+   "account_arrays_bytes": 41207040
+  }
+ },
+ "bloom": {
+  "kind": "bloom",
+  "payments": 5078345,
+  "seconds": 160.3,
+  "payments_per_second": 31673,
+  "peak_mb": 2649,
+  "rss_after_load_mb": 1289,
+  "rss_end_mb": 2649,
+  "state_mb": 1361,
+  "state": {
+   "accounts": 515088,
+   "active_windows": 302073,
+   "pair_index": "bloom",
+   "pair_index_bytes": 35943969,
+   "account_arrays_bytes": 41207040
+  }
+ },
+ "agreement_exact_vs_engine": {
+  "features_identical": true
+ },
+ "agreement_bloom_vs_exact": {
+  "rows_with_any_feature_difference": 0.0,
+  "decision_agreement": 1.0,
+  "flagged_exact": 15900,
+  "flagged_bloom": 15900
+ },
+ "note": "Single Python process on a 2 core, 8 GB container. state_mb = resident memory after streaming minus resident memory right after loading the payments, so it isolates the account state."
+}
