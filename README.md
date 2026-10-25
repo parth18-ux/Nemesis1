@@ -19,6 +19,15 @@ cases for an analyst. It is a research prototype trained and evaluated on **synt
 | **L1 gatekeeper** | XGBoost, 30 trees, depth 3 (`l1_gatekeeper.json`) | Approves most payments; passes the rest on |
 | **L2 graph-boost** | XGBoost (`l2_xgb.json`) + LightGBM (`l2_lgbm.json`), averaged | Risk score → Approve / Step-up / Hold / Block + STR draft, with XGBoost TreeSHAP reasons |
 | **L4 ring linker** | Union-find over blocked payments | Merges blocks that share accounts into one case |
+| **Context layer (ctx-1.4)** | Rules (`service/context_rules.py`) | Consented message cues (English, Hindi, Hinglish), payment and account graph checks, and the session domain fused into a band; two domains needed to escalate; context alone never blocks |
+| **Session and identity** | Rules (`service/session_signals.py`) | Live or video call, screen share, remote access app, pasted payee, hesitation, app hidden; device and SIM swap gate before the OTP; account takeover chains |
+| **Person** | Mouse dynamics (`service/mouse_dynamics.py`, validated on real Balabit data), typing profile (`service/behaviour.py`, experimental) | Is it really the customer? A weak, supporting signal |
+| **Intervention** | `service/intervention.py` | Pause screen in English and Hindi with a question chosen from the evidence, 30 minute cool off, duress PIN |
+| **Network** | `service/campaigns.py`, `service/consortium.py` | Scam campaigns across victims; signed, hash chained cross bank mule ledger of HMAC tokens |
+| **Review desk** | `service/review.py`, `service/security.py`, `service/str_report.py` | Analyst keys and roles, two analysts per block, nonces, signed verdicts and evidence packs, STR drafts |
+
+See `docs/SESSION_AND_NETWORK.md` for what came from session layer and how it was measured, `docs/RETRAINING.md` for the models
+retrained with the unused LI-Small and BAF variant data, and `docs/SCALING.md` for state and scale out.
 
 Random Forest and LSTM/Transformer models appear only in the **offline** benchmark blend ("L3"). The live engine
 (`service/rusetect_engine.py`) never loads them. LightGBM models are served from JSON by `service/lgbm_lite.py`,
