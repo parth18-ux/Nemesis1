@@ -108,7 +108,7 @@ See `docs/RETRAINING.md`: the payment models now also learn from LI-Small, and t
 | Feedzai Bank Account Fraud, Base and Variants I to V | account opening gate, bias tests | https://www.kaggle.com/datasets/sgpjesus/bank-account-fraud-dataset-neurips-2022 | used in full |
 | **Balabit Mouse Dynamics Challenge** (real mouse data, 10 users) | mouse dynamics | https://github.com/balabit/Mouse-Dynamics-Challenge | used (section 3) |
 | **Aalto 136M Keystrokes** (Dhakal, Feit, Kristensson, Oulasvirta, CHI 2018; non commercial use with attribution) | typing rhythm | https://userinterfaces.aalto.fi/136Mkeystrokes/ | used (section 3) |
-| **PaySim** (synthetic mobile money, Lopez-Rojas et al.) | mobile money transaction benchmark | https://www.kaggle.com/datasets/ealaxi/paysim1 | needs a Kaggle login; RuseTect's IBM data covers the same role with labelled rings |
+| **PaySim** (synthetic mobile money, Lopez-Rojas et al.) | mobile money transaction benchmark | https://www.kaggle.com/datasets/ealaxi/paysim1 | used; results in `docs/datasets.md` (note on PaySim) |
 
 ## 5. Honest limits
 

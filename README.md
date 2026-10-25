@@ -7,7 +7,7 @@ evidence: a question to the customer, a short pause, an analyst review, or a blo
 Live demo: [rusetect.vercel.app](https://rusetect.vercel.app) · Author: Parth Sharma
 
 > RuseTect is a research project. Its models are trained and evaluated on public datasets that are synthetic or
-> collected outside banking (IBM AMLworld, Feedzai BAF, Aalto keystrokes, Balabit mouse data). The results below show
+> collected outside banking (IBM AMLworld, Feedzai BAF, PaySim, Aalto keystrokes, Balabit mouse data). The results below show
 > how the methods behave on that data, not performance on real bank traffic.
 
 ## How it works
@@ -47,6 +47,7 @@ Every number comes from a script in `ml/` and a file in `results/`.
 | Typing rhythm | Aalto 136M Keystrokes, 2,868 people never seen in training | ROC-AUC 0.890 from one sentence, 0.936 from three; 64% of impostors caught at 5% false alarms, equal across age groups |
 | Mouse dynamics | Balabit Mouse Dynamics Challenge, labelled impostor sessions | median per user ROC-AUC 0.915 from 20 mouse actions |
 | End to end scenarios | 480 authored, randomised runs through the API | 280 of 280 scam payments stopped before money moved; 1 of 200 genuine payments interrupted |
+| Mobile money | PaySim, 6.36M transactions, last 20% of time as test | PR-AUC 0.52 from account history alone; near perfect once balances are used, because every simulated fraud empties the account ([note](docs/datasets.md)) |
 | Throughput | Full HI-Small file, 5.08M payments, one CPU core | 41,459 payments per second with compact account state |
 
 Details: [model selection](docs/model-selection.md), [retraining with the extra data](docs/RETRAINING.md),
@@ -97,6 +98,7 @@ The datasets are not stored in this repository. Download them, then point `RUSET
 | Feedzai Bank Account Fraud (Base, Variants I to V) | [Kaggle: sgpjesus/bank-account-fraud-dataset-neurips-2022](https://www.kaggle.com/datasets/sgpjesus/bank-account-fraud-dataset-neurips-2022) |
 | Aalto 136M Keystrokes | [userinterfaces.aalto.fi/136Mkeystrokes](https://userinterfaces.aalto.fi/136Mkeystrokes/) |
 | Balabit Mouse Dynamics Challenge | [github.com/balabit/Mouse-Dynamics-Challenge](https://github.com/balabit/Mouse-Dynamics-Challenge) |
+| PaySim | [Kaggle: ealaxi/paysim1](https://www.kaggle.com/datasets/ealaxi/paysim1) |
 
 ```bash
 pip install -r requirements-ml.txt
@@ -111,6 +113,7 @@ python ml/retrain_extended.py          # retraining with LI-Small (see docs/RETR
 python ml/retrain_l0_variants.py       # retraining with the BAF variants
 python ml/aalto_eval.py SAMPLE.zip     # typing rhythm on Aalto keystrokes
 python ml/balabit_eval.py              # mouse dynamics on Balabit
+python ml/paysim_eval.py PAYSIM.csv    # payment recipe on PaySim
 python ml/scenario_suite.py            # end to end scenarios through the API
 python ml/build_report.py              # rebuild the benchmark report page
 pytest tests/
@@ -153,4 +156,4 @@ Redis state layer or a feature store.
 
 Datasets by IBM Research (AMLworld, Altman et al., NeurIPS 2023), Feedzai (Bank Account Fraud, Jesus et al., NeurIPS
 2022), Aalto University (Dhakal, Feit, Kristensson and Oulasvirta, "Observations on Typing from 136 Million
-Keystrokes", CHI 2018) and Balabit (Mouse Dynamics Challenge).
+Keystrokes", CHI 2018), Balabit (Mouse Dynamics Challenge) and Lopez-Rojas, Elmir and Axelsson (PaySim, 2016).
