@@ -64,6 +64,17 @@ class ReviewDesk:
         self._append({"type": "analyst_action", "alert_id": alert_id, "analyst": analyst, "action": action, "status": a["status"]})
         return a
 
+    def system_event(self, alert_id: str, status: str, actor: str, detail: str = "", set_status: bool = False) -> dict:
+        """Customer and system events (pause screen answer, re-verification, duress hold, consortium publish)."""
+        if alert_id not in self.alerts:
+            raise KeyError(alert_id)
+        a = self.alerts[alert_id]
+        if set_status and a["status"] != "blocked":
+            a["status"] = status
+        a["actions"].append({"analyst": actor, "action": status, "note": detail})
+        self._append({"type": "event", "alert_id": alert_id, "actor": actor, "action": status, "status": a["status"]})
+        return a
+
     def verify_chain(self) -> bool:
         prev = "0" * 64
         for e in self.log:

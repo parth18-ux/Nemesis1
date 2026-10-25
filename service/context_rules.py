@@ -25,8 +25,9 @@ import hashlib, os, re, unicodedata
 from dataclasses import dataclass, field, asdict
 from datetime import datetime, timedelta, timezone
 
-RULESET_VERSION = "ctx-1.3"   # 1.1: negation-aware cues, sender mule signature; 1.2: API fuses the intent model by default;
+RULESET_VERSION = "ctx-1.4"   # 1.1: negation-aware cues, sender mule signature; 1.2: API fuses the intent model by default;
                               # 1.3: tighter mule signature, tuned on the validation weeks of the full IBM HI-Small file (results/context_tuning_HI.json)
+                              # 1.4: session and identity domain, flagged sender network rule, Hindi and Hinglish cues
 RETENTION_DAYS = 30
 _SALT = os.environ.get("RUSETECT_HASH_SALT", "rusetect-demo-salt")
 
@@ -77,18 +78,18 @@ CUES = {
     "authority": (15, [r"\b(?:finance|accounts|payments?) (?:office|team|department|desk)\b", r"\bceo\b", r"\bmanaging director\b",
                        r"\b(?:bank|rbi|police|cbi|customs|income tax|cyber cell|trai|court) (?:officer|official|department|notice)\b",
                        r"\bcustomer (?:care|support) (?:team|executive|agent)\b", r"\bsupport (?:team|desk|executive)\b",
-                       r"\b(?:on behalf of|calling from) (?:the )?(?:bank|rbi|police|government)\b"]),
+                       r"\b(?:on behalf of|calling from) (?:the )?(?:bank|rbi|police|government)\b", r"\b(?:police|cbi|crime branch|cyber cell|bank) (?:se|wala|wale) (?:bol|baat)", 'पुलिस', 'सीबीआई', 'साइबर सेल', 'बैंक से बोल']),
     "redirection": (15, [r"\b(?:revised|updated|new|changed|replacement) (?:vendor |bank |account |payment )?(?:details|beneficiary|account|bank details)\b",
                          r"\bremit (?:the )?(?:balance|amount|payment)\b", r"\btransfer (?:it |the amount |the money )?to (?:this|the following|a safe|the new)\b",
-                         r"\bsafe account\b", r"\bpay (?:to|into) (?:this|the new|a different)\b"]),
+                         r"\bsafe account\b", r"\bpay (?:to|into) (?:this|the new|a different)\b", r"\bsafe (?:khate|account) (?:me|mein)\b", 'सुरक्षित खाते']),
     "pressure": (10, [r"\b(?:before|ahead of) (?:the )?(?:afternoon |evening |end of day )?(?:cutoff|cut-off|deadline)\b", r"\bwithin (?:\d+|one|two|24) (?:minutes?|hours?)\b",
-                      r"\bimmediately\b", r"\bright now\b", r"\blast chance\b", r"\bor (?:else )?(?:your|the) account will\b", r"\bdigital arrest\b", r"\btoday itself\b"]),
-    "credential": (15, [r"\b(?:share|send|tell|give|read out) (?:me |us )?(?:the |your )?(?:otp|pin|password|cvv|upi pin)\b", r"\benter (?:your )?upi pin\b"]),
-    "remote_access": (15, [r"\b(?:anydesk|teamviewer|quick ?support|rustdesk)\b", r"\bscreen ?shar(?:e|ing)\b"]),
+                      r"\bimmediately\b", r"\bright now\b", r"\blast chance\b", r"\bor (?:else )?(?:your|the) account will\b", r"\bdigital arrest\b", r"\btoday itself\b", r"\b(?:giraftar|giraftaar|arrest ho)", r"\babhi (?:ke abhi|turant)\b", r"\bturant\b", 'गिरफ्तार', 'तुरंत', 'अभी के अभी', 'डिजिटल अरेस्ट']),
+    "credential": (15, [r"\b(?:share|send|tell|give|read out) (?:me |us )?(?:the |your )?(?:otp|pin|password|cvv|upi pin)\b", r"\benter (?:your )?upi pin\b", r"\b(?:otp|pin|password) (?:batao|bataiye|bata do|bhejo|bhejiye)\b", 'ओटीपी बताइए', 'ओटीपी बताओ', 'ओटीपी भेज', 'पिन बताइए']),
+    "remote_access": (15, [r"\b(?:anydesk|teamviewer|quick ?support|rustdesk)\b", r"\bscreen ?shar(?:e|ing)\b", 'स्क्रीन शेयर', 'एनीडेस्क']),
     "refund": (15, [r"\brefund\b.*\b(?:scan|approve|collect request|enter)\b", r"\bcashback\b.*\bscan\b"]),
-    "investment": (20, [r"\bguaranteed (?:returns?|profit)\b", r"\bdouble (?:your )?money\b", r"\b\d+% (?:daily|weekly|monthly) (?:returns?|profit)\b", r"\btrading (?:group|tips) (?:vip|premium)\b"]),
-    "identity": (15, [r"\b(?:kyc|pan|aadhaar) (?:update|verification|expired|expiry|will expire)\b", r"\bre-?kyc\b"]),
-    "secrecy": (10, [r"\bdo not (?:tell|inform|share this with) (?:anyone|your family|the bank)\b", r"\bkeep (?:this|it) confidential\b"]),
+    "investment": (20, [r"\bguaranteed (?:returns?|profit)\b", r"\bdouble (?:your )?money\b", r"\b\d+% (?:daily|weekly|monthly) (?:returns?|profit)\b", r"\btrading (?:group|tips) (?:vip|premium)\b", r"\bpaisa double\b", r"\bpaise double\b", 'पैसे डबल', 'गारंटीड रिटर्न']),
+    "identity": (15, [r"\b(?:kyc|pan|aadhaar) (?:update|verification|expired|expiry|will expire)\b", r"\bre-?kyc\b", r"\bkyc (?:band|block|update kar)", 'केवाईसी', 'आधार अपडेट', 'पैन अपडेट']),
+    "secrecy": (10, [r"\bdo not (?:tell|inform|share this with) (?:anyone|your family|the bank)\b", r"\bkeep (?:this|it) confidential\b", r"\bkisi ko (?:mat|na) (?:batana|bataiye|bolna)\b", 'किसी को मत बताना', 'किसी को न बताएं', 'किसी को मत बताइए']),
 }
 
 
@@ -177,13 +178,15 @@ class ContextResult:
     keyword_baseline: dict = field(default_factory=dict)
     ruleset: str = RULESET_VERSION
     expires_at: str | None = None
+    session: int = 0                       # ctx-1.4: session and identity domain (service/session_signals.py)
+    session_detail: dict | None = None
 
     def to_dict(self):
         return asdict(self)
 
 
 def assess(text: str | None, payment: PaymentContext, consent: bool, now: datetime | None = None,
-           negation: bool = True, model_band: str | None = None) -> ContextResult:
+           negation: bool = True, model_band: str | None = None, session=None) -> ContextResult:
     """Score one payment with optional message context. Text is used only if consent is True.
     negation=False reproduces ruleset ctx-1.0 cue matching; model_band ('high' / 'caution' / 'safe') from the
     trained L-1 message model, when given, can lift the context score: context = max(phrase cues, model points)."""
@@ -197,18 +200,23 @@ def assess(text: str | None, payment: PaymentContext, consent: bool, now: dateti
         if mp > ctx["points"]:
             ctx = {**ctx, "points": min(CONTEXT_CAP, mp), "families": ctx["families"] + [f"intent model ({model_band})"]}
     tx, gr = transaction_points(payment), graph_points(payment)
-    total = ctx["points"] + tx["points"] + gr["points"]
-    n_dom = sum(1 for p in (ctx["points"], tx["points"], gr["points"]) if p > 0)
+    sp = session.points if session is not None else 0
+    total = ctx["points"] + tx["points"] + gr["points"] + sp
+    n_dom = sum(1 for p in (ctx["points"], tx["points"], gr["points"], sp) if p > 0)
     band = band_for(total, n_dom)
     if "sender_mule_signature" in gr["checks"] and band == "LOW":
         band = "MEDIUM"          # ctx-1.1: a payer that collects from many accounts and forwards within minutes is reviewed even without other domains
+    if session is not None and session.force_verify and band == "LOW":
+        band = "MEDIUM"          # ctx-1.4: coercion index >= 0.65 always asks the customer (pause screen), as the step up did
     reasons = ([f"message cue: {f}" for f in ctx["families"]] + [f"payment check: {c}" for c in tx["checks"]]
-               + [f"account graph: {c}" for c in gr["checks"]])
+               + [f"account graph: {c}" for c in gr["checks"]]
+               + ([f"session: {c}" for c in session.cues] if session is not None else []))
     reasons += [f"negated, not counted: {f}" for f in ctx.get("negated", [])]
     if not consent and text:
         reasons.append("message context not used: no consent")
     return ContextResult(ctx["points"], tx["points"], gr["points"], total, band, ACTION[band], reasons, consent, red, ents, base,
-                         RULESET_VERSION, (now + timedelta(days=RETENTION_DAYS)).isoformat(timespec="seconds"))
+                         RULESET_VERSION, (now + timedelta(days=RETENTION_DAYS)).isoformat(timespec="seconds"),
+                         sp, session.to_dict() if session is not None else None)
 
 
 # ------------------------------------------------------------------ combining with the payment cascade

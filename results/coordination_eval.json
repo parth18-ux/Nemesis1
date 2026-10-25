@@ -1,0 +1,497 @@
+{
+ "HI": {
+  "rule": {
+   "window_min": 4320,
+   "flag_rank": 1,
+   "k": 2
+  },
+  "validation": {
+   "rule_on_missed": {
+    "flagged": 10309,
+    "flag_rate": 0.01015,
+    "caught": 7,
+    "laundering": 1082,
+    "precision": 0.0007,
+    "recall": 0.0065,
+    "f1": 0.0012
+   },
+   "rule_all": {
+    "flagged": 11741,
+    "flag_rate": 0.01156,
+    "caught": 149,
+    "laundering": 1082,
+    "precision": 0.0127,
+    "recall": 0.1377,
+    "f1": 0.0232
+   }
+  },
+  "test": {
+   "rule_all": {
+    "flagged": 21755,
+    "flag_rate": 0.02142,
+    "caught": 492,
+    "laundering": 1797,
+    "precision": 0.0226,
+    "recall": 0.2738,
+    "f1": 0.0418
+   },
+   "rule_on_missed": {
+    "flagged": 19347,
+    "flag_rate": 0.01905,
+    "caught": 21,
+    "laundering": 1797,
+    "precision": 0.0011,
+    "recall": 0.0117,
+    "f1": 0.002
+   },
+   "payment_model_verify_or_more": {
+    "flagged": 15900,
+    "flag_rate": 0.01565,
+    "caught": 1585,
+    "laundering": 1797,
+    "precision": 0.0997,
+    "recall": 0.882,
+    "f1": 0.1791
+   },
+   "payment_model_plus_rule_verify_or_more": {
+    "flagged": 35247,
+    "flag_rate": 0.0347,
+    "caught": 1606,
+    "laundering": 1797,
+    "precision": 0.0456,
+    "recall": 0.8937,
+    "f1": 0.0867
+   }
+  },
+  "grid_top": [
+   {
+    "window_min": 4320,
+    "flag_rank": 1,
+    "k": 2,
+    "val_missed": {
+     "flagged": 10309,
+     "flag_rate": 0.01015,
+     "caught": 7,
+     "laundering": 1082,
+     "precision": 0.0007,
+     "recall": 0.0065,
+     "f1": 0.0012
+    },
+    "val_all": {
+     "flagged": 11741,
+     "flag_rate": 0.01156,
+     "caught": 149,
+     "laundering": 1082,
+     "precision": 0.0127,
+     "recall": 0.1377,
+     "f1": 0.0232
+    }
+   },
+   {
+    "window_min": 10080,
+    "flag_rank": 1,
+    "k": 2,
+    "val_missed": {
+     "flagged": 10309,
+     "flag_rate": 0.01015,
+     "caught": 7,
+     "laundering": 1082,
+     "precision": 0.0007,
+     "recall": 0.0065,
+     "f1": 0.0012
+    },
+    "val_all": {
+     "flagged": 11741,
+     "flag_rate": 0.01156,
+     "caught": 149,
+     "laundering": 1082,
+     "precision": 0.0127,
+     "recall": 0.1377,
+     "f1": 0.0232
+    }
+   },
+   {
+    "window_min": 1440,
+    "flag_rank": 1,
+    "k": 2,
+    "val_missed": {
+     "flagged": 9360,
+     "flag_rate": 0.00922,
+     "caught": 5,
+     "laundering": 1082,
+     "precision": 0.0005,
+     "recall": 0.0046,
+     "f1": 0.001
+    },
+    "val_all": {
+     "flagged": 10754,
+     "flag_rate": 0.01059,
+     "caught": 133,
+     "laundering": 1082,
+     "precision": 0.0124,
+     "recall": 0.1229,
+     "f1": 0.0225
+    }
+   },
+   {
+    "window_min": 1440,
+    "flag_rank": 1,
+    "k": 3,
+    "val_missed": {
+     "flagged": 4969,
+     "flag_rate": 0.00489,
+     "caught": 3,
+     "laundering": 1082,
+     "precision": 0.0006,
+     "recall": 0.0028,
+     "f1": 0.001
+    },
+    "val_all": {
+     "flagged": 5582,
+     "flag_rate": 0.0055,
+     "caught": 69,
+     "laundering": 1082,
+     "precision": 0.0124,
+     "recall": 0.0638,
+     "f1": 0.0207
+    }
+   },
+   {
+    "window_min": 4320,
+    "flag_rank": 1,
+    "k": 3,
+    "val_missed": {
+     "flagged": 5214,
+     "flag_rate": 0.00513,
+     "caught": 3,
+     "laundering": 1082,
+     "precision": 0.0006,
+     "recall": 0.0028,
+     "f1": 0.001
+    },
+    "val_all": {
+     "flagged": 5851,
+     "flag_rate": 0.00576,
+     "caught": 83,
+     "laundering": 1082,
+     "precision": 0.0142,
+     "recall": 0.0767,
+     "f1": 0.0239
+    }
+   },
+   {
+    "window_min": 10080,
+    "flag_rank": 1,
+    "k": 3,
+    "val_missed": {
+     "flagged": 5214,
+     "flag_rate": 0.00513,
+     "caught": 3,
+     "laundering": 1082,
+     "precision": 0.0006,
+     "recall": 0.0028,
+     "f1": 0.001
+    },
+    "val_all": {
+     "flagged": 5851,
+     "flag_rate": 0.00576,
+     "caught": 83,
+     "laundering": 1082,
+     "precision": 0.0142,
+     "recall": 0.0767,
+     "f1": 0.0239
+    }
+   }
+  ]
+ },
+ "selection": "HI validation weeks only: best F1 on laundering the payment model missed, flag rate <= 0.2%",
+ "note": "The rule turns on graph points (coordinated_accounts); alone it can reach verification, never a hold.",
+ "LI_unchanged_rule": {
+  "rule": {
+   "window_min": 4320,
+   "flag_rank": 1,
+   "k": 2
+  },
+  "validation": {
+   "rule_on_missed": {
+    "flagged": 13175,
+    "flag_rate": 0.00951,
+    "caught": 18,
+    "laundering": 827,
+    "precision": 0.0014,
+    "recall": 0.0218,
+    "f1": 0.0026
+   },
+   "rule_all": {
+    "flagged": 14952,
+    "flag_rate": 0.0108,
+    "caught": 65,
+    "laundering": 827,
+    "precision": 0.0043,
+    "recall": 0.0786,
+    "f1": 0.0082
+   }
+  },
+  "test": {
+   "rule_all": {
+    "flagged": 25813,
+    "flag_rate": 0.01864,
+    "caught": 138,
+    "laundering": 925,
+    "precision": 0.0053,
+    "recall": 0.1492,
+    "f1": 0.0103
+   },
+   "rule_on_missed": {
+    "flagged": 23314,
+    "flag_rate": 0.01684,
+    "caught": 31,
+    "laundering": 925,
+    "precision": 0.0013,
+    "recall": 0.0335,
+    "f1": 0.0026
+   },
+   "payment_model_verify_or_more": {
+    "flagged": 19305,
+    "flag_rate": 0.01394,
+    "caught": 645,
+    "laundering": 925,
+    "precision": 0.0334,
+    "recall": 0.6973,
+    "f1": 0.0638
+   },
+   "payment_model_plus_rule_verify_or_more": {
+    "flagged": 42619,
+    "flag_rate": 0.03078,
+    "caught": 676,
+    "laundering": 925,
+    "precision": 0.0159,
+    "recall": 0.7308,
+    "f1": 0.031
+   }
+  },
+  "grid_top": null
+ },
+ "fusion": {
+  "HI": {
+   "without_rule": {
+    "val": {
+     "flagged": 10251,
+     "flag_rate": 0.01009,
+     "caught": 879,
+     "laundering": 1082,
+     "precision": 0.0857,
+     "recall": 0.8124,
+     "f1": 0.1551
+    },
+    "test": {
+     "flagged": 16862,
+     "flag_rate": 0.0166,
+     "caught": 1586,
+     "laundering": 1797,
+     "precision": 0.0941,
+     "recall": 0.8826,
+     "f1": 0.17
+    }
+   },
+   "window 3 d, flag level 1, k 2": {
+    "val": {
+     "flagged": 17587,
+     "flag_rate": 0.01732,
+     "caught": 884,
+     "laundering": 1082,
+     "precision": 0.0503,
+     "recall": 0.817,
+     "f1": 0.0947
+    },
+    "test": {
+     "flagged": 25276,
+     "flag_rate": 0.02489,
+     "caught": 1598,
+     "laundering": 1797,
+     "precision": 0.0632,
+     "recall": 0.8893,
+     "f1": 0.1181
+    },
+    "added_flags_test": 8414,
+    "added_laundering_test": 12
+   },
+   "window 3 d, flag level 1, k 3": {
+    "val": {
+     "flagged": 14898,
+     "flag_rate": 0.01467,
+     "caught": 882,
+     "laundering": 1082,
+     "precision": 0.0592,
+     "recall": 0.8152,
+     "f1": 0.1104
+    },
+    "test": {
+     "flagged": 22480,
+     "flag_rate": 0.02213,
+     "caught": 1592,
+     "laundering": 1797,
+     "precision": 0.0708,
+     "recall": 0.8859,
+     "f1": 0.1312
+    },
+    "added_flags_test": 5618,
+    "added_laundering_test": 6
+   },
+   "window 7 d, flag level 1, k 5": {
+    "val": {
+     "flagged": 11844,
+     "flag_rate": 0.01166,
+     "caught": 879,
+     "laundering": 1082,
+     "precision": 0.0742,
+     "recall": 0.8124,
+     "f1": 0.136
+    },
+    "test": {
+     "flagged": 19343,
+     "flag_rate": 0.01904,
+     "caught": 1588,
+     "laundering": 1797,
+     "precision": 0.0821,
+     "recall": 0.8837,
+     "f1": 0.1502
+    },
+    "added_flags_test": 2481,
+    "added_laundering_test": 2
+   },
+   "window 7 d, flag level 2, k 3": {
+    "val": {
+     "flagged": 10570,
+     "flag_rate": 0.01041,
+     "caught": 879,
+     "laundering": 1082,
+     "precision": 0.0832,
+     "recall": 0.8124,
+     "f1": 0.1509
+    },
+    "test": {
+     "flagged": 17555,
+     "flag_rate": 0.01728,
+     "caught": 1587,
+     "laundering": 1797,
+     "precision": 0.0904,
+     "recall": 0.8831,
+     "f1": 0.164
+    },
+    "added_flags_test": 693,
+    "added_laundering_test": 1
+   }
+  },
+  "LI": {
+   "without_rule": {
+    "val": {
+     "flagged": 13041,
+     "flag_rate": 0.00942,
+     "caught": 552,
+     "laundering": 827,
+     "precision": 0.0423,
+     "recall": 0.6675,
+     "f1": 0.0796
+    },
+    "test": {
+     "flagged": 20614,
+     "flag_rate": 0.01489,
+     "caught": 646,
+     "laundering": 925,
+     "precision": 0.0313,
+     "recall": 0.6984,
+     "f1": 0.06
+    }
+   },
+   "window 3 d, flag level 1, k 2": {
+    "val": {
+     "flagged": 22611,
+     "flag_rate": 0.01633,
+     "caught": 562,
+     "laundering": 827,
+     "precision": 0.0249,
+     "recall": 0.6796,
+     "f1": 0.048
+    },
+    "test": {
+     "flagged": 31154,
+     "flag_rate": 0.0225,
+     "caught": 660,
+     "laundering": 925,
+     "precision": 0.0212,
+     "recall": 0.7135,
+     "f1": 0.0411
+    },
+    "added_flags_test": 10540,
+    "added_laundering_test": 14
+   },
+   "window 3 d, flag level 1, k 3": {
+    "val": {
+     "flagged": 18960,
+     "flag_rate": 0.01369,
+     "caught": 556,
+     "laundering": 827,
+     "precision": 0.0293,
+     "recall": 0.6723,
+     "f1": 0.0562
+    },
+    "test": {
+     "flagged": 27469,
+     "flag_rate": 0.01984,
+     "caught": 653,
+     "laundering": 925,
+     "precision": 0.0238,
+     "recall": 0.7059,
+     "f1": 0.046
+    },
+    "added_flags_test": 6855,
+    "added_laundering_test": 7
+   },
+   "window 7 d, flag level 1, k 5": {
+    "val": {
+     "flagged": 14605,
+     "flag_rate": 0.01055,
+     "caught": 552,
+     "laundering": 827,
+     "precision": 0.0378,
+     "recall": 0.6675,
+     "f1": 0.0715
+    },
+    "test": {
+     "flagged": 23324,
+     "flag_rate": 0.01684,
+     "caught": 648,
+     "laundering": 925,
+     "precision": 0.0278,
+     "recall": 0.7005,
+     "f1": 0.0534
+    },
+    "added_flags_test": 2710,
+    "added_laundering_test": 2
+   },
+   "window 7 d, flag level 2, k 3": {
+    "val": {
+     "flagged": 13557,
+     "flag_rate": 0.00979,
+     "caught": 552,
+     "laundering": 827,
+     "precision": 0.0407,
+     "recall": 0.6675,
+     "f1": 0.0768
+    },
+    "test": {
+     "flagged": 21340,
+     "flag_rate": 0.01541,
+     "caught": 647,
+     "laundering": 925,
+     "precision": 0.0303,
+     "recall": 0.6995,
+     "f1": 0.0581
+    },
+    "added_flags_test": 726,
+    "added_laundering_test": 1
+   }
+  }
+ }
+}
