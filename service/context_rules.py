@@ -207,7 +207,7 @@ def assess(text: str | None, payment: PaymentContext, consent: bool, now: dateti
     if "sender_mule_signature" in gr["checks"] and band == "LOW":
         band = "MEDIUM"          # ctx-1.1: a payer that collects from many accounts and forwards within minutes is reviewed even without other domains
     if session is not None and session.force_verify and band == "LOW":
-        band = "MEDIUM"          # ctx-1.4: coercion index >= 0.65 always asks the customer (pause screen), as the step up did
+        band = "MEDIUM"          # ctx-1.4: likely coercion, or possibly not the customer: always ask (pause screen or identity step up)
     reasons = ([f"message cue: {f}" for f in ctx["families"]] + [f"payment check: {c}" for c in tx["checks"]]
                + [f"account graph: {c}" for c in gr["checks"]]
                + ([f"session: {c}" for c in session.cues] if session is not None else []))

@@ -69,7 +69,7 @@ COORD = CoordinationTracker()
 DURESS = DuressVault()
 SIGNER = Signer()
 NONCES = NonceCache()
-RATE = RateLimiter()
+RATE = RateLimiter(limit=int(os.environ.get("RUSETECT_RATE_LIMIT", "240")))   # requests per 10 s per client on POST /api
 CONSORTIUM = Consortium()
 THIS_BANK = "BANK-A"
 PROFILES: dict = {}

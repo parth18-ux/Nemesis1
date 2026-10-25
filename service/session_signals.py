@@ -14,7 +14,8 @@ Three parts, all readable rules:
 
 They produce SESSION points (cap 40) that join message, payment and graph points in context_rules.assess as a
 fourth domain, so the two domain rule still holds: coaching cues alone can ask for verification (pause screen),
-never an analyst hold. A coercion index in [0, 1] is also reported (weights follow the original design:
+never an analyst hold. Verification is forced when it may not be the customer (unenrolled device with unfamiliar
+typing, or a recent SIM swap). A coercion index in [0, 1] is also reported (weights follow the original design:
 screen share 0.30, paste 0.20, hesitation 0.20, SIM swap 0.15, app hidden 0.10, network 0.05); at 0.65 or more it
 forces at least verification, as the step up did.
 """
@@ -142,9 +143,12 @@ def assess_session(s: SessionSignals | None) -> SessionResult | None:
         cues["unenrolled_device"] = 5
     ch = attack_chain(s.events)
     if ch["chain"] == "full":
-        cues["attack_chain_full"] = 20
+        cues["attack_chain_full"] = 25      # policy: a full takeover chain plus a large new payee transfer reaches an analyst
     elif ch["chain"] == "short":
         cues["attack_chain_short"] = 10
     ci = coercion_index(s)
+    # policy: always ask the customer when coercion is likely, or when it may not be the customer at all
+    # (unenrolled device with typing unlike theirs, or a recent SIM swap)
+    not_them = (idn["new_device"] and s.typing_anomaly) or idn["recent_sim_swap"]
     return SessionResult(points=min(SESSION_CAP, sum(cues.values())), cues=sorted(cues), identity=idn, chain=ch,
-                         coercion_index=ci, force_verify=ci >= COERCION_STEP_UP)
+                         coercion_index=ci, force_verify=ci >= COERCION_STEP_UP or not_them)
