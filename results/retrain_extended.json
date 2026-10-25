@@ -1,0 +1,214 @@
+{
+ "candidates": {
+  "current": {
+   "HI": {
+    "validation": {
+     "payments": 1015669,
+     "laundering": 1082,
+     "pr_auc": 0.6277,
+     "roc_auc": 0.9826,
+     "l1_pass_rate": 0.1411,
+     "l1_laundering_kept": 0.9908
+    },
+    "test": {
+     "payments": 1015669,
+     "laundering": 1797,
+     "pr_auc": 0.7162,
+     "roc_auc": 0.9835,
+     "l1_pass_rate": 0.2048,
+     "l1_laundering_kept": 0.9922,
+     "caught_at_verify_volume": {
+      "alerts": 15900,
+      "caught": 1585,
+      "recall": 0.882,
+      "precision": 0.0997
+     },
+     "caught_at_hold_volume": {
+      "alerts": 5925,
+      "caught": 1461,
+      "recall": 0.813,
+      "precision": 0.2466
+     }
+    }
+   },
+   "LI": {
+    "validation": {
+     "payments": 1384810,
+     "laundering": 827,
+     "pr_auc": 0.283,
+     "roc_auc": 0.9708,
+     "l1_pass_rate": 0.1409,
+     "l1_laundering_kept": 0.9867
+    },
+    "test": {
+     "payments": 1384810,
+     "laundering": 925,
+     "pr_auc": 0.3355,
+     "roc_auc": 0.9603,
+     "l1_pass_rate": 0.2038,
+     "l1_laundering_kept": 0.9892,
+     "caught_at_verify_volume": {
+      "alerts": 19305,
+      "caught": 645,
+      "recall": 0.6973,
+      "precision": 0.0334
+     },
+     "caught_at_hold_volume": {
+      "alerts": 6683,
+      "caught": 529,
+      "recall": 0.5719,
+      "precision": 0.0792
+     }
+    }
+   }
+  },
+  "retrain_HI": {
+   "HI": {
+    "validation": {
+     "payments": 1015669,
+     "laundering": 1082,
+     "pr_auc": 0.6234,
+     "roc_auc": 0.9828,
+     "l1_pass_rate": 0.1411,
+     "l1_laundering_kept": 0.9908
+    },
+    "test": {
+     "payments": 1015669,
+     "laundering": 1797,
+     "pr_auc": 0.7065,
+     "roc_auc": 0.985,
+     "l1_pass_rate": 0.2048,
+     "l1_laundering_kept": 0.9922,
+     "caught_at_verify_volume": {
+      "alerts": 15900,
+      "caught": 1598,
+      "recall": 0.8893,
+      "precision": 0.1005
+     },
+     "caught_at_hold_volume": {
+      "alerts": 5925,
+      "caught": 1461,
+      "recall": 0.813,
+      "precision": 0.2466
+     }
+    }
+   },
+   "LI": {
+    "validation": {
+     "payments": 1384810,
+     "laundering": 827,
+     "pr_auc": 0.2769,
+     "roc_auc": 0.971,
+     "l1_pass_rate": 0.1409,
+     "l1_laundering_kept": 0.9867
+    },
+    "test": {
+     "payments": 1384810,
+     "laundering": 925,
+     "pr_auc": 0.3276,
+     "roc_auc": 0.9632,
+     "l1_pass_rate": 0.2038,
+     "l1_laundering_kept": 0.9892,
+     "caught_at_verify_volume": {
+      "alerts": 19305,
+      "caught": 660,
+      "recall": 0.7135,
+      "precision": 0.0342
+     },
+     "caught_at_hold_volume": {
+      "alerts": 6683,
+      "caught": 542,
+      "recall": 0.5859,
+      "precision": 0.0811
+     }
+    }
+   }
+  },
+  "retrain_HI_LI": {
+   "HI": {
+    "validation": {
+     "payments": 1015669,
+     "laundering": 1082,
+     "pr_auc": 0.6329,
+     "roc_auc": 0.9848,
+     "l1_pass_rate": 0.1409,
+     "l1_laundering_kept": 0.9935
+    },
+    "test": {
+     "payments": 1015669,
+     "laundering": 1797,
+     "pr_auc": 0.7107,
+     "roc_auc": 0.9852,
+     "l1_pass_rate": 0.2032,
+     "l1_laundering_kept": 0.9917,
+     "caught_at_verify_volume": {
+      "alerts": 15900,
+      "caught": 1595,
+      "recall": 0.8876,
+      "precision": 0.1003
+     },
+     "caught_at_hold_volume": {
+      "alerts": 5925,
+      "caught": 1432,
+      "recall": 0.7969,
+      "precision": 0.2417
+     }
+    }
+   },
+   "LI": {
+    "validation": {
+     "payments": 1384810,
+     "laundering": 827,
+     "pr_auc": 0.2984,
+     "roc_auc": 0.9711,
+     "l1_pass_rate": 0.1412,
+     "l1_laundering_kept": 0.9855
+    },
+    "test": {
+     "payments": 1384810,
+     "laundering": 925,
+     "pr_auc": 0.345,
+     "roc_auc": 0.9674,
+     "l1_pass_rate": 0.2031,
+     "l1_laundering_kept": 0.9914,
+     "caught_at_verify_volume": {
+      "alerts": 19305,
+      "caught": 664,
+      "recall": 0.7178,
+      "precision": 0.0344
+     },
+     "caught_at_hold_volume": {
+      "alerts": 6683,
+      "caught": 533,
+      "recall": 0.5762,
+      "precision": 0.0798
+     }
+    }
+   }
+  }
+ },
+ "adoption_rule": "validation PR-AUC: HI >= current - 0.005 and LI >= current + 0.01 (fixed before reading test numbers)",
+ "adopt": true,
+ "budgets_from_current_models": {
+  "HI": {
+   "verify": 0.015654706405334808,
+   "hold": 0.005833593424629481
+  },
+  "LI": {
+   "verify": 0.013940540579574093,
+   "hold": 0.004825932799445412
+  }
+ },
+ "adopted_thresholds": {
+  "l1": 0.056301962584257126,
+  "verify": 0.13664003359675353,
+  "hold": 0.4495068494649108,
+  "block": 0.8230328180234521
+ },
+ "notes": [
+  "All data synthetic (IBM AMLworld).",
+  "LI-Small test weeks were never used for training or for choosing anything.",
+  "The current models were trained on offline features; retrain_HI uses the serving code's features, so the control also checks that the two agree."
+ ],
+ "runtime_seconds": 727.4
+}

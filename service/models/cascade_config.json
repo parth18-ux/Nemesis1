@@ -75,11 +75,13 @@
   "reciprocal",
   "new_bank_pair"
  ],
- "l1_threshold": 0.06022898480296135,
- "block_threshold": 0.8289353039403885,
- "hold_threshold": 0.374910372182638,
+ "l1_threshold": 0.056301962584257126,
+ "block_threshold": 0.8230328180234521,
+ "hold_threshold": 0.4495068494649108,
  "l3_sequence_weight": 0.1,
  "note": "RF and sequence models are batch-only; online path uses L1 + XGB + LGBM",
- "verify_threshold": 0.1,
- "note_bands": "block>=block_threshold, hold>=hold_threshold, step-up>=verify_threshold (val: 0.13% / 0.31% / 0.50% of traffic), else approve"
+ "verify_threshold": 0.13664003359675353,
+ "note_bands": "block>=block_threshold, hold>=hold_threshold, step-up>=verify_threshold (val: 0.13% / 0.31% / 0.50% of traffic), else approve",
+ "trained_on": "IBM AMLworld HI-Small + LI-Small train weeks (first 60% of each, by time), live path features",
+ "thresholds_note": "verify / hold / block keep the previous models' alert rates on HI-Small validation weeks"
 }
