@@ -1,0 +1,29 @@
+{
+ "rule": "add a sequence model only if the rank blend beats the served L2 score on validation by >= 0.01 average precision",
+ "served_l2": {
+  "validation": 0.633,
+  "test": 0.7107
+ },
+ "blends": {
+  "served L2 + TCN": {
+   "validation": 0.6175,
+   "test": 0.7245,
+   "passes_rule": false
+  },
+  "served L2 + LSTM": {
+   "validation": 0.6163,
+   "test": 0.7186,
+   "passes_rule": false
+  },
+  "served L2 + Transformer": {
+   "validation": 0.6284,
+   "test": 0.7261,
+   "passes_rule": false
+  },
+  "served L2 + 1D-CNN": {
+   "validation": 0.6067,
+   "test": 0.7214,
+   "passes_rule": false
+  }
+ }
+}

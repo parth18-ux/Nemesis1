@@ -1,0 +1,86 @@
+{
+ "source": "ml/bench_deep.py (same split, training rows and F1-on-validation threshold as ml/compare_models.py)",
+ "architecture": "encoder over each sender's and receiver's last 12 events (amount, direction, time gap, format, cross-bank, same counterparty) + MLP head over the 31 payment features",
+ "models": {
+  "TCN (sequence)": {
+   "family": "sequence (neural)",
+   "evaluation": "full test set",
+   "train_seconds": 61.3,
+   "latency_ms_p50": 1.1442304999604858,
+   "model_size_bytes": 110852,
+   "test": {
+    "average_precision": 0.6731789999698453,
+    "roc_auc": 0.9906379211199382,
+    "precision": 0.8389694041867954,
+    "recall": 0.5798553144129104,
+    "f1": 0.6857518920697598,
+    "tp": 1042,
+    "fp": 200,
+    "fn": 755,
+    "threshold": 0.9943087697029114,
+    "recall_at_top_0_2pct": 0.662771285475793,
+    "precision_at_top_0_2pct": 0.5864106351550961
+   }
+  },
+  "LSTM (sequence)": {
+   "family": "sequence (neural)",
+   "evaluation": "full test set",
+   "train_seconds": 60.7,
+   "latency_ms_p50": 1.0944175000418,
+   "model_size_bytes": 80132,
+   "test": {
+    "average_precision": 0.6709006793818089,
+    "roc_auc": 0.991731269769003,
+    "precision": 0.8444816053511706,
+    "recall": 0.562047857540345,
+    "f1": 0.6749081189442031,
+    "tp": 1010,
+    "fp": 186,
+    "fn": 787,
+    "threshold": 0.9882055521011353,
+    "recall_at_top_0_2pct": 0.6466332776850306,
+    "precision_at_top_0_2pct": 0.5721319547021172
+   }
+  },
+  "Transformer (sequence)": {
+   "family": "sequence (neural)",
+   "evaluation": "full test set",
+   "train_seconds": 391.2,
+   "latency_ms_p50": 3.7466809999386896,
+   "model_size_bytes": 176132,
+   "test": {
+    "average_precision": 0.666316018441705,
+    "roc_auc": 0.9904333595218547,
+    "precision": 0.8060512024825446,
+    "recall": 0.5781858653311074,
+    "f1": 0.6733635774465327,
+    "tp": 1039,
+    "fp": 250,
+    "fn": 758,
+    "threshold": 0.987163245677948,
+    "recall_at_top_0_2pct": 0.6494156928213689,
+    "precision_at_top_0_2pct": 0.5745937961595273
+   }
+  },
+  "1D-CNN (sequence)": {
+   "family": "sequence (neural)",
+   "evaluation": "full test set",
+   "train_seconds": 49.7,
+   "latency_ms_p50": 1.0416005000024597,
+   "model_size_bytes": 67332,
+   "test": {
+    "average_precision": 0.6605102459339891,
+    "roc_auc": 0.9915142864395458,
+    "precision": 0.828688524590164,
+    "recall": 0.5626043405676127,
+    "f1": 0.6702021876035797,
+    "tp": 1011,
+    "fp": 209,
+    "fn": 786,
+    "threshold": 0.9749905467033386,
+    "recall_at_top_0_2pct": 0.6510851419031719,
+    "precision_at_top_0_2pct": 0.5760709010339734
+   }
+  }
+ }
+}

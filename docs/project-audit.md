@@ -18,11 +18,13 @@ The state of RuseTect against its goals.
 
 ## Findings
 
-1. **Mismatched block threshold (open, decision needed).** `ml/cascade.py` tunes `block_threshold` (0.829) on the
-   offline L3 blend score, but the live engine applies it to the L2 XGBoost + LightGBM average. Measured in the
-   previous session on the test period: block precision 0.605 / recall 0.671 at the committed threshold. A
-   threshold retuned on validation for the live score (0.950) gives 0.920 / 0.570. The served threshold is
-   unchanged until `ml/audit_live_path.py` is rerun on the full data and the trade-off is chosen.
+1. **Mismatched block threshold (open, decision needed).** The served `block_threshold` (0.823) keeps the alert rate of
+   the threshold `ml/cascade.py` tuned on the offline L3 blend score, but the live engine applies it to the L2 XGBoost
+   and LightGBM average. Measured by `ml/audit_live_path.py` with the current models on the full HI-Small test period
+   (`results/live_path_audit.json`): block recommendations are 0.638 precise with 0.653 recall (1,840 alerts). A
+   threshold retuned on validation for the live score (0.935) would give 0.938 precision and 0.553 recall (1,059
+   alerts). Blocks always need two analysts, so this is a choice between analyst workload and recall; the served
+   threshold stays as it is until that choice is made.
 2. **All training data is synthetic or foreign.** IBM AMLworld and Feedzai BAF are generator outputs. The Indian
    message corpus is template based, and UCI SMS is UK-era spam. The pipeline is built to retrain; [datasets.md](datasets.md)
    lists replacements.
@@ -33,27 +35,14 @@ The state of RuseTect against its goals.
    fix is sender verification (TRAI DLT headers), which needs a field the API does not take yet.
 5. **State lives in memory.** Account history, ring cases, lure events, the payee watchlist and alert budgets all
    reset on restart, and are not shared between serverless instances. On Vercel, a message and the following
-   payment can land on different instances, so the fusion can silently do nothing. Production needs Redis or
-   similar; the demo should run on one always on process.
+   payment can land on different instances, so the fusion can silently do nothing. `service/scale` keeps this
+   state in Redis for production; the demo should run on one always on process.
 6. **Offline-only layers are labelled.** Random Forest, the L3 sequence blend and the GNN do not run live; the landing
    page and report say so.
-7. **Fresh model comparison is half done** (7/14). See [model-selection.md](model-selection.md) for the remaining runs.
-
-## Changes on this branch
-
-- Handoff work from `rusetect-rename`: rename, report build step, `verify_threshold` export, comparison scripts.
-- L-1 lure detector: `service/scam_text.py` (featuriser, workflow and tactic tagger, entity extraction, scorer),
-  `ml/scam_corpus.py`, `ml/train_message_model.py`, `service/models/message_model.json`, `results/message_model_eval.json`.
-- Fusion and alert fatigue policy: `service/lure_fusion.py`; `/api/v2/message`, `/api/v2/alerts/summary`,
-  `/api/v2/message-model`; `/api/v2/payment` and `/payments/batch` now apply lure context (they can only raise a decision).
-- Console: a message check panel with samples, and "then pay" buttons that show the escalation live.
-- Landing page: L-1 card. Tests: `tests/test_messages.py`.
-
-## To do, in priority order
-
-1. Obtain real or better data (see datasets.md) and retrain both sides.
-2. Finish the fresh comparison and the sequence runs; run `ml/audit_live_path.py`; decide finding 1.
-3. Persistent state store (Redis) for accounts, lures, watchlist and alert budgets.
-4. Sender-ID input on `/api/v2/message` (DLT header, WhatsApp business verification) to cut refund notice false alarms.
-5. Hindi and regional script data for L-1; the featuriser already keeps Devanagari tokens.
-6. Call audio: speech to text upstream of L-1, plus deepfake voice detection if a labelled set is available.
+7. **Fresh model comparison is complete.** All 14 tabular models (`results/model_comparison_tabular.json`) and the four
+   sequence models (`results/model_comparison_sequence.json`); see [model-selection.md](model-selection.md).
+8. **The LightGBM half of L2 is now the weaker one.** Since the retrain with LI-Small, LightGBM alone scores 0.604
+   average precision on the HI-Small test period against 0.711 for XGBoost alone (0.208 against 0.344 on LI-Small).
+   The served average still scores slightly above XGBoost alone on validation (0.633 against 0.622 on HI-Small, 0.298
+   against 0.292 on LI-Small) and matches it on the test periods, so it is kept; LightGBM's settings are the first
+   place to look in the next retrain (`results/l2_halves_check.json`).

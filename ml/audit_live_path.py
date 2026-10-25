@@ -54,8 +54,9 @@ for name, s in (("validation", 1), ("test", 2)):
         retuned = float(th[int(np.nanargmax(f1[:-1]))])
     else:
         out[name]["block_band_if_retuned_on_validation"] = band(yt, risk, retuned)
-out["note"] = ("block_threshold and hold_threshold in cascade_config.json were fitted by ml/cascade.py on the offline L3 blend score, "
-               "but the live engine applies them to mean(L2 XGBoost, L2 LightGBM). 'block_band_if_retuned_on_validation' shows the effect of "
+out["note"] = ("block_threshold and hold_threshold in cascade_config.json keep the alert rates of the earlier thresholds, which "
+               "ml/cascade.py fitted on the offline L3 blend score (ml/retrain_extended.py carried those rates over to the retrained models); "
+               "the live engine applies them to mean(L2 XGBoost, L2 LightGBM). 'block_band_if_retuned_on_validation' shows the effect of "
                "re-fitting on the live score; it is NOT applied to the served configuration.")
 os.makedirs(os.path.join(REPO, "results"), exist_ok=True)
 json.dump(out, open(os.path.join(REPO, "results", "live_path_audit.json"), "w"), indent=1)

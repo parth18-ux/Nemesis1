@@ -108,6 +108,9 @@ python ml/aml_features.py              # payment features
 python ml/cascade.py                   # build the payment cascade and export service/models
 python ml/l0_onboarding.py             # account opening model with age group thresholds
 python ml/train_message_model.py       # message model
+python ml/compare_models.py            # 14 tabular models, one protocol
+python ml/bench_deep.py tcn cnn lstm transformer && python ml/export_sequence_results.py   # sequence models
+python ml/audit_live_path.py           # live payment path with the served models and thresholds
 python ml/full_dataset_eval.py HI      # stream a full dataset through the live engine (also LI)
 python ml/retrain_extended.py          # retraining with LI-Small (see docs/RETRAINING.md)
 python ml/retrain_l0_variants.py       # retraining with the BAF variants

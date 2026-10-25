@@ -1,0 +1,35 @@
+{
+ "note": "average precision of the live score with each L2 half alone and with the served average; same L1 gate",
+ "HI": {
+  "validation": {
+   "payments": 1015669,
+   "laundering": 1082,
+   "xgboost_alone": 0.6215,
+   "lightgbm_alone": 0.5528,
+   "average_served": 0.6329
+  },
+  "test": {
+   "payments": 1015669,
+   "laundering": 1797,
+   "xgboost_alone": 0.7108,
+   "lightgbm_alone": 0.6037,
+   "average_served": 0.7107
+  }
+ },
+ "LI": {
+  "validation": {
+   "payments": 1384810,
+   "laundering": 827,
+   "xgboost_alone": 0.292,
+   "lightgbm_alone": 0.1969,
+   "average_served": 0.2984
+  },
+  "test": {
+   "payments": 1384810,
+   "laundering": 925,
+   "xgboost_alone": 0.3444,
+   "lightgbm_alone": 0.2081,
+   "average_served": 0.345
+  }
+ }
+}

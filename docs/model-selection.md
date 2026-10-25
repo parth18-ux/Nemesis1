@@ -40,31 +40,56 @@ Random Forest, the LSTM/Transformer blend (L3) and the GNN exist only in the off
 | Logistic regression / linear SVM / RBF-SVM + graph | 0.13 / 0.13 / 0.12 | |
 | Isolation Forest (unsupervised) | 0.004 | laundering looks normal row by row |
 
-### Fresh comparison (`ml/compare_models.py`): 7 of 14 models finished
+### Fresh comparison (`ml/compare_models.py`): all 14 models
 
-Same split; each model gets its own small tuning grid scored on validation; the test set is used once.
-Partial file: `results/model_comparison_tabular.partial.json`.
+Same split; each model gets its own small tuning grid scored on validation; the test set is used once
+(`results/model_comparison_tabular.json`, 1,797 laundering payments in the test period, 2 CPUs).
 
-| Model | Avg. precision | Precision | Recall | False alarms | Missed |
-|---|---|---|---|---|---|
-| Random Forest | 0.706 | 0.904 | 0.548 | 104 | 813 |
-| Decision tree | 0.580 | 0.844 | 0.471 | 157 | 950 |
-| KNN (40K-row fit, reweighted test) | 0.438 | 0.669 | 0.393 | ~350 | ~1,090 |
-| Logistic regression | 0.169 | 0.312 | 0.489 | 1,939 | 918 |
-| Linear SVM | 0.162 | 0.300 | 0.496 | 2,077 | 905 |
-| Gaussian Naive Bayes | 0.013 | 0.015 | 0.698 | 84,165 | 542 |
-| Dummy (class prior) | 0.002 | n/a | 0 | 0 | 1,797 |
+| Model | Avg. precision | Precision | Recall | False alarms | Missed | Train time |
+|---|---|---|---|---|---|---|
+| XGBoost | **0.728** | 0.928 | 0.563 | 79 | 785 | 6 s |
+| LightGBM | 0.725 | 0.896 | 0.573 | 120 | 768 | 8 s |
+| Random Forest | 0.706 | 0.904 | 0.548 | 104 | 813 | 93 s |
+| CatBoost | 0.705 | 0.881 | 0.541 | 131 | 824 | 38 s |
+| HistGradientBoosting | 0.696 | 0.924 | 0.518 | 76 | 867 | 10 s |
+| Extra Trees | 0.692 | 0.899 | 0.523 | 106 | 858 | 47 s |
+| MLP (small neural net) | 0.624 | 0.803 | 0.521 | 229 | 861 | 11 s |
+| Decision tree | 0.580 | 0.844 | 0.471 | 157 | 950 | 4 s |
+| AdaBoost | 0.465 | 0.572 | 0.429 | 578 | 1,026 | 167 s |
+| KNN (40K row fit, reweighted test) | 0.438 | 0.669 | 0.393 | about 350 | about 1,090 | n/a |
+| Logistic regression | 0.169 | 0.312 | 0.489 | 1,939 | 918 | 2 s |
+| Linear SVM | 0.162 | 0.300 | 0.496 | 2,077 | 905 | 3 s |
+| Gaussian Naive Bayes | 0.013 | 0.015 | 0.698 | 84,165 | 542 | 0.1 s |
+| Dummy (class prior) | 0.002 | n/a | 0 | 0 | 1,797 | n/a |
 
-**Still to run** (needs the IBM data, which is not in this repo):
-Extra Trees, AdaBoost, HistGradientBoosting, XGBoost, LightGBM, CatBoost, MLP; then the sequence models
-(`python ml/bench_deep.py tcn cnn lstm transformer`, then `ml/export_sequence_results.py`); then
-`ml/audit_live_path.py` and `ml/build_report.py`. When `results/model_comparison_tabular.json` exists, delete the
-`.partial.json`.
+The two boosters that run live, XGBoost and LightGBM, are also the two best models here. Isolation Forest alone
+scores 0.004; adding its anomaly score to XGBoost gives 0.730, so it is left out. Not run: a Gaussian Process
+classifier and an RBF kernel SVM, whose cost grows too fast with 307,000 training rows.
+
+### Sequence models (`ml/bench_deep.py`, `results/model_comparison_sequence.json`)
+
+Same split, training rows and validation threshold rule as the tabular comparison. Each model reads the sender's and
+the receiver's last 12 events (amount, direction, time gap, payment format, cross bank, same counterparty) plus the 31
+payment features, trains for 6 epochs and keeps the epoch with the best validation average precision.
+
+| Model | Avg. precision | Precision | Recall | False alarms | Missed | Recall in top 0.2% | Train time | Latency |
+|---|---|---|---|---|---|---|---|---|
+| TCN | **0.673** | 0.839 | 0.580 | 200 | 755 | 0.663 | 61 s | 1.1 ms |
+| LSTM | 0.671 | 0.844 | 0.562 | 186 | 787 | 0.647 | 61 s | 1.1 ms |
+| Transformer | 0.666 | 0.806 | 0.578 | 250 | 758 | 0.649 | 391 s | 3.8 ms |
+| 1D-CNN | 0.661 | 0.829 | 0.563 | 209 | 786 | 0.651 | 50 s | 1.0 ms |
+
+None reaches XGBoost on the tabular features (0.728). Would one help as a second opinion? `ml/sequence_blend_check.py`
+blends the served L2 score with each model (mean of percentile ranks). The rule, fixed before looking, is a validation
+gain of at least 0.01. Every blend scores lower than the served score on validation (0.607 to 0.628 against 0.633),
+so none is added. On the test period the blends would score 0.719 to 0.726 against 0.711, but choosing on test numbers
+would be selecting on the test set. Adding one later would also need the live engine to compute the event sequences
+(`results/sequence_blend_check.json`).
 
 ### "Why not TCN, Gaussian, or …?"
 
-- **TCN**: added to `ml/bench_deep.py`; not yet run. Expect it near the LSTM/1D-CNN (0.64 to 0.66), since all three
-  read the same 12-event sequences; it only goes live if it lifts the blend on validation.
+- **TCN**: run; 0.673, the best of the four sequence models and below XGBoost. It does not improve the live score on
+  validation (above), so it stays offline.
 - **Gaussian Naive Bayes**: measured, 0.013. Its independence assumption fails badly on correlated
   account history counts.
 - **Gaussian Process classifier**: not run. Training is O(n³) time and O(n²) memory: infeasible on 307K training
