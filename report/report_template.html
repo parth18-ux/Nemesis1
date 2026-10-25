@@ -125,7 +125,7 @@ button.primary{background:var(--olive);border-color:var(--olive);color:var(--oli
 <section>
   <div class="eyebrow">Offline cascade on the test period (not the live API)</div>
   <h2>What reaches an analyst</h2>
-  <p>Volumes are what each layer passes on during the 10-day test window. The red figure under each bar is how many true laundering payments are still in the stream at that point.</p>
+  <p>Volumes are what each layer passes on during the 10 day test window. The red figure under each bar is how many true laundering payments are still in the stream at that point.</p>
   <div class="funnel" id="funnel"></div>
   <p class="foot">L0 runs at account opening on a different population (BAF), so it has its own test set and is not chained numerically into the payment funnel. L3 sequence models run in batch; the online API path is L1 → L2 → decision band → L4.</p>
 </section>
@@ -158,7 +158,7 @@ button.primary{background:var(--olive);border-color:var(--olive);color:var(--oli
     <div class="card"><h3>Gradient boosting wins on this data</h3><p>XGBoost, LightGBM, CatBoost and Random Forest are within 0.02 PR-AUC of each other. They are also the fastest to train (6 to 70 s on 2 CPUs) and the easiest to explain with SHAP.</p></div>
     <div class="card"><h3>Sequence models add a small, real gain</h3><p>LSTM and Transformer over each sender's and receiver's last 12 events reach 0.66 alone. Blended at 10% weight into the tree ensemble they lift PR-AUC from 0.720 to 0.725 and F1 from 0.691 to 0.702.</p></div>
     <div class="card"><h3>The GNN loses under a strict time split</h3><p>With embeddings built only from the past graph, the GNN reaches 0.516. It cannot represent accounts that first appear during the test period. Published GNN results on this dataset use a test graph that includes future edges.</p></div>
-    <div class="card"><h3>GAN augmentation does not help</h3><p>Adding 3× GAN-generated positives to XGBoost gives 0.711, versus 0.715 without. Real positives are rare, but the synthetic ones add no new signal.</p></div>
+    <div class="card"><h3>GAN augmentation does not help</h3><p>Adding 3× GAN generated positives to XGBoost gives 0.711, versus 0.715 without. Real positives are rare, but the synthetic ones add no new signal.</p></div>
     <div class="card"><h3>No ACH shortcut</h3><p>ACH carries 87% of laundering. Removing payment format entirely costs XGBoost only 0.025 PR-AUC (0.715 → 0.690), so the model is learning behaviour, not the format label. Unsupervised Isolation Forest is near random (0.004): here laundering looks normal row by row and only stands out in context.</p></div>
   </div>
 </section>
@@ -193,7 +193,7 @@ button.primary{background:var(--olive);border-color:var(--olive);color:var(--oli
   <div class="card fix">
     <h3>Live API vs offline benchmark</h3>
     <ul class="plain">
-      <li>The live payment path loads three models: the 30-tree XGBoost gatekeeper (L1), then an XGBoost and a LightGBM model whose scores are averaged (L2). Random Forest and LSTM/Transformer appear only in the offline L3 blend above.</li>
+      <li>The live payment path loads three models: the 30 tree XGBoost gatekeeper (L1), then an XGBoost and a LightGBM model whose scores are averaged (L2). Random Forest and LSTM/Transformer appear only in the offline L3 blend above.</li>
       <li>The offline L3 blend reaches about 0.725 PR-AUC. The live path does not reproduce that blend, so its scores are not the same as the blend's.</li>
       <li>The live block and hold thresholds were tuned on the offline blend score, not on the live L2 average. <code>docs/project-audit.md</code> measures the effect and how to retune.</li>
       <li>Reasons shown by the API are XGBoost TreeSHAP contributions (<code>pred_contribs</code>) from the L2 XGBoost model only; LightGBM's half of the score has no per feature explanation.</li>
@@ -234,10 +234,10 @@ const nf = n => n.toLocaleString("en-US");
 // funnel
 const F = DATA.cascade.funnel, total = F.test_txns;
 const stages = [
-  ["L0", "Onboarding gate", "LightGBM on the account application (BAF) with age-group thresholds. Suspicious openings go to enhanced KYC before the account can transact.", null, null, true],
-  ["IN", "All payments in the test period", "Time-ordered stream; every feature uses only earlier payments.", total, F.laundering_txns],
-  ["L1", "Gatekeeper", "30-tree XGBoost on account-history features; approves 79.5% of traffic in 0.3 ms.", F.after_L1, F.laundering_after_L1],
-  ["L2+L3", "Graph-boost + behaviour", "XGBoost + LightGBM + Random Forest, blended with LSTM/Transformer sequence scores. Top band = Block + STR draft.", F.alerts_after_L3, F.laundering_alerted],
+  ["L0", "Onboarding gate", "LightGBM on the account application (BAF) with age group thresholds. Suspicious openings go to enhanced KYC before the account can transact.", null, null, true],
+  ["IN", "All payments in the test period", "Time ordered stream; every feature uses only earlier payments.", total, F.laundering_txns],
+  ["L1", "Gatekeeper", "30 tree XGBoost on account history features; approves 79.5% of traffic in 0.3 ms.", F.after_L1, F.laundering_after_L1],
+  ["L2+L3", "Graph boost + behaviour", "XGBoost + LightGBM + Random Forest, blended with LSTM/Transformer sequence scores. Top band = Block + STR draft.", F.alerts_after_L3, F.laundering_alerted],
   ["L4", "Ring linker", "Blocked payments that share accounts are merged into one case per mule cluster.", F.cases_after_L4, null],
 ];
 const fEl = document.getElementById("funnel");
@@ -288,7 +288,7 @@ document.getElementById("rings").innerHTML = Object.entries(R).sort((a, b) => b[
 const B = Object.entries(DATA.baf).sort((a, b) => b[1].recall_at_5fpr - a[1].recall_at_5fpr);
 document.getElementById("bafTable").innerHTML = `<thead><tr><th>Model</th><th>Recall @ 5% FPR</th><th>ROC-AUC</th><th>PR-AUC</th><th>FPR ratio (age)</th><th>Train s</th></tr></thead><tbody>` +
   B.map(([k, v], i) => `<tr${i === 0 ? ' class="win"' : ""}><td><span class="fam" style="background:var(${famVar(v.family)})"></span>${k}</td><td>${fmt(v.recall_at_5fpr)}</td><td>${fmt(v.roc_auc)}</td><td>${fmt(v.pr_auc)}</td><td>${fmt(v.fpr_ratio_age, 2)}</td><td>${v.train_secs}</td></tr>`).join("") +
-  `<tr><td><span class="fam" style="background:var(--f-boost)"></span>LightGBM + age-group thresholds (L0 final)</td><td>${fmt(DATA.l0.group_thresholds.recall)}</td><td>${fmt(DATA.l0.roc_auc)}</td><td>n/a</td><td>${fmt(DATA.l0.group_thresholds.fpr_ratio, 2)}</td><td>n/a</td></tr></tbody>`;
+  `<tr><td><span class="fam" style="background:var(--f-boost)"></span>LightGBM + age group thresholds (L0 final)</td><td>${fmt(DATA.l0.group_thresholds.recall)}</td><td>${fmt(DATA.l0.roc_auc)}</td><td>n/a</td><td>${fmt(DATA.l0.group_thresholds.fpr_ratio, 2)}</td><td>n/a</td></tr></tbody>`;
 
 // fresh comparison (results/*.json, if present at build time)
 (function () {
@@ -304,7 +304,7 @@ document.getElementById("bafTable").innerHTML = `<thead><tr><th>Model</th><th>Re
 // online
 const O = DATA.online;
 document.getElementById("online").textContent = O ?
-  `The API engine was warmed with all ${nf(4062676)} pre-test payments and then scored the next ${nf(O.test_payments_scored)} payments live. Its risk scores differ from the offline model by at most ${O.max_abs_risk_diff.toFixed(4)} (mean ${O.mean_abs_risk_diff.toExponential(1)}), the block decision agrees on ${(O.same_decision_rate * 100).toFixed(2)}% of payments, and PR-AUC is ${O.pr_auc_live.toFixed(3)} live vs ${O.pr_auc_offline.toFixed(3)} offline on that slice. Median latency is ${O.latency_ms_p50.toFixed(2)} ms per payment (p99 ${O.latency_ms_p99.toFixed(1)} ms), including feature computation, on one CPU core.` :
+  `The API engine was warmed with all ${nf(4062676)} earlier payments and then scored the next ${nf(O.test_payments_scored)} payments live. Its risk scores differ from the offline model by at most ${O.max_abs_risk_diff.toFixed(4)} (mean ${O.mean_abs_risk_diff.toExponential(1)}), the block decision agrees on ${(O.same_decision_rate * 100).toFixed(2)}% of payments, and PR-AUC is ${O.pr_auc_live.toFixed(3)} live vs ${O.pr_auc_offline.toFixed(3)} offline on that slice. Median latency is ${O.latency_ms_p50.toFixed(2)} ms per payment (p99 ${O.latency_ms_p99.toFixed(1)} ms), including feature computation, on one CPU core.` :
   "Live parity check not available.";
 </script>
 </body></html>

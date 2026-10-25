@@ -1,0 +1,85 @@
+{
+ "dataset": "PaySim (synthetic mobile money), https://www.kaggle.com/datasets/ealaxi/paysim1",
+ "citation": "Lopez-Rojas, Elmir, Axelsson. PaySim: A financial mobile money simulator for fraud detection. EMSS 2016.",
+ "rows": 6362620,
+ "fraud": 8213,
+ "split": "time ordered 60 / 20 / 20",
+ "test_fraud": 4254,
+ "features": [
+  "type_CASH_IN",
+  "type_CASH_OUT",
+  "type_DEBIT",
+  "type_PAYMENT",
+  "type_TRANSFER",
+  "amount",
+  "log_amount",
+  "hour",
+  "payer_balance_before",
+  "share_of_balance",
+  "empties_account",
+  "payer_seen_before",
+  "payee_seen_before",
+  "payee_received_before",
+  "payee_hours_known",
+  "payee_distinct_payers_before",
+  "payee_is_merchant"
+ ],
+ "models": {
+  "rusetect_recipe_bank_visible_features": {
+   "test_pr_auc": 0.9997,
+   "test_roc_auc": 1.0,
+   "validation_pr_auc": 1.0,
+   "budget_0.1%": {
+    "alerts_share_test": 0.0037,
+    "recall": 0.9988,
+    "precision": 0.8906
+   },
+   "budget_0.5%": {
+    "alerts_share_test": 0.0074,
+    "recall": 1.0,
+    "precision": 0.4505
+   },
+   "budget_1.0%": {
+    "alerts_share_test": 0.0119,
+    "recall": 1.0,
+    "precision": 0.2802
+   }
+  },
+  "leaky_upper_bound_all_balance_columns": {
+   "test_pr_auc": 1.0,
+   "test_roc_auc": 1.0,
+   "validation_pr_auc": 1.0,
+   "budget_0.1%": {
+    "alerts_share_test": 0.0037,
+    "recall": 0.9998,
+    "precision": 0.9117
+   },
+   "budget_0.5%": {
+    "alerts_share_test": 0.007,
+    "recall": 1.0,
+    "precision": 0.477
+   },
+   "budget_1.0%": {
+    "alerts_share_test": 0.0109,
+    "recall": 1.0,
+    "precision": 0.3059
+   }
+  },
+  "paysim_isFlaggedFraud_rule": {
+   "test_alert_share": 0.0,
+   "recall": 0.0031,
+   "precision": 1.0
+  },
+  "rule_payment_empties_account": {
+   "test_alert_share": 0.3198,
+   "recall": 0.9723,
+   "precision": 0.0102
+  }
+ },
+ "notes": [
+  "PaySim is synthetic; fraud only appears in TRANSFER and CASH_OUT, and each fraud case empties an account.",
+  "Payee balance columns are left out of the main model because PaySim fills them in a way that reveals fraud.",
+  "PaySim's account ids rarely repeat for payers, so payer history features carry little signal here."
+ ],
+ "runtime_seconds": 220.0
+}

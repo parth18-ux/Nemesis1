@@ -1,15 +1,18 @@
 # Datasets: what we use and what to look for next
 
-Download anything below into `data/` (ignored by git), or point `RUSETECT_DATA` at it. This build environment could reach
-only GitHub; Kaggle, Hugging Face, Mendeley, Zenodo and UCI were blocked, so these were not tried here.
-Check each licence before use.
+Download anything below into `data/` (ignored by git), or point `RUSETECT_DATA` at it. Check each licence before use.
 
 ## In use
 
 | Data | Side | Size | Limits |
 |---|---|---|---|
 | IBM AMLworld HI-Small (Kaggle, Altman et al., NeurIPS 2023) | Payments (L1 to L4) | 5.08M payments, 5,177 laundering, labelled rings | Synthetic; USD-era banking, not UPI |
+| IBM AMLworld LI-Small (same source) | Payments (training and out of distribution test) | 6.92M payments, lower laundering rate | Synthetic |
 | Feedzai Bank Account Fraud, Base (Kaggle, NeurIPS 2022) | Onboarding (L0) | 1M applications | Synthetic; US-style fields |
+| Feedzai Bank Account Fraud, Variants I to V | Onboarding (L0 training, bias tests) | 5M applications | Synthetic, controlled bias shifts |
+| Aalto 136M Keystrokes (CHI 2018) | Typing rhythm check | 168,593 people; 7,169 random plus 5,254 older or phone typists used | Real typing test website, not a banking app |
+| Balabit Mouse Dynamics Challenge | Mouse dynamics | 10 users, labelled impostor sessions | Real desktop mouse data |
+| PaySim (Lopez-Rojas et al., 2016) | Payments benchmark | 6.36M mobile money transactions, 8,213 fraud | Synthetic; see the note below |
 | UCI SMS Spam Collection (via GitHub mirror) | Messages (L-1) | 5,574 SMS, 747 spam | Real but ~2011 UK; spam ≠ scam |
 | `ml/scam_corpus.py` | Messages (L-1) | 1,791 messages, 144 templates | Written from public advisories; synthetic |
 
