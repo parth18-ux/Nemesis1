@@ -1,5 +1,5 @@
 """
-Flagged sender network rule (from the "accounts paid by 5+ flagged senders are flagged for every bank").
+Flagged sender network rule ("accounts paid by 5+ flagged senders are flagged for every bank").
 
 A payee that keeps receiving money from accounts that RuseTect has itself flagged recently is collecting from many
 scam victims or many laundering hops. Unlike the mule signature (which looks at one account's own in and out

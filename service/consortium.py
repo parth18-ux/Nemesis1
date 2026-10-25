@@ -1,5 +1,5 @@
 """
-Cross bank mule intelligence (session layer used Hyperledger Fabric chaincodes and Ethereum anchoring).
+Cross bank mule intelligence, without a blockchain network (an alternative to Hyperledger Fabric chaincodes and Ethereum anchoring).
 
 The same guarantees with far less machinery: an append only ledger where every entry is signed (Ed25519) by the
 bank that publishes it and chained to the previous entry's hash, so any change to history breaks verification.

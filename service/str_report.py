@@ -1,5 +1,5 @@
 """
-STR draft from an alert's evidence pack (the "AI investigator drafts an STR ready case report").
+STR draft from an alert's evidence pack (an STR ready case report for the analyst to sign).
 
 Built from a template, not a language model: every sentence is traceable to a field in the evidence pack, nothing
 leaves the bank's servers, and the same inputs always give the same draft. The sections follow the parts of a

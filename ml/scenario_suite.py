@@ -1,4 +1,4 @@
-"""End to end replay suite (the "scam replay suite"): every scenario goes through the real API (/api/v2/assess,
+"""End to end scam replay suite: every scenario goes through the real API (/api/v2/assess,
 /api/v2/identity/check, /api/v2/payments/confirm) with randomised parameters, and we count what the customer would
 have experienced.
 

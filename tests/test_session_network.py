@@ -1,4 +1,4 @@
-"""session layer features inside RuseTect: session and identity domain, attack chains, pause screen, duress PIN, campaigns,
+"""Person, session and network layer: session and identity domain, attack chains, pause screen, duress PIN, campaigns,
 consortium ledger, signed verdicts, STR drafts, display score, typing profile. Each test pins one behaviour."""
 import sys, uuid
 from pathlib import Path

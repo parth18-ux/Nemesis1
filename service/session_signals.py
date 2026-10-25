@@ -17,7 +17,7 @@ fourth domain, so the two domain rule still holds: coaching cues alone can ask f
 never an analyst hold. Verification is forced when it may not be the customer (unenrolled device with unfamiliar
 typing, or a recent SIM swap). A coercion index in [0, 1] is also reported (weights follow the original design:
 screen share 0.30, paste 0.20, hesitation 0.20, SIM swap 0.15, app hidden 0.10, network 0.05); at 0.65 or more it
-forces at least verification, as the step up did.
+forces at least verification (step up).
 """
 from __future__ import annotations
 from dataclasses import dataclass, field, asdict

@@ -12,7 +12,7 @@ import numpy as np
 
 class LiteBooster:
     def __init__(self, path):
-        m = json.loads(open(path).read())
+        m = path if isinstance(path, dict) else json.loads(open(path).read())
         self.sigmoid = 1.0
         obj = m.get("objective", "")
         if "sigmoid:" in obj:

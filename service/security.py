@@ -9,7 +9,7 @@ Security for the review desk and the verdicts.
   captured request cannot be replayed.
 * A small per client rate limit protects the write endpoints.
 * Verdicts and evidence packs are signed with Ed25519 (RUSETECT_SIGNING_KEY = base64 32 byte seed; otherwise an
-  ephemeral key per process). Anyone can verify with GET /api/v2/keys/public. the original design named
+  ephemeral key per process). Anyone can verify with GET /api/v2/keys/public. The original design named
   ML-DSA (FIPS 204); the Python cryptography library used here has no ML-DSA yet, so swapping it in later is a
   change to sign() and verify() only.
 """

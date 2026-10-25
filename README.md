@@ -26,7 +26,7 @@ cases for an analyst. It is a research prototype trained and evaluated on **synt
 | **Network** | `service/campaigns.py`, `service/consortium.py` | Scam campaigns across victims; signed, hash chained cross bank mule ledger of HMAC tokens |
 | **Review desk** | `service/review.py`, `service/security.py`, `service/str_report.py` | Analyst keys and roles, two analysts per block, nonces, signed verdicts and evidence packs, STR drafts |
 
-See `docs/SESSION_AND_NETWORK.md` for what came from session layer and how it was measured, `docs/RETRAINING.md` for the models
+See `docs/SESSION_AND_NETWORK.md` for the person, session and network layer and how it was measured, `docs/RETRAINING.md` for the models
 retrained with the unused LI-Small and BAF variant data, and `docs/SCALING.md` for state and scale out.
 
 Random Forest and LSTM/Transformer models appear only in the **offline** benchmark blend ("L3"). The live engine

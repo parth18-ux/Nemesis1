@@ -1,5 +1,5 @@
 """
-Scam campaigns: link alerts that are the same operation hitting different people (the campaign clustering).
+Scam campaigns: link alerts that are the same operation hitting different people.
 
 Two alerts join the same campaign when any of these hold:
   * same payee account (many victims paying one collector)
