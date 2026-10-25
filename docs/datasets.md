@@ -16,6 +16,23 @@ Download anything below into `data/` (ignored by git), or point `RUSETECT_DATA` 
 | UCI SMS Spam Collection (via GitHub mirror) | Messages (L-1) | 5,574 SMS, 747 spam | Real but ~2011 UK; spam ≠ scam |
 | `ml/scam_corpus.py` | Messages (L-1) | 1,791 messages, 144 templates | Written from public advisories; synthetic |
 
+### Note on PaySim
+
+`ml/paysim_eval.py` runs RuseTect's payment recipe on PaySim with the same protocol (time ordered 60/20/20 split,
+past only features, XGBoost and LightGBM averaged, thresholds set by alert budget on validation). Results on the test
+period (4,254 fraud cases), from `results/paysim_eval.json`:
+
+| Model | Test PR-AUC | Recall at 0.1% alert budget |
+|---|---|---|
+| Account history only (no balance fields) | 0.52 | 45% at 53% precision |
+| Bank visible features including the payer's balance | 0.9997 | 99.9% |
+| Every balance column (leaky upper bound) | 1.0 | 99.98% |
+| PaySim's own rule (transfers above 200,000) | n/a | 0.3% |
+| Rule: the payment empties the account | n/a | 97% at 1% precision |
+
+The near perfect scores come from the simulator: every fraud case empties the payer's balance, so PaySim cannot tell
+good models apart. RuseTect keeps the IBM and Feedzai data as its main benchmarks.
+
 ## Better candidates
 
 ### Messages and calls (biggest gap)
