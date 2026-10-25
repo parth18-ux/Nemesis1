@@ -161,7 +161,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-bet
   <div class="wrap">
     <a class="brand" href="#top">RuseTect</a>
     <nav class="links" aria-label="Sections">
-      <a href="#layers">How it works</a><a href="/investigate">Investigator</a><a href="/report">Benchmark report</a><a href="/docs">API docs</a><a href="https://github.com/Parth1681/RuseTect">GitHub</a>
+      <a href="#layers">How it works</a><a href="#session">Session and network</a><a href="/investigate">Investigator</a><a href="/report">Benchmark report</a><a href="/docs">API docs</a><a href="https://github.com/Parth1681/RuseTect">GitHub</a>
     </nav>
     <a class="pill" href="/console">Open live console ↗</a>
   </div>
@@ -242,6 +242,60 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-bet
           <h3>Turn alerts into ring cases</h3>
           <p>Alerts that share accounts are merged into one case per mule cluster, so analysts review rings, not rows. A block needs two different analysts, and every action lands in a hash chained audit log.</p>
           <div class="stat num">3.5×<small>fewer items to review (1,105 alerts → 318 cases) · offline benchmark</small></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="session" style="padding-top:0">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">Person · session · network</span>
+        <h2>Catch the coached victim, too.</h2>
+        <p>Scammers have the password and the OTP; what they cannot hide is the pattern around the payment. RuseTect now also reads the banking session (with consent), checks it is really the customer, links victims into campaigns, and answers with a pause, not a panic.</p>
+      </div>
+      <div class="feat">
+        <article>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h4l2 5-2.5 1.5a11 11 0 0 0 5 5L16 12l5 2v4a2 2 0 0 1-2 2A17 17 0 0 1 4 5a2 2 0 0 1 2-2z"/></svg>
+          <span class="tag">Session · coaching cues</span>
+          <h3>Notice the call behind the payment</h3>
+          <p>A live or video call, screen sharing, a remote access app, a pasted payee, long hesitation: a fourth evidence domain. Alone it only asks the customer; with payment or message evidence it holds the money for an analyst.</p>
+          <div class="stat num">40 / 40<small>session points on the digital arrest demo, held at 914 out of 1,000 · synthetic</small></div>
+        </article>
+        <article>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg>
+          <span class="tag">Person · is it really them?</span>
+          <h3>Stop SIM swap takeovers before the OTP</h3>
+          <p>An unenrolled device right after a SIM swap gets no OTP and re-verifies by video KYC. Typing and mouse rhythm check the person; account takeover chains (reset, new device, new payee, transfer) are caught in order.</p>
+          <div class="stat num">0.89<small>median ROC-AUC of mouse dynamics after 10 actions, on real Balabit data</small></div>
+        </article>
+        <article>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 9v6M14 9v6"/></svg>
+          <span class="tag">Pause, not panic</span>
+          <h3>Ask the one question that breaks the spell</h3>
+          <p>"Has anyone said you are under digital arrest and must pay?" chosen from the evidence, in English or Hindi, with a 30 minute cool off. A duress PIN shows the scammer "payment successful" while the money is held and family is alerted.</p>
+          <div class="stat num">30 min<small>cool off before a paused payment can continue</small></div>
+        </article>
+        <article>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="2.5"/><circle cx="19" cy="6" r="2.5"/><circle cx="19" cy="18" r="2.5"/><path d="M7.5 11l9-4M7.5 13l9 4"/></svg>
+          <span class="tag">Network · campaigns</span>
+          <h3>See one scam hitting many people</h3>
+          <p>Alerts link into a campaign when they share a payee, a payee identifier from the messages, or a near identical script, with the reason shown for every link.</p>
+          <div class="stat num">3 ways<small>same payee, same identifier, same script</small></div>
+        </article>
+        <article>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="6" rx="1"/><rect x="3" y="14" width="18" height="6" rx="1"/><path d="M7 7h.01M7 17h.01"/></svg>
+          <span class="tag">Network · across banks</span>
+          <h3>Catch a mule once, flag it everywhere</h3>
+          <p>A payee blocked by two analysts is published to a signed, hash chained ledger as an HMAC token. Other banks can match it without learning anything else. No blockchain needed.</p>
+          <div class="stat num">Ed25519<small>signatures on every ledger entry, verdict and evidence pack</small></div>
+        </article>
+        <article>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h9l3 3v17H6z"/><path d="M9 9h6M9 13h6M9 17h4"/></svg>
+          <span class="tag">Analysts in charge</span>
+          <h3>Signed in, four eyes, STR drafted</h3>
+          <p>Analysts act with their own keys, a block needs two different people, replays are rejected, and a ready to review STR draft is built from the evidence pack without sending data to any outside AI service.</p>
+          <div class="stat num">2 analysts<small>required for every block · hash chained audit log</small></div>
         </article>
       </div>
     </div>
