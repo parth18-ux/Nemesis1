@@ -6,3 +6,8 @@ work/
 catboost_info/
 .env
 .vercel/
+graphify-out/
+research/out/streams/
+research/out/*.csv
+research/out/*.log
+research/__pycache__/

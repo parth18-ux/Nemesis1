@@ -1,0 +1,218 @@
+{
+ "data": "AMLGentex/sweden_100K_{difficult,easy} tx_log.csv from Hugging Face; mapping in the script docstring",
+ "split": "chronological by step: first 60% of steps train, last 20% test",
+ "difficult": {
+  "rows_total": 7648937,
+  "sar_total": 132439,
+  "steps": 112,
+  "sar_rate_by_type": {
+   "CASH": 1.0,
+   "TRANSFER": 0.0169
+  },
+  "zero_shot_served_model_test": {
+   "rows": 1472825,
+   "positives": 25319,
+   "prevalence": 0.01719,
+   "pr_auc": 0.018,
+   "roc_auc": 0.5196,
+   "pr_auc_ci95": [
+    0.0174,
+    0.0185
+   ],
+   "roc_auc_ci95": [
+    0.5139,
+    0.525
+   ],
+   "note_ci": "bootstrap of 400,000 row resamples"
+  },
+  "zero_shot_served_model_test_transfers_only": {
+   "rows": 1472604,
+   "positives": 25098,
+   "prevalence": 0.01704,
+   "pr_auc": 0.018,
+   "roc_auc": 0.5239,
+   "pr_auc_ci95": [
+    0.0174,
+    0.0186
+   ],
+   "roc_auc_ci95": [
+    0.5179,
+    0.5295
+   ],
+   "note_ci": "bootstrap of 400,000 row resamples"
+  },
+  "zero_shot_transfer_as_wire_test": {
+   "rows": 1472825,
+   "positives": 25319,
+   "prevalence": 0.01719,
+   "pr_auc": 0.016,
+   "roc_auc": 0.467,
+   "pr_auc_ci95": [
+    0.0155,
+    0.0164
+   ],
+   "roc_auc_ci95": [
+    0.4616,
+    0.4739
+   ],
+   "note_ci": "bootstrap of 400,000 row resamples"
+  },
+  "in_domain_top_features_gain": [
+   "fmt_code",
+   "d_uniq_src",
+   "new_pair",
+   "s_fanout_24h",
+   "s_uniq_dst",
+   "s_mins_since_in",
+   "s_in_n",
+   "reciprocal"
+  ],
+  "in_domain_xgboost_test": {
+   "pr_auc_seeds": [
+    0.1278,
+    0.1172,
+    0.1122
+   ],
+   "roc_auc_seeds": [
+    0.7229,
+    0.7079,
+    0.7159
+   ],
+   "pr_auc_mean": 0.1191,
+   "roc_auc_mean": 0.7156,
+   "prevalence": 0.01719,
+   "positives": 25319
+  }
+ },
+ "easy": {
+  "rows_total": 7703223,
+  "sar_total": 2299629,
+  "steps": 112,
+  "sar_rate_by_type": {
+   "CASH": 1.0,
+   "TRANSFER": 0.2968
+  },
+  "zero_shot_served_model_test": {
+   "rows": 1483597,
+   "positives": 440358,
+   "prevalence": 0.29682,
+   "pr_auc": 0.3099,
+   "roc_auc": 0.5321,
+   "pr_auc_ci95": [
+    0.308,
+    0.3118
+   ],
+   "roc_auc_ci95": [
+    0.5302,
+    0.5338
+   ],
+   "note_ci": "bootstrap of 400,000 row resamples"
+  },
+  "zero_shot_served_model_test_transfers_only": {
+   "rows": 1480549,
+   "positives": 437310,
+   "prevalence": 0.29537,
+   "pr_auc": 0.3099,
+   "roc_auc": 0.5356,
+   "pr_auc_ci95": [
+    0.3079,
+    0.3118
+   ],
+   "roc_auc_ci95": [
+    0.5338,
+    0.5373
+   ],
+   "note_ci": "bootstrap of 400,000 row resamples"
+  },
+  "zero_shot_transfer_as_wire_test": {
+   "rows": 1483597,
+   "positives": 440358,
+   "prevalence": 0.29682,
+   "pr_auc": 0.2755,
+   "roc_auc": 0.4544,
+   "pr_auc_ci95": [
+    0.2738,
+    0.277
+   ],
+   "roc_auc_ci95": [
+    0.4523,
+    0.4562
+   ],
+   "note_ci": "bootstrap of 400,000 row resamples"
+  },
+  "in_domain_top_features_gain": [
+   "s_fanout_24h",
+   "d_uniq_src",
+   "new_pair",
+   "fmt_code",
+   "d_cnt_24h",
+   "s_uniq_dst",
+   "d_fanin_24h",
+   "s_mins_since_in"
+  ],
+  "in_domain_xgboost_test": {
+   "pr_auc_seeds": [
+    0.6113,
+    0.6085,
+    0.6158
+   ],
+   "roc_auc_seeds": [
+    0.7603,
+    0.7624,
+    0.7666
+   ],
+   "pr_auc_mean": 0.6119,
+   "roc_auc_mean": 0.7631,
+   "prevalence": 0.29682,
+   "positives": 440358
+  }
+ },
+ "easy_trained_on_difficult_test": {
+  "rows": 1472825,
+  "positives": 25319,
+  "prevalence": 0.01719,
+  "pr_auc": 0.1428,
+  "roc_auc": 0.7447,
+  "pr_auc_ci95": [
+   0.1347,
+   0.1501
+  ],
+  "roc_auc_ci95": [
+   0.7389,
+   0.7508
+  ],
+  "note_ci": "bootstrap of 400,000 row resamples"
+ },
+ "amlgentex_difficult_trained_on_hi_slice_eval": {
+  "rows": 60000,
+  "positives": 97,
+  "prevalence": 0.00162,
+  "pr_auc": 0.0009,
+  "roc_auc": 0.1535,
+  "pr_auc_ci95": [
+   0.0007,
+   0.0011
+  ],
+  "roc_auc_ci95": [
+   0.1278,
+   0.1815
+  ],
+  "note_ci": "row bootstrap"
+ },
+ "served_model_on_hi_slice_eval_reference": {
+  "rows": 60000,
+  "positives": 97,
+  "prevalence": 0.00162,
+  "pr_auc": 0.4077,
+  "roc_auc": 0.9786,
+  "pr_auc_ci95": [
+   0.2921,
+   0.5323
+  ],
+  "roc_auc_ci95": [
+   0.9691,
+   0.9865
+  ],
+  "note_ci": "row bootstrap"
+ }
+}

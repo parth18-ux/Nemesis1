@@ -1,0 +1,972 @@
+{
+ "meta": {
+  "data": "service/models/demo_stream.csv.gz: 160,000 consecutive IBM AMLworld HI-Small payments (2022/09/08 11:06 to 19:16)",
+  "evaluation_window": "rows 100,000 to 159,999; account state built from rows 0 to 99,999 only",
+  "thresholds": {
+   "l1": 0.056301962584257126,
+   "verify": 0.13664003359675353,
+   "hold": 0.4495068494649108,
+   "block": 0.8230328180234521,
+   "block_retuned_full_validation": 0.9345272756338533
+  },
+  "bootstrap": "2000 resamples, percentile 95% intervals; 'block' resamples 10 minute blocks to respect time dependence",
+  "caveat": "five hours of account history instead of about thirteen days; absolute metrics are not comparable with the full protocol"
+ },
+ "parity": {
+  "max_abs_diff_l1": 2.9026794412523316e-08,
+  "max_abs_diff_l2_xgb": 2.9351806651867207e-08,
+  "max_abs_diff_l2_lgbm": 1.0547118733938987e-15,
+  "note": "Python xgboost/lightgbm on the Rust feature vectors vs the Rust served scores"
+ },
+ "A_dataset_audit": {
+  "rows": 160000,
+  "laundering": 236,
+  "prevalence": 0.001475,
+  "eval_rows": 60000,
+  "eval_laundering": 97,
+  "time_span": [
+   "2022/09/08 11:06",
+   "2022/09/08 19:16"
+  ],
+  "exact_duplicate_rows": 0,
+  "empty_fields": 0,
+  "accounts": 109088,
+  "accounts_touching_laundering": 400,
+  "self_loops": 3433,
+  "cross_currency_share": 0.016,
+  "laundering_by_format": {
+   "ACH": {
+    "payments": 19913,
+    "laundering": 217,
+    "rate": 0.0109
+   },
+   "Bitcoin": {
+    "payments": 4513,
+    "laundering": 1,
+    "rate": 0.00022
+   },
+   "Cash": {
+    "payments": 17787,
+    "laundering": 4,
+    "rate": 0.00022
+   },
+   "Cheque": {
+    "payments": 67884,
+    "laundering": 7,
+    "rate": 0.0001
+   },
+   "Credit Card": {
+    "payments": 43647,
+    "laundering": 7,
+    "rate": 0.00016
+   },
+   "Wire": {
+    "payments": 6256,
+    "laundering": 0,
+    "rate": 0.0
+   }
+  },
+  "laundering_by_currency": {
+   "Australian Dollar": 6,
+   "Bitcoin": 1,
+   "Brazil Real": 2,
+   "Canadian Dollar": 3,
+   "Euro": 79,
+   "Mexican Peso": 5,
+   "Ruble": 5,
+   "Rupee": 5,
+   "Saudi Riyal": 18,
+   "Shekel": 3,
+   "Swiss Franc": 4,
+   "UK Pound": 1,
+   "US Dollar": 85,
+   "Yen": 12,
+   "Yuan": 7
+  },
+  "amount_usd_median": {
+   "legit": 883.89,
+   "laundering": 7330.15
+  },
+  "amount_mannwhitney_p": 3.986863019505931e-40,
+  "ach_share_of_laundering": 0.9195,
+  "labels_per_payment_only": "no typology, ring id or account label in the slice; ring and typology analyses need the full HI-Small patterns file"
+ },
+ "B_feature_intelligence": {
+  "univariate_ranked": {
+   "fmt_code": {
+    "missing_share": 0.0,
+    "univariate_auc": 0.9031,
+    "direction": "lower is riskier",
+    "mean_legit": 2.847,
+    "mean_laundering": 0.227
+   },
+   "log_usd": {
+    "missing_share": 0.0,
+    "univariate_auc": 0.7461,
+    "direction": "higher is riskier",
+    "mean_legit": 6.957,
+    "mean_laundering": 8.717
+   },
+   "new_pair": {
+    "missing_share": 0.0,
+    "univariate_auc": 0.7248,
+    "direction": "higher is riskier",
+    "mean_legit": 0.478,
+    "mean_laundering": 0.928
+   },
+   "new_bank_pair": {
+    "missing_share": 0.0,
+    "univariate_auc": 0.6938,
+    "direction": "higher is riskier",
+    "mean_legit": 0.21,
+    "mean_laundering": 0.598
+   },
+   "s_out_over_last_in": {
+    "missing_share": 0.7493,
+    "univariate_auc": 0.6824,
+    "direction": "higher is riskier",
+    "mean_legit": 2458.235,
+    "mean_laundering": 315.062
+   },
+   "s_in_n": {
+    "missing_share": 0.0,
+    "univariate_auc": 0.6634,
+    "direction": "higher is riskier",
+    "mean_legit": 0.548,
+    "mean_laundering": 1.186
+   },
+   "s_gap_out": {
+    "missing_share": 0.2792,
+    "univariate_auc": 0.6618,
+    "direction": "lower is riskier",
+    "mean_legit": 39.116,
+    "mean_laundering": 24.444
+   },
+   "s_passthrough": {
+    "missing_share": 0.0,
+    "univariate_auc": 0.6598,
+    "direction": "lower is riskier",
+    "mean_legit": 38417878.861,
+    "mean_laundering": 34114196.91
+   },
+   "s_age_out": {
+    "missing_share": 0.0,
+    "univariate_auc": 0.6566,
+    "direction": "lower is riskier",
+    "mean_legit": 114.619,
+    "mean_laundering": 77.629
+   },
+   "d_fanin_24h": {
+    "missing_share": 0.0,
+    "univariate_auc": 0.644,
+    "direction": "higher is riskier",
+    "mean_legit": 1.231,
+    "mean_laundering": 1.804
+   },
+   "s_usd_24h": {
+    "missing_share": 0.0,
+    "univariate_auc": 0.6338,
+    "direction": "higher is riskier",
+    "mean_legit": 9.403,
+    "mean_laundering": 10.247
+   },
+   "s_mins_since_in": {
+    "missing_share": 0.7493,
+    "univariate_auc": 0.6282,
+    "direction": "higher is riskier",
+    "mean_legit": 173.288,
+    "mean_laundering": 48.119
+   },
+   "s_fanout_24h": {
+    "missing_share": 0.0,
+    "univariate_auc": 0.5964,
+    "direction": "higher is riskier",
+    "mean_legit": 154.346,
+    "mean_laundering": 141.485
+   },
+   "s_out_n": {
+    "missing_share": 0.0,
+    "univariate_auc": 0.5638,
+    "direction": "lower is riskier",
+    "mean_legit": 299.535,
+    "mean_laundering": 272.856
+   },
+   "s_cnt_24h": {
+    "missing_share": 0.0,
+    "univariate_auc": 0.5638,
+    "direction": "lower is riskier",
+    "mean_legit": 300.535,
+    "mean_laundering": 273.856
+   },
+   "d_in_n": {
+    "missing_share": 0.0,
+    "univariate_auc": 0.5454,
+    "direction": "lower is riskier",
+    "mean_legit": 1.043,
+    "mean_laundering": 1.072
+   },
+   "d_cnt_24h": {
+    "missing_share": 0.0,
+    "univariate_auc": 0.5454,
+    "direction": "lower is riskier",
+    "mean_legit": 2.043,
+    "mean_laundering": 2.072
+   },
+   "s_out_mean_usd": {
+    "missing_share": 0.0,
+    "univariate_auc": 0.5446,
+    "direction": "higher is riskier",
+    "mean_legit": 5.803,
+    "mean_laundering": 6.071
+   },
+   "d_uniq_src": {
+    "missing_share": 0.0,
+    "univariate_auc": 0.5411,
+    "direction": "lower is riskier",
+    "mean_legit": 0.753,
+    "mean_laundering": 0.876
+   },
+   "d_gap_in": {
+    "missing_share": 0.418,
+    "univariate_auc": 0.5298,
+    "direction": "lower is riskier",
+    "mean_legit": 23.376,
+    "mean_laundering": 134.068
+   },
+   "s_uniq_dst": {
+    "missing_share": 0.0,
+    "univariate_auc": 0.527,
+    "direction": "lower is riskier",
+    "mean_legit": 153.868,
+    "mean_laundering": 140.557
+   },
+   "d_in_usd_log": {
+    "missing_share": 0.0,
+    "univariate_auc": 0.5246,
+    "direction": "lower is riskier",
+    "mean_legit": 4.399,
+    "mean_laundering": 3.938
+   },
+   "cur_code": {
+    "missing_share": 0.0,
+    "univariate_auc": 0.5174,
+    "direction": "lower is riskier",
+    "mean_legit": 8.4,
+    "mean_laundering": 8.062
+   },
+   "hour": {
+    "missing_share": 0.0,
+    "univariate_auc": 0.5142,
+    "direction": "lower is riskier",
+    "mean_legit": 17.251,
+    "mean_laundering": 17.216
+   },
+   "cross_bank": {
+    "missing_share": 0.0,
+    "univariate_auc": 0.513,
+    "direction": "higher is riskier",
+    "mean_legit": 0.953,
+    "mean_laundering": 0.979
+   },
+   "self_loop": {
+    "missing_share": 0.0,
+    "univariate_auc": 0.5115,
+    "direction": "lower is riskier",
+    "mean_legit": 0.023,
+    "mean_laundering": 0.0
+   },
+   "cross_cur": {
+    "missing_share": 0.0,
+    "univariate_auc": 0.5085,
+    "direction": "lower is riskier",
+    "mean_legit": 0.017,
+    "mean_laundering": 0.0
+   },
+   "d_out_n": {
+    "missing_share": 0.0,
+    "univariate_auc": 0.5017,
+    "direction": "lower is riskier",
+    "mean_legit": 0.556,
+    "mean_laundering": 0.608
+   },
+   "reciprocal": {
+    "missing_share": 0.0,
+    "univariate_auc": 0.501,
+    "direction": "lower is riskier",
+    "mean_legit": 0.012,
+    "mean_laundering": 0.01
+   },
+   "dow": {
+    "missing_share": 0.0,
+    "univariate_auc": 0.5,
+    "direction": "higher is riskier",
+    "mean_legit": 4.0,
+    "mean_laundering": 4.0
+   },
+   "round_100": {
+    "missing_share": 0.0,
+    "univariate_auc": 0.5,
+    "direction": "higher is riskier",
+    "mean_legit": 0.0,
+    "mean_laundering": 0.0
+   }
+  },
+  "redundant_pairs_spearman_ge_0.85": [
+   [
+    "s_out_n",
+    "s_cnt_24h",
+    1.0
+   ],
+   [
+    "d_in_n",
+    "d_cnt_24h",
+    1.0
+   ],
+   [
+    "s_out_n",
+    "s_uniq_dst",
+    0.958
+   ],
+   [
+    "s_uniq_dst",
+    "s_cnt_24h",
+    0.958
+   ],
+   [
+    "d_in_n",
+    "d_uniq_src",
+    0.939
+   ],
+   [
+    "d_uniq_src",
+    "d_cnt_24h",
+    0.939
+   ],
+   [
+    "s_out_n",
+    "s_age_out",
+    0.917
+   ],
+   [
+    "s_age_out",
+    "s_cnt_24h",
+    0.917
+   ],
+   [
+    "s_age_out",
+    "s_uniq_dst",
+    0.9
+   ],
+   [
+    "s_out_mean_usd",
+    "s_passthrough",
+    0.887
+   ],
+   [
+    "d_uniq_src",
+    "d_in_usd_log",
+    0.887
+   ],
+   [
+    "d_in_n",
+    "d_in_usd_log",
+    0.875
+   ],
+   [
+    "d_in_usd_log",
+    "d_cnt_24h",
+    0.875
+   ],
+   [
+    "s_out_n",
+    "s_fanout_24h",
+    0.851
+   ],
+   [
+    "s_fanout_24h",
+    "s_cnt_24h",
+    0.851
+   ]
+  ],
+  "constant_features": [
+   "dow",
+   "round_100"
+  ]
+ },
+ "C_headline_with_intervals": {
+  "pr_auc_iid": {
+   "live_mean": {
+    "point": 0.4077,
+    "ci95": [
+     0.3039,
+     0.5263
+    ]
+   },
+   "xgb_half_only": {
+    "point": 0.4143,
+    "ci95": [
+     0.3128,
+     0.5315
+    ],
+    "minus_live_mean": {
+     "point": 0.0066,
+     "ci95": [
+      -0.0386,
+      0.0464
+     ],
+     "share_of_resamples_above_0": 0.657
+    }
+   },
+   "lgbm_half_only": {
+    "point": 0.369,
+    "ci95": [
+     0.2701,
+     0.4867
+    ],
+    "minus_live_mean": {
+     "point": -0.0387,
+     "ci95": [
+      -0.0702,
+      -0.0056
+     ],
+     "share_of_resamples_above_0": 0.011
+    }
+   }
+  },
+  "pr_auc_time_block": {
+   "live_mean": {
+    "point": 0.4077,
+    "ci95": [
+     0.3119,
+     0.5032
+    ]
+   },
+   "xgb_half_only": {
+    "point": 0.4143,
+    "ci95": [
+     0.3058,
+     0.5173
+    ],
+    "minus_live_mean": {
+     "point": 0.0066,
+     "ci95": [
+      -0.0403,
+      0.0436
+     ],
+     "share_of_resamples_above_0": 0.661
+    }
+   },
+   "lgbm_half_only": {
+    "point": 0.369,
+    "ci95": [
+     0.2647,
+     0.4768
+    ],
+    "minus_live_mean": {
+     "point": -0.0387,
+     "ci95": [
+      -0.071,
+      -0.0038
+     ],
+     "share_of_resamples_above_0": 0.01
+    }
+   }
+  },
+  "roc_auc_iid": {
+   "live_mean": {
+    "point": 0.9786,
+    "ci95": [
+     0.9698,
+     0.9863
+    ]
+   },
+   "xgb_half_only": {
+    "point": 0.9801,
+    "ci95": [
+     0.9717,
+     0.9875
+    ],
+    "minus_live_mean": {
+     "point": 0.0015,
+     "ci95": [
+      0.0002,
+      0.0028
+     ],
+     "share_of_resamples_above_0": 0.987
+    }
+   },
+   "lgbm_half_only": {
+    "point": 0.9621,
+    "ci95": [
+     0.9441,
+     0.9761
+    ],
+    "minus_live_mean": {
+     "point": -0.0165,
+     "ci95": [
+      -0.0283,
+      -0.0072
+     ],
+     "share_of_resamples_above_0": 0.0
+    }
+   }
+  },
+  "l1_pass_rate": 0.1373,
+  "l1_laundering_kept": 0.9897,
+  "bands": {
+   "verify_or_more": {
+    "flags": 1515,
+    "tp": 77,
+    "fp": 1438,
+    "precision": 0.0508,
+    "recall": 0.7938,
+    "precision_ci95": [
+     0.0399,
+     0.0614
+    ],
+    "recall_ci95": [
+     0.7093,
+     0.8724
+    ]
+   },
+   "hold_or_more": {
+    "flags": 238,
+    "tp": 47,
+    "fp": 191,
+    "precision": 0.1975,
+    "recall": 0.4845,
+    "precision_ci95": [
+     0.1494,
+     0.25
+    ],
+    "recall_ci95": [
+     0.3905,
+     0.5876
+    ]
+   },
+   "block_served": {
+    "flags": 46,
+    "tp": 36,
+    "fp": 10,
+    "precision": 0.7826,
+    "recall": 0.3711,
+    "precision_ci95": [
+     0.6522,
+     0.9
+    ],
+    "recall_ci95": [
+     0.2737,
+     0.4667
+    ]
+   },
+   "block_retuned": {
+    "flags": 31,
+    "tp": 25,
+    "fp": 6,
+    "precision": 0.8065,
+    "recall": 0.2577,
+    "precision_ci95": [
+     0.6552,
+     0.9355
+    ],
+    "recall_ci95": [
+     0.1705,
+     0.3495
+    ]
+   }
+  }
+ },
+ "D_calibration": {
+  "split": {
+   "calibration_rows": 30000,
+   "calibration_laundering": 53,
+   "test_rows": 30000,
+   "test_laundering": 44
+  },
+  "live_mean_uncalibrated": {
+   "brier": 0.0035634580422633545,
+   "ece": 0.01592924382402634,
+   "mean_score": 0.017395910490693004,
+   "observed_rate": 0.0014666666666666667
+  },
+  "xgb": {
+   "brier": 0.004297024516532649,
+   "ece": 0.016992283586785804,
+   "mean_score": 0.01845895025345247,
+   "observed_rate": 0.0014666666666666667
+  },
+  "lgbm": {
+   "brier": 0.0033484579843952875,
+   "ece": 0.010300931819579848,
+   "mean_score": 0.011767598486246516,
+   "observed_rate": 0.0014666666666666667
+  },
+  "mean_of_isotonic_calibrated_halves": {
+   "brier": 0.001019873143301311,
+   "ece": 0.0004386048623814231,
+   "pr_auc_test_half": 0.3994
+  },
+  "mean_of_platt_calibrated_halves": {
+   "brier": 0.0010405167168245871,
+   "ece": 0.00043626837851673403,
+   "pr_auc_test_half": 0.4092
+  },
+  "pr_auc_test_half_uncalibrated": 0.4002,
+  "threshold_transfer_precision_0.9_target": {
+   "uncalibrated_mean": {
+    "threshold_fitted_on_first_half": 0.7540511393867746,
+    "second_half": {
+     "flags": 29,
+     "tp": 19,
+     "fp": 10,
+     "precision": 0.6552,
+     "recall": 0.4318
+    }
+   },
+   "xgb_half_only": {
+    "threshold_fitted_on_first_half": 0.84809655,
+    "second_half": {
+     "flags": 22,
+     "tp": 16,
+     "fp": 6,
+     "precision": 0.7273,
+     "recall": 0.3636
+    }
+   }
+  },
+  "served_block_on_second_half": {
+   "flags": 24,
+   "tp": 16,
+   "fp": 8,
+   "precision": 0.6667,
+   "recall": 0.3636
+  }
+ },
+ "E_operational": {
+  "window_hours": 3.07,
+  "payments_per_hour": 19565.2,
+  "precision_at_alert_budget": {
+   "1_per_10k_payments": {
+    "alerts": 6,
+    "tp": 4,
+    "precision": 0.6667,
+    "recall": 0.0412
+   },
+   "5_per_10k_payments": {
+    "alerts": 30,
+    "tp": 25,
+    "precision": 0.8333,
+    "recall": 0.2577
+   },
+   "10_per_10k_payments": {
+    "alerts": 60,
+    "tp": 42,
+    "precision": 0.7,
+    "recall": 0.433
+   },
+   "25_per_10k_payments": {
+    "alerts": 150,
+    "tp": 42,
+    "precision": 0.28,
+    "recall": 0.433
+   },
+   "50_per_10k_payments": {
+    "alerts": 300,
+    "tp": 50,
+    "precision": 0.1667,
+    "recall": 0.5155
+   },
+   "100_per_10k_payments": {
+    "alerts": 600,
+    "tp": 61,
+    "precision": 0.1017,
+    "recall": 0.6289
+   }
+  },
+  "recall_at_fpr": {
+   "0.0005": {
+    "threshold": 0.6152266487654063,
+    "recall": 0.433
+   },
+   "0.001": {
+    "threshold": 0.5674392488107607,
+    "recall": 0.433
+   },
+   "0.005": {
+    "threshold": 0.3799341333637064,
+    "recall": 0.5464
+   },
+   "0.01": {
+    "threshold": 0.26820657762166455,
+    "recall": 0.6289
+   }
+  },
+  "amount_weighted_recall": {
+   "verify": {
+    "count_recall": 0.7938,
+    "usd_recall": 0.9893
+   },
+   "hold": {
+    "count_recall": 0.4845,
+    "usd_recall": 0.9811
+   },
+   "block": {
+    "count_recall": 0.3711,
+    "usd_recall": 0.0087
+   }
+  },
+  "cost_curve_count_based": {
+   "fn_cost_10x_fp": {
+    "cost_minimising_threshold": 0.6481,
+    "cost": 570.0,
+    "cost_at_served_verify": 1638.0,
+    "cost_at_served_hold": 691.0,
+    "cost_at_served_block": 620.0
+   },
+   "fn_cost_50x_fp": {
+    "cost_minimising_threshold": 0.2435,
+    "cost": 2228.0,
+    "cost_at_served_verify": 2438.0,
+    "cost_at_served_hold": 2691.0,
+    "cost_at_served_block": 3060.0
+   },
+   "fn_cost_100x_fp": {
+    "cost_minimising_threshold": 0.1452,
+    "cost": 3327.0,
+    "cost_at_served_verify": 3438.0,
+    "cost_at_served_hold": 5191.0,
+    "cost_at_served_block": 6110.0
+   },
+   "fn_cost_500x_fp": {
+    "cost_minimising_threshold": 0.0548,
+    "cost": 8193.0,
+    "cost_at_served_verify": 11438.0,
+    "cost_at_served_hold": 25191.0,
+    "cost_at_served_block": 30510.0
+   }
+  }
+ },
+ "F_missing_field": {
+  "true_format": {
+   "pr_auc": 0.4077,
+   "bands": {
+    "approve": 58485,
+    "verify": 1277,
+    "hold": 192,
+    "block": 46
+   },
+   "legit_flagged_verify_plus": 1438
+  },
+  "format_missing_as_nan": {
+   "pr_auc": 0.015,
+   "bands": {
+    "approve": 59982,
+    "verify": 16,
+    "hold": 2,
+    "block": 0
+   },
+   "legit_flagged_verify_plus": 17,
+   "decisions_changed_vs_true": 1501,
+   "escalated_vs_true": 1,
+   "escalated_non_ach_legit": 1
+  },
+  "format_missing_defaulted_to_ACH (current API)": {
+   "pr_auc": 0.2102,
+   "bands": {
+    "approve": 51734,
+    "verify": 7479,
+    "hold": 654,
+    "block": 133
+   },
+   "legit_flagged_verify_plus": 8190,
+   "decisions_changed_vs_true": 7323,
+   "escalated_vs_true": 7037,
+   "escalated_non_ach_legit": 7037
+  }
+ },
+ "G_evasion": {
+  "laundering_payments_in_window": 97,
+  "baseline": {
+   "verify": 0.7938,
+   "hold": 0.4845,
+   "block": 0.3711
+  },
+  "format_switch_all_laundering_to": {
+   "ACH": {
+    "verify": 0.7835,
+    "hold": 0.4845,
+    "block": 0.3711,
+    "pr_auc": 0.407
+   },
+   "Bitcoin": {
+    "verify": 0.3402,
+    "hold": 0.0412,
+    "block": 0.0,
+    "pr_auc": 0.0161
+   },
+   "Cash": {
+    "verify": 0.0103,
+    "hold": 0.0103,
+    "block": 0.0,
+    "pr_auc": 0.0028
+   },
+   "Cheque": {
+    "verify": 0.0206,
+    "hold": 0.0103,
+    "block": 0.0,
+    "pr_auc": 0.0028
+   },
+   "Credit Card": {
+    "verify": 0.0103,
+    "hold": 0.0,
+    "block": 0.0,
+    "pr_auc": 0.0028
+   },
+   "Wire": {
+    "verify": 0.0103,
+    "hold": 0.0,
+    "block": 0.0,
+    "pr_auc": 0.0027
+   }
+  },
+  "amount_shave_1pct_no_round": {
+   "verify": 0.7938,
+   "hold": 0.4742,
+   "block": 0.3711
+  },
+  "structuring_split2": {
+   "original_payments": 97,
+   "verify_any_part": 0.7732,
+   "hold_any_part": 0.4845,
+   "block_any_part": 0.2165,
+   "verify_all_parts": 0.433,
+   "block_all_parts": 0.0,
+   "legit_flagged_verify_plus": 1435
+  },
+  "structuring_split4": {
+   "original_payments": 97,
+   "verify_any_part": 0.7216,
+   "hold_any_part": 0.4124,
+   "block_any_part": 0.0103,
+   "verify_all_parts": 0.3093,
+   "block_all_parts": 0.0,
+   "legit_flagged_verify_plus": 1433
+  },
+  "structuring_split4_spread": {
+   "original_payments": 97,
+   "verify_any_part": 0.6186,
+   "hold_any_part": 0.2784,
+   "block_any_part": 0.0103,
+   "verify_all_parts": 0.299,
+   "block_all_parts": 0.0,
+   "legit_flagged_verify_plus": 1437
+  },
+  "legit_flagged_verify_plus_baseline": 1438
+ },
+ "H_explanations": {
+  "method": "TreeSHAP per half (log odds), then each half mapped to probability space by p(1-p) and averaged like the served score",
+  "all_l2_payments": {
+   "payments": 8236,
+   "top4_jaccard_xgb_vs_lgbm": 0.41,
+   "top4_jaccard_xgb_vs_full": 0.679,
+   "top1_agreement_xgb_vs_lgbm": 0.942,
+   "top1_agreement_xgb_vs_full": 0.998
+  },
+  "hold_or_more": {
+   "payments": 238,
+   "top4_jaccard_xgb_vs_lgbm": 0.469,
+   "top4_jaccard_xgb_vs_full": 0.587,
+   "top1_agreement_xgb_vs_lgbm": 1.0,
+   "top1_agreement_xgb_vs_full": 1.0
+  },
+  "global_rank_spearman_xgb_vs_lgbm": 0.628,
+  "top10_global_xgb": [
+   "fmt_code",
+   "s_uniq_dst",
+   "s_cnt_24h",
+   "log_usd",
+   "s_out_mean_usd",
+   "s_mins_since_in",
+   "new_pair",
+   "s_fanout_24h",
+   "d_in_usd_log",
+   "d_uniq_src"
+  ],
+  "top10_global_lgbm": [
+   "fmt_code",
+   "s_uniq_dst",
+   "s_fanout_24h",
+   "s_usd_24h",
+   "log_usd",
+   "new_pair",
+   "s_passthrough",
+   "self_loop",
+   "d_gap_in",
+   "s_out_mean_usd"
+  ]
+ },
+ "I_history_depth": {
+  "history_100000_payments": {
+   "pr_auc": 0.4077,
+   "ci95": [
+    0.3013,
+    0.5234
+   ],
+   "roc_auc": 0.9786,
+   "block_flags": 46,
+   "block_precision": 0.7826
+  },
+  "history_10000_payments": {
+   "pr_auc": 0.4277,
+   "ci95": [
+    0.3274,
+    0.5242
+   ],
+   "roc_auc": 0.9767,
+   "block_flags": 42,
+   "block_precision": 0.8333
+  },
+  "history_25000_payments": {
+   "pr_auc": 0.4157,
+   "ci95": [
+    0.3057,
+    0.5239
+   ],
+   "roc_auc": 0.9783,
+   "block_flags": 44,
+   "block_precision": 0.8182
+  },
+  "history_50000_payments": {
+   "pr_auc": 0.4062,
+   "ci95": [
+    0.3021,
+    0.5159
+   ],
+   "roc_auc": 0.978,
+   "block_flags": 45,
+   "block_precision": 0.8
+  },
+  "full_protocol_reference": {
+   "history_payments": 4062676,
+   "pr_auc": 0.7107,
+   "source": "results/full_eval_HI.json"
+  }
+ },
+ "J_random_vs_chronological": {
+  "setup": "XGBoost retrained on the slice's 31 live features; 60% train, last 20% test; 5 seeds",
+  "chronological": {
+   "pr_auc_mean": 0.4334,
+   "sd": 0.0143,
+   "test_laundering": 46
+  },
+  "random_row_split": {
+   "pr_auc_mean": 0.4189,
+   "sd": 0.0653
+  },
+  "random_split_grouped_by_sender": {
+   "pr_auc_mean": 0.5206,
+   "sd": 0.0884
+  },
+  "caveat": "features carry the causal state of a five hour stream, so the gap measures split policy only, on 236 positives"
+ }
+}

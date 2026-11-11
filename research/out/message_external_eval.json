@@ -1,0 +1,36 @@
+{
+ "source": "bolewara/hinglish-scam-text-dataset (CC BY 4.0), rows not in UCI SMS Spam",
+ "all_external": {
+  "messages": 87,
+  "scam": 47,
+  "high_or_above": {
+   "recall": 0.681,
+   "false_alarms": 0,
+   "false_alarm_rate": 0.0
+  },
+  "caution_or_above": {
+   "recall": 0.851,
+   "false_alarms": 0,
+   "false_alarm_rate": 0.0
+  }
+ },
+ "hinglish_subset": {
+  "messages": 30,
+  "scam": 13,
+  "high_or_above": {
+   "recall": 0.769,
+   "false_alarms": 0,
+   "false_alarm_rate": 0.0
+  },
+  "caution_or_above": {
+   "recall": 0.846,
+   "false_alarms": 0,
+   "false_alarm_rate": 0.0
+  }
+ },
+ "missed_hinglish_scams": [
+  "International call bhejna hai aapko? Sasta recharge offer. SBI bank details verify karne ke liye bhi click karo link par.",
+  "Paisa loan chahiye? Bina guarantor, bina documents, 10 minute me loan approval. Apply now on loanfastindia.com - low interest."
+ ],
+ "flagged_hinglish_benign": []
+}

@@ -38,6 +38,21 @@ def load_keys():
 
 KEYS, DEMO_MODE = load_keys()
 
+PRODUCTION_SECRETS = ("RUSETECT_SIGNING_KEY", "RUSETECT_CONSORTIUM_SECRET", "RUSETECT_HASH_SALT")
+
+
+def missing_production_secrets(env=os.environ) -> list:
+    """Fail closed: with RUSETECT_ANALYST_KEYS set the deployment is not a demo, so the hard-coded demo consortium secret,
+    demo hash salt and per-process signing key must not be used."""
+    if not env.get("RUSETECT_ANALYST_KEYS"):
+        return []
+    return [k for k in PRODUCTION_SECRETS if not (env.get(k) or "").strip()]
+
+
+_missing = missing_production_secrets()
+if _missing:
+    raise RuntimeError(f"RUSETECT_ANALYST_KEYS is set but {', '.join(_missing)} missing; refusing to start with demo secrets")
+
 
 def analyst_for(key: str | None) -> dict | None:
     return KEYS.get(key or "")
@@ -70,7 +85,10 @@ class RateLimiter:
         self.limit, self.per, self.hits = limit, per_s, defaultdict(deque)
 
     def allow(self, client: str) -> bool:
-        now = time.time(); q = self.hits[client]
+        now = time.time()
+        if len(self.hits) > 50_000:  # bound memory: forget clients with no hit inside the window
+            self.hits = defaultdict(deque, {k: q for k, q in self.hits.items() if q and q[-1] > now - self.per})
+        q = self.hits[client]
         while q and q[0] <= now - self.per:
             q.popleft()
         if len(q) >= self.limit:
