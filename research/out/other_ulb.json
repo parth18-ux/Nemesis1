@@ -1,0 +1,20 @@
+{
+ "dataset": "ULB credit card (Dal Pozzolo et al.)",
+ "rows": 284807,
+ "fraud": 492,
+ "split": "chronological 60/20/20 by Time",
+ "xgboost": {
+  "rows": 56962,
+  "positives": 75,
+  "pr_auc": 0.796,
+  "pr_auc_ci95": [
+   0.7083,
+   0.8828
+  ],
+  "roc_auc": 0.9792,
+  "f1_at_0.5": 0.8175,
+  "amount_weighted_recall_top1pct": 0.7754,
+  "mean_score": 0.00111,
+  "observed_rate": 0.00132
+ }
+}

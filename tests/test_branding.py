@@ -45,6 +45,8 @@ def test_no_legacy_names_anywhere_in_source():
         if p.suffix not in {".py", ".html", ".md", ".json", ".ps1", ".txt", ".svg", ".toml", ".yml", ".yaml", ".cfg", ".ini", ".sh"} and p.name not in {"Dockerfile", ".gitignore", ".vercelignore", "vercel.json"}:
             continue
         rel = p.relative_to(ROOT).as_posix()
+        if rel.startswith("docs/research/"):  # the research audit discusses the project history by its old names on purpose
+            continue
         for n, line in enumerate(p.read_text(errors="ignore").splitlines(), 1):
             if LEGACY.search(line):
                 hits.append(f"{rel}:{n}: {line.strip()[:80]}")

@@ -54,6 +54,18 @@ Details: [model selection](docs/model-selection.md), [retraining with the extra 
 [person, session and network layer](docs/SESSION_AND_NETWORK.md), [context layer](docs/CONTEXT_LAYER.md),
 [scaling](docs/SCALING.md), [datasets](docs/datasets.md), [project audit](docs/project-audit.md).
 
+### Research review (November 2026)
+
+An independent check of the audit and roadmap in `docs/research/` against the served models, at `/research` on the site
+and as `docs/research/RuseTect research review 2026-11.pdf`. Experiments were streamed through the same models by the
+Rust edition's feature code ([NemesisRust1](https://github.com/parth18-ux/NemesisRust1) `research/`); scripts and
+results are mirrored in `research/`. Main findings: the served model leans on payment format (re-sending laundering as
+Cheque removes almost all detection), about a third of HI-Small test laundering sits in an end-of-simulation tail that
+inflates the 0.711 headline, splitting payments defeats the block band, and the models do not transfer to AMLgentex or
+SAML-D without retraining. The API now requires a known `payment_format` and currency, trusts `X-Forwarded-For` only
+behind Vercel or `RUSETECT_TRUST_PROXY=1`, gates alert data behind analyst keys when keys are configured, and refuses
+to start with demo secrets in that mode.
+
 ## Quick start
 
 ```bash

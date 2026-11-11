@@ -1,0 +1,33 @@
+{
+ "note": "review spam, not payments; architecture comparison only, as the audit classes it (D/E)",
+ "YelpChi": {
+  "nodes": 45954,
+  "positives": 6677,
+  "edges": 3846979,
+  "node_features": {
+   "roc_auc_mean": 0.9429,
+   "roc_auc_sd": 0.0017,
+   "pr_auc_mean": 0.8135
+  },
+  "plus_neighbour_aggregates": {
+   "roc_auc_mean": 0.9549,
+   "roc_auc_sd": 0.0018,
+   "pr_auc_mean": 0.8482
+  }
+ },
+ "InstrumentReviews": {
+  "nodes": 11944,
+  "positives": 821,
+  "edges": 4398392,
+  "node_features": {
+   "roc_auc_mean": 0.9773,
+   "roc_auc_sd": 0.0029,
+   "pr_auc_mean": 0.8877
+  },
+  "plus_neighbour_aggregates": {
+   "roc_auc_mean": 0.9823,
+   "roc_auc_sd": 0.0036,
+   "pr_auc_mean": 0.9076
+  }
+ }
+}

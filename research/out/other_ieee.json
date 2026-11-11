@@ -1,0 +1,31 @@
+{
+ "dataset": "IEEE-CIS (Vesta) train file",
+ "rows": 590540,
+ "fraud": 20663,
+ "with_identity_rows": 144233,
+ "split": "chronological 60/20/20 by TransactionDT",
+ "transaction_features": {
+  "rows": 118108,
+  "positives": 4064,
+  "pr_auc": 0.4932,
+  "pr_auc_ci95": [
+   0.4795,
+   0.51
+  ],
+  "roc_auc": 0.8914,
+  "f1_at_0.5": 0.4467,
+  "amount_weighted_recall_top1pct": 0.1553
+ },
+ "plus_identity_device_features": {
+  "rows": 118108,
+  "positives": 4064,
+  "pr_auc": 0.4993,
+  "pr_auc_ci95": [
+   0.4833,
+   0.5133
+  ],
+  "roc_auc": 0.8933,
+  "f1_at_0.5": 0.4549,
+  "amount_weighted_recall_top1pct": 0.1554
+ }
+}

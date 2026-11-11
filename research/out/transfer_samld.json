@@ -1,0 +1,187 @@
+{
+ "dataset": "samld",
+ "rows": 9504852,
+ "split": "rows < 60% train, >= 80% test (chronological)",
+ "laundering_rate_by_format": {
+  "ACH": {
+   "payments": 2008807,
+   "laundering": 1159,
+   "rate": 0.00058
+  },
+  "Cash": {
+   "payments": 525683,
+   "laundering": 2739,
+   "rate": 0.00521
+  },
+  "Cheque": {
+   "payments": 2011419,
+   "laundering": 1087,
+   "rate": 0.00054
+  },
+  "Credit Card": {
+   "payments": 4025012,
+   "laundering": 2260,
+   "rate": 0.00056
+  },
+  "Wire": {
+   "payments": 933931,
+   "laundering": 2628,
+   "rate": 0.00281
+  }
+ },
+ "served_zero_shot": {
+  "rows": 1900971,
+  "positives": 2143,
+  "prevalence": 0.00113,
+  "pr_auc": 0.0045,
+  "roc_auc": 0.5645,
+  "recall_at_0.5pct_alerts": 0.0541,
+  "precision_at_0.5pct_alerts": 0.0122
+ },
+ "hi_small_control_zero_shot": {
+  "rows": 1900971,
+  "positives": 2143,
+  "prevalence": 0.00113,
+  "pr_auc": 0.0033,
+  "roc_auc": 0.6636,
+  "recall_at_0.5pct_alerts": 0.0457,
+  "precision_at_0.5pct_alerts": 0.0103
+ },
+ "hi_small_no_format_zero_shot": {
+  "rows": 1900971,
+  "positives": 2143,
+  "prevalence": 0.00113,
+  "pr_auc": 0.0198,
+  "roc_auc": 0.8016,
+  "recall_at_0.5pct_alerts": 0.1316,
+  "precision_at_0.5pct_alerts": 0.0297
+ },
+ "in_domain_control": {
+  "rows": 1900971,
+  "positives": 2143,
+  "prevalence": 0.00113,
+  "pr_auc": 0.991,
+  "roc_auc": 1.0,
+  "recall_at_0.5pct_alerts": 0.9995,
+  "precision_at_0.5pct_alerts": 0.2254,
+  "top_features": [
+   "new_pair",
+   "s_out_n",
+   "d_gap_in",
+   "reciprocal",
+   "d_cnt_24h",
+   "s_uniq_dst"
+  ]
+ },
+ "in_domain_no_format": {
+  "rows": 1900971,
+  "positives": 2143,
+  "prevalence": 0.00113,
+  "pr_auc": 0.9812,
+  "roc_auc": 1.0,
+  "recall_at_0.5pct_alerts": 1.0,
+  "precision_at_0.5pct_alerts": 0.2255,
+  "top_features": [
+   "new_pair",
+   "d_gap_in",
+   "s_out_n",
+   "reciprocal",
+   "cross_cur",
+   "d_cnt_24h"
+  ]
+ },
+ "typology_recall_at_0.5pct_alerts": {
+  "Behavioural_Change_1": {
+   "laundering": 90,
+   "in_domain_control": 1.0,
+   "in_domain_no_format": 1.0
+  },
+  "Behavioural_Change_2": {
+   "laundering": 94,
+   "in_domain_control": 1.0,
+   "in_domain_no_format": 1.0
+  },
+  "Bipartite": {
+   "laundering": 43,
+   "in_domain_control": 1.0,
+   "in_domain_no_format": 1.0
+  },
+  "Cash_Withdrawal": {
+   "laundering": 274,
+   "in_domain_control": 1.0,
+   "in_domain_no_format": 1.0
+  },
+  "Cycle": {
+   "laundering": 50,
+   "in_domain_control": 1.0,
+   "in_domain_no_format": 1.0
+  },
+  "Deposit-Send": {
+   "laundering": 209,
+   "in_domain_control": 1.0,
+   "in_domain_no_format": 1.0
+  },
+  "Fan_In": {
+   "laundering": 64,
+   "in_domain_control": 1.0,
+   "in_domain_no_format": 1.0
+  },
+  "Fan_Out": {
+   "laundering": 76,
+   "in_domain_control": 1.0,
+   "in_domain_no_format": 1.0
+  },
+  "Gather-Scatter": {
+   "laundering": 100,
+   "in_domain_control": 1.0,
+   "in_domain_no_format": 1.0
+  },
+  "Layered_Fan_In": {
+   "laundering": 156,
+   "in_domain_control": 1.0,
+   "in_domain_no_format": 1.0
+  },
+  "Layered_Fan_Out": {
+   "laundering": 107,
+   "in_domain_control": 1.0,
+   "in_domain_no_format": 1.0
+  },
+  "Over-Invoicing": {
+   "laundering": 10,
+   "in_domain_control": 1.0,
+   "in_domain_no_format": 1.0
+  },
+  "Scatter-Gather": {
+   "laundering": 75,
+   "in_domain_control": 1.0,
+   "in_domain_no_format": 1.0
+  },
+  "Single_large": {
+   "laundering": 45,
+   "in_domain_control": 0.978,
+   "in_domain_no_format": 1.0
+  },
+  "Smurfing": {
+   "laundering": 176,
+   "in_domain_control": 1.0,
+   "in_domain_no_format": 1.0
+  },
+  "Stacked Bipartite": {
+   "laundering": 166,
+   "in_domain_control": 1.0,
+   "in_domain_no_format": 1.0
+  },
+  "Structuring": {
+   "laundering": 408,
+   "in_domain_control": 1.0,
+   "in_domain_no_format": 1.0
+  }
+ },
+ "account_reuse_check": {
+  "test_laundering_touching_train_laundering_accounts": 0.4676,
+  "test_genuine_touching_train_laundering_accounts": 0.09357,
+  "laundering_accounts": 7902,
+  "all_accounts": 855460,
+  "share_of_payments_sent_by_laundering_accounts_that_are_laundering": 0.0096
+ }
+}

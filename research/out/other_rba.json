@@ -1,0 +1,23 @@
+{
+ "dataset": "RBA login dataset (Wiefling et al.), streamed",
+ "logins_streamed": 31269264,
+ "account_takeovers": 141,
+ "sample": "all takeover logins + 2% of others, weights restore the rest",
+ "split": "time cuts at the 60% and 80% points of takeover logins",
+ "features": [
+  "new_country",
+  "new_asn",
+  "new_device",
+  "new_ua",
+  "hours_since_last",
+  "n_prior",
+  "rtt",
+  "success"
+ ],
+ "test_takeovers": 29,
+ "xgboost": {
+  "pr_auc_weighted": 0.0349,
+  "roc_auc_weighted": 0.9613
+ },
+ "note": "'Is Attack IP' is excluded: it is a label-adjacent flag, not something a bank sees before the login"
+}

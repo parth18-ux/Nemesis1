@@ -1,0 +1,774 @@
+[
+ {
+  "paperId": "c5469887971d5f475b0dfc6b152aa3e277de24b0",
+  "externalIds": {
+   "DBLP": "conf/icaif/LinGZMAS24",
+   "DOI": "10.1145/3677052.3698648",
+   "CorpusId": 274075695
+  },
+  "title": "FraudGT: A Simple, Effective, and Efficient Graph Transformer for Financial Fraud Detection",
+  "venue": "International Conference on AI in Finance",
+  "year": 2024,
+  "authors": [
+   {
+    "authorId": "2311427666",
+    "name": "Jun-Hong Lin"
+   },
+   {
+    "authorId": "2311589209",
+    "name": "Xiao-Jie Guo"
+   },
+   {
+    "authorId": "24018646",
+    "name": "Ya-Da Zhu"
+   },
+   {
+    "authorId": "2249196163",
+    "name": "S. Mitchell"
+   },
+   {
+    "authorId": "2283934265",
+    "name": "Erik Altman"
+   },
+   {
+    "authorId": "2220314207",
+    "name": "Julian Shun"
+   }
+  ],
+  "matchScore": 258.13113
+ },
+ {
+  "paperId": "efd6a9c11cdf1c00dde426b3eecb4b717c689459",
+  "externalIds": {
+   "ArXiv": "2506.13989",
+   "DBLP": "journals/corr/abs-2506-13989",
+   "DOI": "10.48550/arXiv.2506.13989",
+   "CorpusId": 279410541
+  },
+  "title": "AMLgentex: Mobilizing Data-Driven Research to Combat Money Laundering",
+  "venue": "arXiv.org",
+  "year": 2025,
+  "authors": [
+   {
+    "authorId": "2484578475",
+    "name": "J. \u00d6stman"
+   },
+   {
+    "authorId": "2367274548",
+    "name": "Edvin Callisen"
+   },
+   {
+    "authorId": "2367677558",
+    "name": "Anton Chen"
+   },
+   {
+    "authorId": "34494979",
+    "name": "Kristiina Ausmees"
+   },
+   {
+    "authorId": "2370859523",
+    "name": "Emanuel G\u00e5rdh"
+   },
+   {
+    "authorId": "118236767",
+    "name": "Jovan \u017damac"
+   },
+   {
+    "authorId": "2367273863",
+    "name": "Jolanta Goldsteine"
+   },
+   {
+    "authorId": "2367276652",
+    "name": "Hugo Wefer"
+   },
+   {
+    "authorId": "2239865717",
+    "name": "Simon Whelan"
+   },
+   {
+    "authorId": "2370859627",
+    "name": "Markus Reimeg\u00e5rd"
+   }
+  ],
+  "matchScore": 249.36212
+ },
+ {
+  "paperId": "1b04936c2599e59b120f743fbb30df2eed3fd782",
+  "externalIds": {
+   "MAG": "3016970897",
+   "ArXiv": "2004.07780",
+   "DBLP": "journals/corr/abs-2004-07780",
+   "DOI": "10.1038/s42256-020-00257-z",
+   "CorpusId": 215786368
+  },
+  "title": "Shortcut learning in deep neural networks",
+  "venue": "Nature Machine Intelligence",
+  "year": 2020,
+  "authors": [
+   {
+    "authorId": "1949747",
+    "name": "Robert Geirhos"
+   },
+   {
+    "authorId": "51919565",
+    "name": "J. Jacobsen"
+   },
+   {
+    "authorId": "40899528",
+    "name": "Claudio Michaelis"
+   },
+   {
+    "authorId": "1804104",
+    "name": "R. Zemel"
+   },
+   {
+    "authorId": "40634590",
+    "name": "Wieland Brendel"
+   },
+   {
+    "authorId": "1731199",
+    "name": "M. Bethge"
+   },
+   {
+    "authorId": "1924112",
+    "name": "Felix Wichmann"
+   }
+  ],
+  "matchScore": 142.29634
+ },
+ {
+  "paperId": "de13767fa40ef87dd03c6d2a91f8e393fdbfbdc6",
+  "externalIds": {
+   "ArXiv": "2208.13058",
+   "DBLP": "journals/corr/abs-2208-13058",
+   "DOI": "10.48550/arXiv.2208.13058",
+   "CorpusId": 251903744
+  },
+  "title": "Adversarial Robustness for Tabular Data through Cost and Utility Awareness",
+  "venue": "Network and Distributed System Security Symposium",
+  "year": 2022,
+  "authors": [
+   {
+    "authorId": "71398522",
+    "name": "K. Kireev"
+   },
+   {
+    "authorId": "21228890",
+    "name": "B. Kulynych"
+   },
+   {
+    "authorId": "145495227",
+    "name": "C. Troncoso"
+   }
+  ],
+  "matchScore": 252.5156
+ },
+ {
+  "paperId": "11335170c2821b34ee129cebe5fa95df44b23bf7",
+  "externalIds": {
+   "ArXiv": "1911.03274",
+   "DBLP": "journals/corr/abs-1911-03274",
+   "MAG": "2983358147",
+   "DOI": "10.48550/arXiv.1911.03274",
+   "CorpusId": 207847875
+  },
+  "title": "Imperceptible Adversarial Attacks on Tabular Data",
+  "venue": "arXiv.org",
+  "year": 2019,
+  "authors": [
+   {
+    "authorId": "1397227823",
+    "name": "Vincent Ballet"
+   },
+   {
+    "authorId": "49822783",
+    "name": "X. Renard"
+   },
+   {
+    "authorId": "2145045",
+    "name": "Jonathan Aigrain"
+   },
+   {
+    "authorId": "15278671",
+    "name": "Thibault Laugel"
+   },
+   {
+    "authorId": "1703189",
+    "name": "P. Frossard"
+   },
+   {
+    "authorId": "1762116",
+    "name": "Marcin Detyniecki"
+   }
+  ],
+  "matchScore": 191.63992
+ },
+ {
+  "paperId": "ea33122e1599d9c35323ec2af6a413d125c09a31",
+  "externalIds": {
+   "ArXiv": "2101.08030",
+   "DBLP": "journals/corr/abs-2101-08030",
+   "DOI": "10.48550/arXiv.2101.08030",
+   "CorpusId": 231648232
+  },
+  "title": "Adversarial Attacks for Tabular Data: Application to Fraud Detection and Imbalanced Data",
+  "venue": "SafeAI@AAAI",
+  "year": 2021,
+  "authors": [
+   {
+    "authorId": "2230041",
+    "name": "F. Cartella"
+   },
+   {
+    "authorId": "1684742",
+    "name": "Orlando Anuncia\u00e7\u00e3o"
+   },
+   {
+    "authorId": "34141621",
+    "name": "Yuki Funabiki"
+   },
+   {
+    "authorId": "1802927814",
+    "name": "Daisuke Yamaguchi"
+   },
+   {
+    "authorId": "2563415",
+    "name": "Toru Akishita"
+   },
+   {
+    "authorId": "2047097659",
+    "name": "Olivier Elshocht"
+   }
+  ],
+  "matchScore": 238.02109
+ },
+ {
+  "paperId": "f6c2bef525fb661cc72dcb2339dcd817b050b741",
+  "externalIds": {
+   "DBLP": "conf/nips/PoursafaeiHPR22",
+   "ArXiv": "2207.10128",
+   "DOI": "10.48550/arXiv.2207.10128",
+   "CorpusId": 250920987
+  },
+  "title": "Towards Better Evaluation for Dynamic Link Prediction",
+  "venue": "Neural Information Processing Systems",
+  "year": 2022,
+  "authors": [
+   {
+    "authorId": "9385224",
+    "name": "Farimah Poursafaei"
+   },
+   {
+    "authorId": "51012317",
+    "name": "Shenyang Huang"
+   },
+   {
+    "authorId": "104333826",
+    "name": "Kellin Pelrine"
+   },
+   {
+    "authorId": "2490772",
+    "name": "Reihaneh Rabbany"
+   }
+  ],
+  "matchScore": 176.81052
+ },
+ {
+  "paperId": "b5f9a98c2a3bd14131dc470d37147997ffa1efc0",
+  "externalIds": {
+   "PubMedCentral": "9382395",
+   "DBLP": "journals/jamia/GoorberghSTC22",
+   "ArXiv": "2202.09101",
+   "DOI": "10.1093/jamia/ocac093",
+   "CorpusId": 246996500,
+   "PubMed": "35686364"
+  },
+  "title": "The harm of class imbalance corrections for risk prediction models: illustration and simulation using logistic regression",
+  "venue": "J. Am. Medical Informatics Assoc.",
+  "year": 2022,
+  "authors": [
+   {
+    "authorId": "2427620925",
+    "name": "Ruben Van Den Goorbergh"
+   },
+   {
+    "authorId": "52122002",
+    "name": "M. van Smeden"
+   },
+   {
+    "authorId": "144565951",
+    "name": "D. Timmerman"
+   },
+   {
+    "authorId": "10108730",
+    "name": "B. van Calster"
+   }
+  ],
+  "matchScore": 172.18004
+ },
+ {
+  "paperId": "75c4f0f3afc809f446daa157851a2c5a2af6075c",
+  "externalIds": {
+   "DBLP": "journals/corr/abs-2306-06108",
+   "ArXiv": "2306.06108",
+   "DOI": "10.1145/3580305.3599803",
+   "CorpusId": 259137411
+  },
+  "title": "Demystifying Fraudulent Transactions and Illicit Nodes in the Bitcoin Network for Financial Forensics",
+  "venue": "Knowledge Discovery and Data Mining",
+  "year": 2023,
+  "authors": [
+   {
+    "authorId": "2127862556",
+    "name": "Youssef Elmougy"
+   },
+   {
+    "authorId": "2146022582",
+    "name": "Ling Liu"
+   }
+  ],
+  "matchScore": 283.0243
+ },
+ {
+  "paperId": "b775723b9270314966020fd61e7356cbe12bc360",
+  "externalIds": {
+   "DBLP": "journals/corr/abs-2403-06906",
+   "ArXiv": "2403.06906",
+   "DOI": "10.48550/arXiv.2403.06906",
+   "CorpusId": 268364277
+  },
+  "title": "Cost-Sensitive Learning to Defer to Multiple Experts with Workload Constraints",
+  "venue": "Trans. Mach. Learn. Res.",
+  "year": 2024,
+  "authors": [
+   {
+    "authorId": "2275112082",
+    "name": "Jean V. Alves"
+   },
+   {
+    "authorId": "2275349052",
+    "name": "Diogo Leit\u00e3o"
+   },
+   {
+    "authorId": "2068793245",
+    "name": "S\u00e9rgio Jesus"
+   },
+   {
+    "authorId": "2176778353",
+    "name": "Marco O. P. Sampaio"
+   },
+   {
+    "authorId": "2290933664",
+    "name": "Javier Li'ebana"
+   },
+   {
+    "authorId": "2266550",
+    "name": "Pedro Saleiro"
+   },
+   {
+    "authorId": "2275162174",
+    "name": "M\u00e1rio A. T. Figueiredo"
+   },
+   {
+    "authorId": "2642808",
+    "name": "P. Bizarro"
+   }
+  ],
+  "matchScore": 275.13928
+ },
+ {
+  "paperId": "a1c5af2a531c64f1c06e806d7986cd878ec3c33a",
+  "externalIds": {
+   "DBLP": "conf/fat/JesusBB0SB021",
+   "MAG": "3121975067",
+   "ArXiv": "2101.08758",
+   "DOI": "10.1145/3442188.3445941",
+   "CorpusId": 231662316
+  },
+  "title": "How can I choose an explainer?: An Application-grounded Evaluation of Post-hoc Explanations",
+  "venue": "Conference on Fairness, Accountability and Transparency",
+  "year": 2021,
+  "authors": [
+   {
+    "authorId": "2068793245",
+    "name": "S\u00e9rgio Jesus"
+   },
+   {
+    "authorId": "66532509",
+    "name": "Catarina G. Bel\u00e9m"
+   },
+   {
+    "authorId": "2030983575",
+    "name": "Vladimir Balayan"
+   },
+   {
+    "authorId": "2065338962",
+    "name": "Jo\u00e3o Bento"
+   },
+   {
+    "authorId": "2266550",
+    "name": "Pedro Saleiro"
+   },
+   {
+    "authorId": "2642808",
+    "name": "P. Bizarro"
+   },
+   {
+    "authorId": "2065401401",
+    "name": "Jo\u00e3o Gama"
+   }
+  ],
+  "matchScore": 270.63757
+ },
+ {
+  "paperId": "e9b1bf5fbff17d9ec337f9f55f813356a78522bc",
+  "externalIds": {
+   "ArXiv": "1907.03324",
+   "MAG": "2955486278",
+   "DBLP": "journals/corr/abs-1907-03324",
+   "DOI": "10.48550/arXiv.1907.03324",
+   "CorpusId": 195833476
+  },
+  "title": "A Human-Grounded Evaluation of SHAP for Alert Processing",
+  "venue": "arXiv.org",
+  "year": 2019,
+  "authors": [
+   {
+    "authorId": "32345170",
+    "name": "Hilde J. P. Weerts"
+   },
+   {
+    "authorId": "25828893",
+    "name": "Werner van Ipenburg"
+   },
+   {
+    "authorId": "1691997",
+    "name": "Mykola Pechenizkiy"
+   }
+  ],
+  "matchScore": 222.37045
+ },
+ {
+  "paperId": "5eaa4656b31d32a65e50fe4308bf804e53b50df0",
+  "externalIds": {
+   "MAG": "2997619488",
+   "DBLP": "conf/aaai/LiLLHSHHC20",
+   "DOI": "10.1609/AAAI.V34I04.5906",
+   "CorpusId": 214469428
+  },
+  "title": "FlowScope: Spotting Money Laundering Based on Graphs",
+  "venue": "AAAI Conference on Artificial Intelligence",
+  "year": 2020,
+  "authors": [
+   {
+    "authorId": "2475781164",
+    "name": "Xiangfeng Li"
+   },
+   {
+    "authorId": "8602563",
+    "name": "Shenghua Liu"
+   },
+   {
+    "authorId": "2430952870",
+    "name": "Zifeng Li"
+   },
+   {
+    "authorId": "50017230",
+    "name": "Xiaotian Han"
+   },
+   {
+    "authorId": "2113915032",
+    "name": "Chuan Shi"
+   },
+   {
+    "authorId": "2019961",
+    "name": "Bryan Hooi"
+   },
+   {
+    "authorId": "2146258201",
+    "name": "He Huang"
+   },
+   {
+    "authorId": "1717004",
+    "name": "Xue-Qi Cheng"
+   }
+  ],
+  "matchScore": 218.30017
+ },
+ {
+  "paperId": "e36bb7fbe1b4f7c521608e93a2215e2062dae5b1",
+  "externalIds": {
+   "MAG": "2217007515",
+   "DBLP": "conf/ssci/PozzoloCJB15",
+   "DOI": "10.1109/SSCI.2015.33",
+   "CorpusId": 15023467
+  },
+  "title": "Calibrating Probability with Undersampling for Unbalanced Classification",
+  "venue": "IEEE Symposium Series on Computational Intelligence",
+  "year": 2015,
+  "authors": [
+   {
+    "authorId": "2852301",
+    "name": "Andrea Dal Pozzolo"
+   },
+   {
+    "authorId": "3055244",
+    "name": "O. Caelen"
+   },
+   {
+    "authorId": "17951811",
+    "name": "Reid A. Johnson"
+   },
+   {
+    "authorId": "1772497",
+    "name": "Gianluca Bontempi"
+   }
+  ],
+  "matchScore": 224.13535
+ },
+ {
+  "paperId": "eae3948747c9d051314c1f5851957b833aa83eca",
+  "externalIds": {
+   "DBLP": "conf/icml/Niculescu-MizilC05",
+   "MAG": "2098824882",
+   "DOI": "10.1145/1102351.1102430",
+   "CorpusId": 207158152
+  },
+  "title": "Predicting good probabilities with supervised learning",
+  "venue": "International Conference on Machine Learning",
+  "year": 2005,
+  "authors": [
+   {
+    "authorId": "1399048849",
+    "name": "Alexandru Niculescu-Mizil"
+   },
+   {
+    "authorId": "145727186",
+    "name": "R. Caruana"
+   }
+  ],
+  "matchScore": 177.1156
+ },
+ {
+  "paperId": "904627c2d5a91ab8cb1b682e42f06f1ca192aea6",
+  "externalIds": {
+   "MAG": "1966716734",
+   "PubMedCentral": "4349800",
+   "DOI": "10.1371/journal.pone.0118432",
+   "CorpusId": 14081058,
+   "PubMed": "25738806"
+  },
+  "title": "The Precision-Recall Plot Is More Informative than the ROC Plot When Evaluating Binary Classifiers on Imbalanced Datasets",
+  "venue": "PLoS ONE",
+  "year": 2015,
+  "authors": [
+   {
+    "authorId": "2929902",
+    "name": "Takaya Saito"
+   },
+   {
+    "authorId": "2241397",
+    "name": "Marc Rehmsmeier"
+   }
+  ],
+  "matchScore": 387.3747
+ },
+ {
+  "paperId": "81600fd653a828d69f6160705be6814dd101beb7",
+  "externalIds": {
+   "MAG": "2999615587",
+   "DBLP": "journals/natmi/LundbergECDPNKH20",
+   "PubMedCentral": "7326367",
+   "DOI": "10.1038/s42256-019-0138-9",
+   "CorpusId": 214265509,
+   "PubMed": "32607472"
+  },
+  "title": "From Local Explanations to Global Understanding with Explainable AI for Trees",
+  "venue": "Nature Machine Intelligence",
+  "year": 2020,
+  "authors": [
+   {
+    "authorId": "23451726",
+    "name": "Scott M. Lundberg"
+   },
+   {
+    "authorId": "6579861",
+    "name": "Gabriel Erion-Barner"
+   },
+   {
+    "authorId": "2616600",
+    "name": "Hugh Chen"
+   },
+   {
+    "authorId": "50731529",
+    "name": "A. DeGrave"
+   },
+   {
+    "authorId": "3869000",
+    "name": "J. Prutkin"
+   },
+   {
+    "authorId": "2447936",
+    "name": "B. Nair"
+   },
+   {
+    "authorId": "2740105",
+    "name": "R. Katz"
+   },
+   {
+    "authorId": "3538555",
+    "name": "J. Himmelfarb"
+   },
+   {
+    "authorId": "34451449",
+    "name": "N. Bansal"
+   },
+   {
+    "authorId": "2180463",
+    "name": "Su-In Lee"
+   }
+  ],
+  "matchScore": 243.26532
+ },
+ {
+  "paperId": "29e29e96e4d6b4ac5b03ae349b1772e3979351f0",
+  "externalIds": {
+   "MAG": "3173100042",
+   "DBLP": "journals/ijdsa/LebichotPSHOB21",
+   "DOI": "10.1007/s41060-021-00258-0",
+   "CorpusId": 227122706
+  },
+  "title": "Incremental learning strategies for credit cards fraud detection",
+  "venue": "International Journal of Data Science and Analysis",
+  "year": 2021,
+  "authors": [
+   {
+    "authorId": "2430371",
+    "name": "B. Lebichot"
+   },
+   {
+    "authorId": "2028617733",
+    "name": "Gian Marco Paldino"
+   },
+   {
+    "authorId": "17268868",
+    "name": "W. Siblini"
+   },
+   {
+    "authorId": "1398405859",
+    "name": "Liyun He-Guelton"
+   },
+   {
+    "authorId": "2939551",
+    "name": "F. Obl\u00e9"
+   },
+   {
+    "authorId": "1772497",
+    "name": "Gianluca Bontempi"
+   }
+  ],
+  "matchScore": 221.47687
+ },
+ {
+  "paperId": "f135378fc0b7df707a2dfe99affba3f06d93814e",
+  "externalIds": {
+   "DBLP": "journals/corr/abs-2307-01390",
+   "ArXiv": "2307.01390",
+   "DOI": "10.1145/3600046.3600051",
+   "CorpusId": 259341933
+  },
+  "title": "Adversarial Learning in Real-World Fraud Detection: Challenges and Perspectives",
+  "venue": "DEC@SIGMOD",
+  "year": 2023,
+  "authors": [
+   {
+    "authorId": "2238212862",
+    "name": "D. Lunghi"
+   },
+   {
+    "authorId": "1695573",
+    "name": "A. Simitsis"
+   },
+   {
+    "authorId": "3055244",
+    "name": "O. Caelen"
+   },
+   {
+    "authorId": "1772497",
+    "name": "Gianluca Bontempi"
+   }
+  ],
+  "matchScore": 215.97626
+ },
+ {
+  "paperId": "68140108c35dea33e6d00efb3639e5df7bdc6073",
+  "externalIds": {
+   "MAG": "2965374788",
+   "ArXiv": "1908.02591",
+   "DBLP": "journals/corr/abs-1908-02591",
+   "DOI": "10.48550/arXiv.1908.02591",
+   "CorpusId": 199472611
+  },
+  "title": "Anti-Money Laundering in Bitcoin: Experimenting with Graph Convolutional Networks for Financial Forensics",
+  "venue": "arXiv.org",
+  "year": 2019,
+  "authors": [
+   {
+    "authorId": "2456673132",
+    "name": "Mark Weber"
+   },
+   {
+    "authorId": "2972684",
+    "name": "Giacomo Domeniconi"
+   },
+   {
+    "authorId": "2155099587",
+    "name": "Jie Chen"
+   },
+   {
+    "authorId": "69374634",
+    "name": "D. Weidele"
+   },
+   {
+    "authorId": "2071023651",
+    "name": "Claudio Bellei"
+   },
+   {
+    "authorId": "2111807241",
+    "name": "Tom Robinson"
+   },
+   {
+    "authorId": "145372049",
+    "name": "C. Leiserson"
+   }
+  ],
+  "matchScore": 275.02625
+ },
+ {
+  "paperId": "c7abafc1c03e2642ddb80708ec80570d3a1853cf",
+  "externalIds": {
+   "MAG": "2112627523",
+   "DBLP": "journals/eswa/BahnsenAO15",
+   "DOI": "10.1016/j.eswa.2015.04.042",
+   "CorpusId": 3260353
+  },
+  "title": "Example-dependent cost-sensitive decision trees",
+  "venue": "Expert systems with applications",
+  "year": 2015,
+  "authors": [
+   {
+    "authorId": "2297216",
+    "name": "Alejandro Correa Bahnsen"
+   },
+   {
+    "authorId": "2949307",
+    "name": "D. Aouada"
+   },
+   {
+    "authorId": "145303200",
+    "name": "B. Ottersten"
+   }
+  ],
+  "matchScore": 202.79523
+ }
+]

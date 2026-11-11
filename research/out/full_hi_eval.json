@@ -1,0 +1,370 @@
+{
+ "data": "HI-Small full (mirror verified against the repository); features from the served Rust engine",
+ "rule": {
+  "R1_max_drop": 0.03,
+  "R2_min_ratio": 0.8,
+  "R3_served_max_ratio": 0.5
+ },
+ "splits": {
+  "train_rows": 3047007,
+  "validation_rows": 1015669,
+  "test_rows": 1015669
+ },
+ "served_validation": {
+  "pr_auc": 0.6321,
+  "ci95": [
+   0.6064,
+   0.6563
+  ],
+  "roc_auc": 0.9741,
+  "positives": 1082,
+  "rows": 1015669
+ },
+ "served_validation_attack": {
+  "Bitcoin": 0.1334,
+  "Cash": 0.0055,
+  "Cheque": 0.0055,
+  "Credit Card": 0.0044,
+  "Wire": 0.003
+ },
+ "train_sample": {
+  "positives": 2298,
+  "negatives": 304470
+ },
+ "control_31_features_validation": {
+  "pr_auc": 0.6238,
+  "ci95": [
+   0.5922,
+   0.647
+  ],
+  "roc_auc": 0.9871,
+  "positives": 1082,
+  "rows": 1015669
+ },
+ "candidate_no_format_validation": {
+  "pr_auc": 0.5996,
+  "ci95": [
+   0.5661,
+   0.6299
+  ],
+  "roc_auc": 0.985,
+  "positives": 1082,
+  "rows": 1015669
+ },
+ "control_31_features_validation_attack": {
+  "Bitcoin": 0.0397,
+  "Cash": 0.0078,
+  "Cheque": 0.0079,
+  "Credit Card": 0.0054,
+  "Wire": 0.0052
+ },
+ "candidate_calibrated_validation": {
+  "pr_auc": 0.5916,
+  "ci95": [
+   0.5611,
+   0.6181
+  ],
+  "roc_auc": 0.9855,
+  "positives": 1082,
+  "rows": 1015669
+ },
+ "candidate_validation_attack": {
+  "Bitcoin": 0.5916,
+  "Cash": 0.5916,
+  "Cheque": 0.5916,
+  "Credit Card": 0.5916,
+  "Wire": 0.5916
+ },
+ "candidate_thresholds_from_served_validation_rates": {
+  "rates": {
+   "verify": 0.009457805643373974,
+   "hold": 0.0044315618572586144,
+   "block": 0.001340003485387464
+  },
+  "thresholds": {
+   "verify": 0.006874999962747097,
+   "hold": 0.0211267601698637,
+   "block": 0.08415841311216354
+  }
+ },
+ "decision": {
+  "checks": {
+   "R1": false,
+   "R2": true,
+   "R3": true
+  },
+  "adopt": false,
+  "values": {
+   "served_clean": 0.6321,
+   "served_worst_attack": 0.003,
+   "candidate_clean": 0.5916,
+   "candidate_worst_attack": 0.5916
+  },
+  "decided_at_seconds": 488.8,
+  "note": "decided on validation only; test scored after this line"
+ },
+ "test": {
+  "served_live": {
+   "all_test": {
+    "pr_auc": 0.7104,
+    "ci95": [
+     0.6939,
+     0.7307
+    ],
+    "roc_auc": 0.983,
+    "positives": 1797,
+    "rows": 1015669
+   },
+   "without_sep11_18_tail": {
+    "pr_auc": 0.5808,
+    "ci95": [
+     0.5484,
+     0.607
+    ],
+    "roc_auc": 0.9738,
+    "positives": 1142,
+    "rows": 1014561
+   },
+   "sep09_10_only": {
+    "pr_auc": 0.5851,
+    "ci95": [
+     0.5518,
+     0.6175
+    ],
+    "roc_auc": 0.9724,
+    "positives": 956,
+    "rows": 862792
+   }
+  },
+  "control_31_features": {
+   "all_test": {
+    "pr_auc": 0.7264,
+    "ci95": [
+     0.7031,
+     0.7436
+    ],
+    "roc_auc": 0.9894,
+    "positives": 1797,
+    "rows": 1015669
+   },
+   "without_sep11_18_tail": {
+    "pr_auc": 0.5897,
+    "ci95": [
+     0.5649,
+     0.6166
+    ],
+    "roc_auc": 0.9836,
+    "positives": 1142,
+    "rows": 1014561
+   },
+   "sep09_10_only": {
+    "pr_auc": 0.597,
+    "ci95": [
+     0.5692,
+     0.6285
+    ],
+    "roc_auc": 0.9832,
+    "positives": 956,
+    "rows": 862792
+   }
+  },
+  "candidate_no_format": {
+   "all_test": {
+    "pr_auc": 0.7002,
+    "ci95": [
+     0.6823,
+     0.7188
+    ],
+    "roc_auc": 0.9857,
+    "positives": 1797,
+    "rows": 1015669
+   },
+   "without_sep11_18_tail": {
+    "pr_auc": 0.5572,
+    "ci95": [
+     0.5286,
+     0.5822
+    ],
+    "roc_auc": 0.9783,
+    "positives": 1142,
+    "rows": 1014561
+   },
+   "sep09_10_only": {
+    "pr_auc": 0.5698,
+    "ci95": [
+     0.5426,
+     0.6028
+    ],
+    "roc_auc": 0.977,
+    "positives": 956,
+    "rows": 862792
+   }
+  },
+  "tail": {
+   "rows": 1108,
+   "laundering": 655,
+   "share_of_test_laundering": 0.3645
+  },
+  "served_attack": {
+   "Bitcoin": 0.2124,
+   "Cash": 0.009,
+   "Cheque": 0.0088,
+   "Credit Card": 0.006,
+   "Wire": 0.0045
+  },
+  "candidate_attack": {
+   "Bitcoin": 0.7002,
+   "Cash": 0.7002,
+   "Cheque": 0.7002,
+   "Credit Card": 0.7002,
+   "Wire": 0.7002
+  },
+  "served_bands": {
+   "verify": {
+    "flags": 15319,
+    "tp": 1592,
+    "precision": 0.1039,
+    "recall": 0.8859
+   },
+   "hold": {
+    "flags": 6773,
+    "tp": 1457,
+    "precision": 0.2151,
+    "recall": 0.8108
+   },
+   "block": {
+    "flags": 1840,
+    "tp": 1173,
+    "precision": 0.6375,
+    "recall": 0.6528
+   }
+  },
+  "candidate_bands": {
+   "verify": {
+    "flags": 13059,
+    "tp": 1565,
+    "precision": 0.1198,
+    "recall": 0.8709
+   },
+   "hold": {
+    "flags": 6060,
+    "tp": 1483,
+    "precision": 0.2447,
+    "recall": 0.8253
+   },
+   "block": {
+    "flags": 2246,
+    "tp": 1246,
+    "precision": 0.5548,
+    "recall": 0.6934
+   }
+  },
+  "bands_under_cheque_attack": {
+   "served": {
+    "verify": {
+     "flags": 13961,
+     "tp": 234,
+     "precision": 0.0168,
+     "recall": 0.1302
+    },
+    "hold": {
+     "flags": 5422,
+     "tp": 106,
+     "precision": 0.0195,
+     "recall": 0.059
+    },
+    "block": {
+     "flags": 703,
+     "tp": 36,
+     "precision": 0.0512,
+     "recall": 0.02
+    }
+   },
+   "candidate": {
+    "verify": {
+     "flags": 13059,
+     "tp": 1565,
+     "precision": 0.1198,
+     "recall": 0.8709
+    },
+    "hold": {
+     "flags": 6060,
+     "tp": 1483,
+     "precision": 0.2447,
+     "recall": 0.8253
+    },
+    "block": {
+     "flags": 2246,
+     "tp": 1246,
+     "precision": 0.5548,
+     "recall": 0.6934
+    }
+   }
+  },
+  "typology_recall": {
+   "BIPARTITE": {
+    "laundering": 74,
+    "served_verify": 0.973,
+    "served_block": 0.757,
+    "candidate_verify": 1.0,
+    "candidate_block": 0.824
+   },
+   "CYCLE": {
+    "laundering": 109,
+    "served_verify": 0.982,
+    "served_block": 0.826,
+    "candidate_verify": 0.954,
+    "candidate_block": 0.853
+   },
+   "FAN-IN": {
+    "laundering": 137,
+    "served_verify": 0.985,
+    "served_block": 0.861,
+    "candidate_verify": 0.985,
+    "candidate_block": 0.905
+   },
+   "FAN-OUT": {
+    "laundering": 140,
+    "served_verify": 1.0,
+    "served_block": 0.9,
+    "candidate_verify": 0.993,
+    "candidate_block": 0.929
+   },
+   "GATHER-SCATTER": {
+    "laundering": 401,
+    "served_verify": 0.99,
+    "served_block": 0.863,
+    "candidate_verify": 0.985,
+    "candidate_block": 0.905
+   },
+   "RANDOM": {
+    "laundering": 86,
+    "served_verify": 0.988,
+    "served_block": 0.802,
+    "candidate_verify": 0.965,
+    "candidate_block": 0.849
+   },
+   "SCATTER-GATHER": {
+    "laundering": 252,
+    "served_verify": 1.0,
+    "served_block": 0.853,
+    "candidate_verify": 0.992,
+    "candidate_block": 0.893
+   },
+   "STACK": {
+    "laundering": 140,
+    "served_verify": 0.979,
+    "served_block": 0.786,
+    "candidate_verify": 0.957,
+    "candidate_block": 0.814
+   },
+   "unattributed": {
+    "laundering": 458,
+    "served_verify": 0.583,
+    "served_block": 0.094,
+    "candidate_verify": 0.548,
+    "candidate_block": 0.138
+   }
+  }
+ }
+}
