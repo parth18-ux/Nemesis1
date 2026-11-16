@@ -17,7 +17,7 @@ RuseTect API: layered filtration cascade for mule accounts and scam money flows.
 import calendar, csv, gzip, logging, os, random, time
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import List, Optional
+from typing import List, Literal, Optional
 
 from fastapi import APIRouter, FastAPI, Header, HTTPException, Request
 from fastapi.responses import JSONResponse
@@ -75,10 +75,16 @@ THIS_BANK = "BANK-A"
 PROFILES: dict = {}
 
 
+# X-Forwarded-For is client controlled unless a proxy we trust overwrites it: Vercel (VERCEL is set by the platform) or
+# RUSETECT_TRUST_PROXY=1. Trusting it unconditionally let any caller pick a fresh identity per request.
+TRUST_PROXY = os.environ.get("RUSETECT_TRUST_PROXY") == "1" or "VERCEL" in os.environ
+
+
 @app.middleware("http")
 async def rate_limit(request: Request, call_next):
     if request.method == "POST" and request.url.path.startswith("/api/"):
-        client = (request.headers.get("x-forwarded-for") or (request.client.host if request.client else "?")).split(",")[0].strip()
+        fwd = request.headers.get("x-forwarded-for") if TRUST_PROXY else None
+        client = (fwd or (request.client.host if request.client else "?")).split(",")[0].strip()
         if not RATE.allow(client):
             return JSONResponse({"detail": "rate limit: too many requests, slow down"}, status_code=429)
     return await call_next(request)
@@ -119,6 +125,11 @@ async def report():
     return FileResponse(ROOT / "static" / "report.html")
 
 
+@app.get("/research")
+async def research():
+    return FileResponse(ROOT / "static" / "research.html")
+
+
 @api.get("/")
 @api.get("/health")
 async def health():
@@ -128,6 +139,14 @@ async def health():
 
 
 # ---------------------------------------------------------------- scoring
+# Formats and currencies the served models were trained on (models/cascade_config.json fmt_codes and cur_codes; a test
+# keeps them in sync). A missing format used to default to ACH, the format of 92% of AMLworld laundering, which escalated
+# thousands of genuine payments; an unknown format or currency reached the model as missing and was approved.
+PaymentFormat = Literal["ACH", "Bitcoin", "Cash", "Cheque", "Credit Card", "Reinvestment", "Wire"]
+Currency = Literal["Australian Dollar", "Bitcoin", "Brazil Real", "Canadian Dollar", "Euro", "Mexican Peso", "Ruble", "Rupee",
+                   "Saudi Riyal", "Shekel", "Swiss Franc", "UK Pound", "US Dollar", "Yen", "Yuan"]
+
+
 class PaymentIn(BaseModel):
     timestamp: str = Field(description="YYYY-MM-DD HH:MM (UTC)", examples=["2022-09-09 10:00"])
     from_bank: str
@@ -135,9 +154,9 @@ class PaymentIn(BaseModel):
     to_bank: str
     to_account: str
     amount_paid: float = Field(gt=0)
-    payment_currency: str = "US Dollar"
-    receiving_currency: Optional[str] = None
-    payment_format: str = Field("ACH", description="ACH, Bitcoin, Cash, Cheque, Credit Card, Reinvestment, Wire")
+    payment_currency: Currency = "US Dollar"
+    receiving_currency: Optional[Currency] = None
+    payment_format: PaymentFormat = Field(description="ACH, Bitcoin, Cash, Cheque, Credit Card, Reinvestment, Wire")
 
 
 def to_payload(p: PaymentIn) -> dict:
@@ -253,8 +272,16 @@ class ReviewIn(BaseModel):
     analyst: Optional[str] = Field(None, description="ignored: the analyst is identified by the X-Analyst-Key header")
 
 
+def require_reader(key: Optional[str]) -> None:
+    """Alerts, evidence packs, STR drafts, cases and the audit log name accounts and suspicions (sharing an STR is tipping
+    off). With configured keys they need a valid X-Analyst-Key of any role; demo mode keeps them open for the public demo."""
+    if not DEMO_MODE and not analyst_for(key):
+        raise HTTPException(401, "missing or unknown X-Analyst-Key")
+
+
 @api.get("/v2/alerts")
-async def v2_alerts(status: Optional[str] = None):
+async def v2_alerts(status: Optional[str] = None, x_analyst_key: Optional[str] = Header(None)):
+    require_reader(x_analyst_key)
     """Alerts awaiting or after human review, newest first."""
     al = [a for a in DESK.alerts.values() if status is None or a["status"] == status]
     return list(reversed(al))
@@ -287,7 +314,8 @@ async def v2_review(alert_id: str, r: ReviewIn, x_analyst_key: Optional[str] = H
 
 
 @api.get("/v2/alerts/{alert_id}/evidence")
-async def v2_evidence(alert_id: str):
+async def v2_evidence(alert_id: str, x_analyst_key: Optional[str] = Header(None)):
+    require_reader(x_analyst_key)
     if alert_id not in DESK.alerts:
         raise HTTPException(404, "unknown alert")
     pack = DESK.evidence(alert_id)
@@ -296,8 +324,9 @@ async def v2_evidence(alert_id: str):
 
 
 @api.get("/v2/alerts/{alert_id}/str")
-async def v2_str(alert_id: str):
+async def v2_str(alert_id: str, x_analyst_key: Optional[str] = Header(None)):
     """STR draft built from the evidence pack (template, not a language model). For analyst review; never filed automatically."""
+    require_reader(x_analyst_key)
     if alert_id not in DESK.alerts:
         raise HTTPException(404, "unknown alert")
     camp = next((c for c in CAMPAIGNS.build(list(DESK.alerts.values())) if alert_id in c["alerts"]), None)
@@ -460,7 +489,8 @@ async def v2_fixture_mule():
 
 
 @api.get("/v2/audit")
-async def v2_audit():
+async def v2_audit(x_analyst_key: Optional[str] = Header(None)):
+    require_reader(x_analyst_key)
     return {"entries": DESK.log, "chain_valid": DESK.verify_chain()}
 
 
@@ -503,7 +533,8 @@ async def v2_batch(items: List[PaymentIn]):
 
 
 @api.get("/v2/cases")
-async def v2_cases(limit: int = 50):
+async def v2_cases(limit: int = 50, x_analyst_key: Optional[str] = Header(None)):
+    require_reader(x_analyst_key)
     return need_engine().cases(max(1, min(limit, 500)))
 
 

@@ -1,0 +1,21 @@
+{
+ "dataset": "DGraph-Fin (Huang et al. 2022)",
+ "nodes": 3700550,
+ "edges": 4300999,
+ "labelled": {
+  "train": 857899,
+  "valid": 183862,
+  "test": 183862
+ },
+ "fraud_in_heldout_validation": 2326,
+ "heldout": "official validation split (test labels hidden in the mirror)",
+ "reference": "paper reports test ROC-AUC about 0.72 (MLP) to about 0.78 (best GNNs)",
+ "node_features": {
+  "roc_auc": 0.7127,
+  "pr_auc": 0.0258
+ },
+ "node_plus_graph_aggregates": {
+  "roc_auc": 0.7837,
+  "pr_auc": 0.0383
+ }
+}

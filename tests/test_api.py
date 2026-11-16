@@ -12,7 +12,7 @@ SAMPLES = json.loads((ROOT / "service" / "models" / "sample_applications.json").
 
 def test_health_and_pages():
     assert c.get("/api/health").json()["engine_loaded"] is True
-    for path in ("/", "/console", "/report", "/docs"):
+    for path in ("/", "/console", "/report", "/research", "/docs"):
         assert c.get(path).status_code == 200, path
 
 
@@ -36,3 +36,30 @@ def test_demo_replay():
         n = c.post("/api/v2/demo/next?n=2000").json()
         total["high"] += n["bands"]["high"]
     assert n["position"] == 20_000 and n["exits"]["L1"] > n["exits"]["L2"]
+
+
+def test_payment_format_and_currency_are_validated():
+    base = dict(timestamp="2022-09-09 10:00", from_bank="070", from_account="V1", to_bank="011", to_account="V2", amount_paid=100.0)
+    r = c.post("/api/v2/payment", json=base)
+    assert r.status_code == 422 and r.json()["detail"][0]["loc"] == ["body", "payment_format"]
+    assert c.post("/api/v2/payment", json={**base, "payment_format": "UPI"}).status_code == 422
+    r = c.post("/api/v2/payment", json={**base, "payment_format": "Wire", "payment_currency": "INR"})
+    assert r.status_code == 422 and r.json()["detail"][0]["loc"] == ["body", "payment_currency"]
+    assert c.post("/api/v2/payment", json={**base, "payment_format": "Wire", "payment_currency": "Rupee"}).status_code == 200
+
+
+def test_validation_lists_match_cascade_config():
+    import typing
+    from server import Currency, PaymentFormat
+    cfg = json.loads((ROOT / "service" / "models" / "cascade_config.json").read_text())
+    assert sorted(typing.get_args(PaymentFormat)) == sorted(cfg["fmt_codes"])
+    assert sorted(typing.get_args(Currency)) == sorted(cfg["cur_codes"])
+
+
+def test_production_mode_requires_secrets():
+    from security import missing_production_secrets as miss
+    assert miss({}) == []
+    assert len(miss({"RUSETECT_ANALYST_KEYS": "{}"})) == 3
+    assert miss({"RUSETECT_ANALYST_KEYS": "{}", "RUSETECT_SIGNING_KEY": "x", "RUSETECT_CONSORTIUM_SECRET": " "}) == \
+        ["RUSETECT_CONSORTIUM_SECRET", "RUSETECT_HASH_SALT"]
+    assert miss({"RUSETECT_ANALYST_KEYS": "{}", "RUSETECT_SIGNING_KEY": "a", "RUSETECT_CONSORTIUM_SECRET": "b", "RUSETECT_HASH_SALT": "c"}) == []

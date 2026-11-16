@@ -1,0 +1,19 @@
+{
+ "dataset": "Elliptic++ wallets (actors), labelled wallet-time-step rows",
+ "rows": 367472,
+ "illicit_rows": 28601,
+ "wallets": 265354,
+ "split": "time steps 1-34 train, 35-49 test",
+ "xgboost": {
+  "rows": 121805,
+  "positives": 8676,
+  "pr_auc": 0.5479,
+  "pr_auc_ci95": [
+   0.5384,
+   0.5586
+  ],
+  "roc_auc": 0.9175,
+  "f1_at_0.5": 0.539
+ },
+ "note": "rows are wallet x time step; a wallet can appear in train and test steps, as in the dataset's own benchmark"
+}

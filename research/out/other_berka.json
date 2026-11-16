@@ -1,0 +1,14 @@
+{
+ "dataset": "Berka PKDD99 (CTU, real anonymised Czech bank 1993-1998)",
+ "transactions": 1056320,
+ "loans": 682,
+ "bad_loans": 76,
+ "split": "loans in time order, 70% train / 30% test; features only from transactions before each loan date",
+ "test": {
+  "loans": 205,
+  "bad": 12,
+  "roc_auc": 0.9689,
+  "pr_auc": 0.799
+ },
+ "note": "credit default, not fraud: the audit's 'behaviour realism' use (class D/E); few positives, so the interval is wide"
+}
